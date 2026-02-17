@@ -1,12 +1,95 @@
-import { NextResponse } from "next/server";
 import connectDB from "@/utils/db";
 import { City } from "@/model/city.model";
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  await connectDB();
+  try {
+    const cities = await City.find({}).sort({ createdAt: -1 });
+    return NextResponse.json({ success: true, data: cities });
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 },
+    );
+  }
+}
 
 export async function POST(request) {
-  await connectDB();
+  try {
+    await connectDB();
+    const body = await request.json();
+    const city = await City.create(body);
+    return NextResponse.json({ success: true, data: city }, { status: 201 });
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 400 },
+    );
+  }
+}
 
-  const data = await request.json();
-  const newCity = await City.create(data);
+export async function PUT(request) {
+  try {
+    await connectDB();
+    const body = await request.json();
+    const { id, ...updateData } = body;
 
-  return NextResponse.json({ success: true, city: newCity });
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: "City ID is required" },
+        { status: 400 },
+      );
+    }
+
+    const city = await City.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!city) {
+      return NextResponse.json(
+        { success: false, error: "City not found" },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json({ success: true, data: city });
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 400 },
+    );
+  }
+}
+
+export async function DELETE(request) {
+  try {
+    await connectDB();
+    const body = await request.json();
+    const { id } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: "City ID is required" },
+        { status: 400 },
+      );
+    }
+
+    const deletedCity = await City.findByIdAndDelete(id);
+
+    if (!deletedCity) {
+      return NextResponse.json(
+        { success: false, error: "City not found" },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json({ success: true, data: {} });
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 400 },
+    );
+  }
 }
