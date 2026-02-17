@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import slugify from "slugify";
+import { applySlugify } from "../utils/slugMiddleware.js";
 
 const blogSchema = new mongoose.Schema(
   {
@@ -28,13 +28,6 @@ const blogSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-blogSchema.pre("save", function (next) {
-  if (this.slug) {
-    this.slug = slugify(this.slug, { lower: true, strict: true });
-  } else if (this.title) {
-    this.slug = slugify(this.title, { lower: true, strict: true });
-  }
-  next();
-});
+applySlugify(blogSchema, "title");
 
 export const Blog = mongoose.models.Blog || mongoose.model("Blog", blogSchema);

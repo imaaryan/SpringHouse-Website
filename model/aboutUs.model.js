@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { applySlugify } from "../utils/slugMiddleware.js";
 
 const aboutUsSchema = new mongoose.Schema(
   {
@@ -7,6 +8,12 @@ const aboutUsSchema = new mongoose.Schema(
     },
     subHeading: {
       type: String,
+    },
+    slug: {
+      type: String,
+      unique: true,
+      trim: true,
+      lowercase: true,
     },
     heading: {
       type: String,
@@ -38,6 +45,8 @@ const aboutUsSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+applySlugify(aboutUsSchema, "heading");
 
 export const AboutUs =
   mongoose.models.AboutUs || mongoose.model("AboutUs", aboutUsSchema);

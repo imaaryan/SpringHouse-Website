@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import slugify from "slugify";
+import { applySlugify } from "../utils/slugMiddleware.js";
 
 const citySchema = new mongoose.Schema(
   {
@@ -50,13 +50,6 @@ const citySchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-citySchema.pre("save", function (next) {
-  if (this.slug) {
-    this.slug = slugify(this.slug, { lower: true, strict: true });
-  } else if (this.name) {
-    this.slug = slugify(this.name, { lower: true, strict: true });
-  }
-  next();
-});
+applySlugify(citySchema, "name");
 
 export const City = mongoose.models.City || mongoose.model("City", citySchema);

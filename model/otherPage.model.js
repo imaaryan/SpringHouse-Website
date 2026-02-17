@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import slugify from "slugify";
+import { applySlugify } from "../utils/slugMiddleware.js";
 
 const otherPageSchema = new mongoose.Schema(
   {
@@ -25,14 +25,7 @@ const otherPageSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-otherPageSchema.pre("save", function (next) {
-  if (this.slug) {
-    this.slug = slugify(this.slug, { lower: true, strict: true });
-  } else if (this.name) {
-    this.slug = slugify(this.name, { lower: true, strict: true });
-  }
-  next();
-});
+applySlugify(otherPageSchema, "name");
 
 export const OtherPage =
   mongoose.models.OtherPage || mongoose.model("OtherPage", otherPageSchema);
