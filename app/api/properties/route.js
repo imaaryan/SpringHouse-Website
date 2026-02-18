@@ -1,6 +1,7 @@
 import connectDB from "@/utils/db";
 import { Property } from "@/model/property.model";
 import { NextResponse } from "next/server";
+import { uploadImage } from "@/utils/upload";
 
 export async function GET() {
   await connectDB();
@@ -23,7 +24,35 @@ export async function GET() {
 export async function POST(request) {
   try {
     await connectDB();
-    const body = await request.json();
+
+    const formData = await request.formData();
+    const body = {};
+
+    // Iterate over formData keys to build the body
+    for (const key of formData.keys()) {
+      if (key === "images") continue; // Handle images separately
+      if (key === "amenities" || key === "activeSolutions") {
+        body[key] = formData.getAll(key);
+      } else {
+        body[key] = formData.get(key);
+      }
+    }
+
+    // Handle Images
+    const images = formData.getAll("images");
+    const uploadedImages = [];
+
+    for (const image of images) {
+      if (image instanceof File) {
+        const path = await uploadImage(image, "properties");
+        if (path) uploadedImages.push(path);
+      } else if (typeof image === "string") {
+        uploadedImages.push(image);
+      }
+    }
+
+    body.images = uploadedImages;
+
     const property = await Property.create(body);
     return NextResponse.json(
       { success: true, data: property },
@@ -40,8 +69,10 @@ export async function POST(request) {
 export async function PUT(request) {
   try {
     await connectDB();
-    const body = await request.json();
-    const { _id, ...updateData } = body;
+
+    const formData = await request.formData();
+    const _id = formData.get("_id");
+    const body = {};
 
     if (!_id) {
       return NextResponse.json(
@@ -50,7 +81,32 @@ export async function PUT(request) {
       );
     }
 
-    const property = await Property.findByIdAndUpdate(_id, updateData, {
+    // Iterate over keys
+    for (const key of formData.keys()) {
+      if (key === "images" || key === "_id") continue;
+      if (key === "amenities" || key === "activeSolutions") {
+        body[key] = formData.getAll(key);
+      } else {
+        body[key] = formData.get(key);
+      }
+    }
+
+    // Handle Images
+    const images = formData.getAll("images");
+    const uploadedImages = [];
+
+    for (const image of images) {
+      if (image instanceof File) {
+        const path = await uploadImage(image, "properties");
+        if (path) uploadedImages.push(path);
+      } else if (typeof image === "string") {
+        uploadedImages.push(image);
+      }
+    }
+
+    body.images = uploadedImages;
+
+    const property = await Property.findByIdAndUpdate(_id, body, {
       new: true,
       runValidators: true,
     });

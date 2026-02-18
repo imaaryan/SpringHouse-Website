@@ -1,6 +1,7 @@
 import connectDB from "@/utils/db";
 import { Solution } from "@/model/solution.model";
 import { NextResponse } from "next/server";
+import { uploadImage } from "@/utils/upload";
 
 export async function GET() {
   await connectDB();
@@ -21,7 +22,49 @@ export async function GET() {
 export async function POST(request) {
   try {
     await connectDB();
-    const body = await request.json();
+    const formData = await request.formData();
+    const body = {};
+
+    // Standard fields
+    for (const key of formData.keys()) {
+      if (key === "image" || key === "companyImages") continue;
+      if (
+        key === "fourPoints" ||
+        key === "testimonials" ||
+        key === "activeProperties"
+      ) {
+        body[key] = formData.getAll(key);
+      } else if (key === "featuredSpaces") {
+        // Complex array of objects - expect stringified JSON
+        const fs = formData.get(key);
+        if (fs) body[key] = JSON.parse(fs);
+      } else {
+        body[key] = formData.get(key);
+      }
+    }
+
+    // Single Image
+    const image = formData.get("image");
+    if (image instanceof File) {
+      const path = await uploadImage(image, "solutions");
+      if (path) body.image = path;
+    } else if (typeof image === "string") {
+      body.image = image;
+    }
+
+    // Array of Images (companyImages)
+    const companyImages = formData.getAll("companyImages");
+    const uploadedCompanyImages = [];
+    for (const img of companyImages) {
+      if (img instanceof File) {
+        const path = await uploadImage(img, "solutions");
+        if (path) uploadedCompanyImages.push(path);
+      } else if (typeof img === "string") {
+        uploadedCompanyImages.push(img);
+      }
+    }
+    body.companyImages = uploadedCompanyImages;
+
     const solution = await Solution.create(body);
     return NextResponse.json(
       { success: true, data: solution },
@@ -38,8 +81,9 @@ export async function POST(request) {
 export async function PUT(request) {
   try {
     await connectDB();
-    const body = await request.json();
-    const { _id, ...updateData } = body;
+    const formData = await request.formData();
+    const _id = formData.get("_id");
+    const body = {};
 
     if (!_id) {
       return NextResponse.json(
@@ -48,7 +92,46 @@ export async function PUT(request) {
       );
     }
 
-    const solution = await Solution.findByIdAndUpdate(_id, updateData, {
+    // Standard fields
+    for (const key of formData.keys()) {
+      if (key === "image" || key === "companyImages" || key === "_id") continue;
+      if (
+        key === "fourPoints" ||
+        key === "testimonials" ||
+        key === "activeProperties"
+      ) {
+        body[key] = formData.getAll(key);
+      } else if (key === "featuredSpaces") {
+        const fs = formData.get(key);
+        if (fs) body[key] = JSON.parse(fs);
+      } else {
+        body[key] = formData.get(key);
+      }
+    }
+
+    // Single Image
+    const image = formData.get("image");
+    if (image instanceof File) {
+      const path = await uploadImage(image, "solutions");
+      if (path) body.image = path;
+    } else if (typeof image === "string") {
+      body.image = image;
+    }
+
+    // Array of Images (companyImages)
+    const companyImages = formData.getAll("companyImages");
+    const uploadedCompanyImages = [];
+    for (const img of companyImages) {
+      if (img instanceof File) {
+        const path = await uploadImage(img, "solutions");
+        if (path) uploadedCompanyImages.push(path);
+      } else if (typeof img === "string") {
+        uploadedCompanyImages.push(img);
+      }
+    }
+    body.companyImages = uploadedCompanyImages;
+
+    const solution = await Solution.findByIdAndUpdate(_id, body, {
       new: true,
       runValidators: true,
     });

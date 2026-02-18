@@ -1,6 +1,7 @@
 import connectDB from "@/utils/db";
 import { Blog } from "@/model/blog.model";
 import { NextResponse } from "next/server";
+import { uploadImage } from "@/utils/upload"; // Verify path
 
 export async function GET() {
   await connectDB();
@@ -18,7 +19,22 @@ export async function GET() {
 export async function POST(request) {
   try {
     await connectDB();
-    const body = await request.json();
+    const formData = await request.formData();
+    const body = {};
+
+    for (const key of formData.keys()) {
+      if (key === "imageURL") continue;
+      body[key] = formData.get(key);
+    }
+
+    const image = formData.get("imageURL");
+    if (image instanceof File) {
+      const path = await uploadImage(image, "blogs");
+      if (path) body.imageURL = path;
+    } else if (typeof image === "string") {
+      body.imageURL = image;
+    }
+
     const blog = await Blog.create(body);
     return NextResponse.json({ success: true, data: blog }, { status: 201 });
   } catch (error) {
@@ -32,8 +48,9 @@ export async function POST(request) {
 export async function PUT(request) {
   try {
     await connectDB();
-    const body = await request.json();
-    const { _id, ...updateData } = body;
+    const formData = await request.formData();
+    const _id = formData.get("_id");
+    const body = {};
 
     if (!_id) {
       return NextResponse.json(
@@ -42,7 +59,20 @@ export async function PUT(request) {
       );
     }
 
-    const blog = await Blog.findByIdAndUpdate(_id, updateData, {
+    for (const key of formData.keys()) {
+      if (key === "imageURL" || key === "_id") continue;
+      body[key] = formData.get(key);
+    }
+
+    const image = formData.get("imageURL");
+    if (image instanceof File) {
+      const path = await uploadImage(image, "blogs");
+      if (path) body.imageURL = path;
+    } else if (typeof image === "string") {
+      body.imageURL = image;
+    }
+
+    const blog = await Blog.findByIdAndUpdate(_id, body, {
       new: true,
       runValidators: true,
     });
