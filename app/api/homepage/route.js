@@ -47,3 +47,25 @@ export async function POST(request) {
     );
   }
 }
+
+export async function PUT(request) {
+  try {
+    await connectDB();
+    const body = await request.json();
+
+    // Singleton Pattern: Update the single existing document or create if missing
+    const homepage = await Homepage.findOneAndUpdate({}, body, {
+      new: true,
+      upsert: true,
+      runValidators: true,
+      setDefaultsOnInsert: true,
+    });
+
+    return NextResponse.json({ success: true, data: homepage });
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 400 },
+    );
+  }
+}

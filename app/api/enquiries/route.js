@@ -34,16 +34,16 @@ export async function PUT(request) {
   try {
     await connectDB();
     const body = await request.json();
-    const { id, ...updateData } = body;
+    const { _id, ...updateData } = body;
 
-    if (!id) {
+    if (!_id) {
       return NextResponse.json(
         { success: false, error: "Enquiry ID is required" },
         { status: 400 },
       );
     }
 
-    const enquiry = await Enquiry.findByIdAndUpdate(id, updateData, {
+    const enquiry = await Enquiry.findByIdAndUpdate(_id, updateData, {
       new: true,
       runValidators: true,
     });
@@ -68,16 +68,16 @@ export async function DELETE(request) {
   try {
     await connectDB();
     const body = await request.json();
-    const { id } = body;
+    const { _id } = body;
 
-    if (!id) {
+    if (!_id) {
       return NextResponse.json(
         { success: false, error: "Enquiry ID is required" },
         { status: 400 },
       );
     }
 
-    const deletedEnquiry = await Enquiry.findByIdAndDelete(id);
+    const deletedEnquiry = await Enquiry.findByIdAndDelete(_id);
 
     if (!deletedEnquiry) {
       return NextResponse.json(

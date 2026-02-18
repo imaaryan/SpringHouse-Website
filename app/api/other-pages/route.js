@@ -36,16 +36,16 @@ export async function PUT(request) {
   try {
     await connectDB();
     const body = await request.json();
-    const { id, ...updateData } = body;
+    const { _id, ...updateData } = body;
 
-    if (!id) {
+    if (!_id) {
       return NextResponse.json(
         { success: false, error: "Page ID is required" },
         { status: 400 },
       );
     }
 
-    const otherPage = await OtherPage.findByIdAndUpdate(id, updateData, {
+    const otherPage = await OtherPage.findByIdAndUpdate(_id, updateData, {
       new: true,
       runValidators: true,
     });
@@ -70,16 +70,16 @@ export async function DELETE(request) {
   try {
     await connectDB();
     const body = await request.json();
-    const { id } = body;
+    const { _id } = body;
 
-    if (!id) {
+    if (!_id) {
       return NextResponse.json(
         { success: false, error: "Page ID is required" },
         { status: 400 },
       );
     }
 
-    const deletedPage = await OtherPage.findByIdAndDelete(id);
+    const deletedPage = await OtherPage.findByIdAndDelete(_id);
 
     if (!deletedPage) {
       return NextResponse.json(

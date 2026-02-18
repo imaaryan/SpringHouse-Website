@@ -36,16 +36,16 @@ export async function PUT(request) {
   try {
     await connectDB();
     const body = await request.json();
-    const { id, ...updateData } = body;
+    const { _id, ...updateData } = body;
 
-    if (!id) {
+    if (!_id) {
       return NextResponse.json(
         { success: false, error: "Testimonial ID is required" },
         { status: 400 },
       );
     }
 
-    const testimonial = await Testimonial.findByIdAndUpdate(id, updateData, {
+    const testimonial = await Testimonial.findByIdAndUpdate(_id, updateData, {
       new: true,
       runValidators: true,
     });
@@ -70,16 +70,16 @@ export async function DELETE(request) {
   try {
     await connectDB();
     const body = await request.json();
-    const { id } = body;
+    const { _id } = body;
 
-    if (!id) {
+    if (!_id) {
       return NextResponse.json(
         { success: false, error: "Testimonial ID is required" },
         { status: 400 },
       );
     }
 
-    const deletedTestimonial = await Testimonial.findByIdAndDelete(id);
+    const deletedTestimonial = await Testimonial.findByIdAndDelete(_id);
 
     if (!deletedTestimonial) {
       return NextResponse.json(

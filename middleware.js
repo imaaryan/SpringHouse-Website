@@ -7,16 +7,31 @@ export async function middleware(request) {
 
   // Only apply to API routes
   if (pathname.startsWith("/api")) {
-    // Exclude public routes: enquiries and login
-    if (
-      pathname.startsWith("/api/enquiries") ||
-      pathname.startsWith("/api/auth/login")
-    ) {
+    // 1. Always public routes
+    if (pathname.startsWith("/api/auth/login")) {
       return NextResponse.next();
     }
 
-    // Apply authentication check for POST, PUT, and DELETE requests
-    if (method === "POST" || method === "PUT" || method === "DELETE") {
+    let isProtected = false;
+
+    // 2. Enquiries and Careers: Public POST (submission), Protected GET/DELETE (admin)
+    if (
+      pathname.startsWith("/api/enquiries") ||
+      pathname.startsWith("/api/careers")
+    ) {
+      if (method !== "POST") {
+        isProtected = true;
+      }
+    }
+    // 3. Other Routes (Properties, Blogs, etc.): Protected POST/PUT/DELETE, Public GET
+    else {
+      if (["POST", "PUT", "DELETE"].includes(method)) {
+        isProtected = true;
+      }
+    }
+
+    // Apply authentication check if protected
+    if (isProtected) {
       const authHeader = request.headers.get("authorization");
 
       if (!authHeader || !authHeader.startsWith("Bearer ")) {

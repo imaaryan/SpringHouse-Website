@@ -33,16 +33,16 @@ export async function PUT(request) {
   try {
     await connectDB();
     const body = await request.json();
-    const { id, ...updateData } = body;
+    const { _id, ...updateData } = body;
 
-    if (!id) {
+    if (!_id) {
       return NextResponse.json(
         { success: false, error: "FAQ ID is required" },
         { status: 400 },
       );
     }
 
-    const faq = await FAQ.findByIdAndUpdate(id, updateData, {
+    const faq = await FAQ.findByIdAndUpdate(_id, updateData, {
       new: true,
       runValidators: true,
     });
@@ -67,16 +67,16 @@ export async function DELETE(request) {
   try {
     await connectDB();
     const body = await request.json();
-    const { id } = body;
+    const { _id } = body;
 
-    if (!id) {
+    if (!_id) {
       return NextResponse.json(
         { success: false, error: "FAQ ID is required" },
         { status: 400 },
       );
     }
 
-    const deletedFaq = await FAQ.findByIdAndDelete(id);
+    const deletedFaq = await FAQ.findByIdAndDelete(_id);
 
     if (!deletedFaq) {
       return NextResponse.json(

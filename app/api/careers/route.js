@@ -33,16 +33,16 @@ export async function DELETE(request) {
   try {
     await connectDB();
     const body = await request.json();
-    const { id } = body;
+    const { _id } = body;
 
-    if (!id) {
+    if (!_id) {
       return NextResponse.json(
         { success: false, error: "Career Application ID is required" },
         { status: 400 },
       );
     }
 
-    const deletedCareer = await Career.findByIdAndDelete(id);
+    const deletedCareer = await Career.findByIdAndDelete(_id);
 
     if (!deletedCareer) {
       return NextResponse.json(

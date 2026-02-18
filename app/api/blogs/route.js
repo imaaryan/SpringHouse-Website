@@ -33,16 +33,16 @@ export async function PUT(request) {
   try {
     await connectDB();
     const body = await request.json();
-    const { id, ...updateData } = body;
+    const { _id, ...updateData } = body;
 
-    if (!id) {
+    if (!_id) {
       return NextResponse.json(
         { success: false, error: "Blog ID is required" },
         { status: 400 },
       );
     }
 
-    const blog = await Blog.findByIdAndUpdate(id, updateData, {
+    const blog = await Blog.findByIdAndUpdate(_id, updateData, {
       new: true,
       runValidators: true,
     });
@@ -67,16 +67,16 @@ export async function DELETE(request) {
   try {
     await connectDB();
     const body = await request.json();
-    const { id } = body;
+    const { _id } = body;
 
-    if (!id) {
+    if (!_id) {
       return NextResponse.json(
         { success: false, error: "Blog ID is required" },
         { status: 400 },
       );
     }
 
-    const deletedBlog = await Blog.findByIdAndDelete(id);
+    const deletedBlog = await Blog.findByIdAndDelete(_id);
 
     if (!deletedBlog) {
       return NextResponse.json(

@@ -33,16 +33,16 @@ export async function PUT(request) {
   try {
     await connectDB();
     const body = await request.json();
-    const { id, ...updateData } = body;
+    const { _id, ...updateData } = body;
 
-    if (!id) {
+    if (!_id) {
       return NextResponse.json(
         { success: false, error: "Area ID is required" },
         { status: 400 },
       );
     }
 
-    const area = await Area.findByIdAndUpdate(id, updateData, {
+    const area = await Area.findByIdAndUpdate(_id, updateData, {
       new: true,
       runValidators: true,
     });
@@ -67,16 +67,16 @@ export async function DELETE(request) {
   try {
     await connectDB();
     const body = await request.json();
-    const { id } = body;
+    const { _id } = body;
 
-    if (!id) {
+    if (!_id) {
       return NextResponse.json(
         { success: false, error: "Area ID is required" },
         { status: 400 },
       );
     }
 
-    const deletedArea = await Area.findByIdAndDelete(id);
+    const deletedArea = await Area.findByIdAndDelete(_id);
 
     if (!deletedArea) {
       return NextResponse.json(
