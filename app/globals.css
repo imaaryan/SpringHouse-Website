@@ -1,2 +1,15 @@
 @import "tailwindcss";
 
+@theme {
+  --color-brand-primary: #00aaa6;
+  --color-brand-light: #f5f3f3;
+  --color-brand-dark: #282828;
+
+  --font-heading: "gobold", sans-serif;
+  --font-body: "Montserrat", sans-serif;
+}
+
+/* Ensure fonts are loaded if not already imported in style.css, 
+   but since they are in style.css which is imported in layout.js, 
+   we just strictly define the font-family utilities here if needed 
+   or rely on the theme variables above which map to font-heading and font-body utilities. */
