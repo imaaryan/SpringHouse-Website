@@ -1,7 +1,7 @@
 import { SignJWT, jwtVerify } from "jose";
 
 const getJwtSecretKey = () => {
-  const secret = process.env.JWT_SECRET || "default_secret_key_change_me";
+  const secret = process.env.JWT_SECRET || "HeyItsAaryanTheDeveloper@2002--aaryanpandey.com";
   if (!process.env.JWT_SECRET) {
     console.warn(
       "JWT_SECRET is not set in environment variables. Using default secret.",

@@ -265,7 +265,7 @@ export default function AddSolutionPage() {
                   className="flex gap-4 items-start p-4 border border-gray-100 rounded-lg bg-gray-50/50"
                 >
                   {/* Image Upload for Space */}
-                  <label className="flex flex-col items-center justify-center w-24 h-24 flex-shrink-0 rounded-lg border-2 border-dashed border-gray-300 bg-white hover:bg-gray-50 cursor-pointer overflow-hidden">
+                  <label className="flex flex-col items-center justify-center w-24 h-24 shrink-0 rounded-lg border-2 border-dashed border-gray-300 bg-white hover:bg-gray-50 cursor-pointer overflow-hidden">
                     {space.preview ? (
                       <img
                         src={space.preview}
