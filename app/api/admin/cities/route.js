@@ -72,7 +72,7 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     await connectDB();
-    const { name } = await request.json();
+    const { name, seo } = await request.json();
 
     if (!name) {
       return NextResponse.json(
@@ -81,7 +81,7 @@ export async function POST(request) {
       );
     }
 
-    const newCity = await City.create({ name });
+    const newCity = await City.create({ name, seo });
 
     return NextResponse.json({
       success: true,

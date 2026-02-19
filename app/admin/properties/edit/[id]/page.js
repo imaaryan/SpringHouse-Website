@@ -1,21 +1,24 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Loader2, Save } from "lucide-react";
+import { useRouter, useParams } from "next/navigation";
+import { Loader2, Save, UploadCloud, X } from "lucide-react";
 import PageHeader from "@/app/components/admin/PageHeader";
 import {
   FormInput,
   FormTextarea,
   FormSelect,
   FormCheckboxGrid,
-  ImageUploader,
 } from "@/app/components/admin/FormElements";
 import slugify from "slugify";
 import SEOForm from "@/app/components/admin/SEOForm";
 
-export default function AddPropertyPage() {
+export default function EditPropertyPage() {
   const router = useRouter();
+  const params = useParams();
+  const { id } = params;
+
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [dependencies, setDependencies] = useState({
     cities: [],
     areas: [],
@@ -31,12 +34,12 @@ export default function AddPropertyPage() {
     city: "",
     area: "",
     size: "",
-    location: "", // Short location
+    location: "",
     fullAddress: "",
-    locationOnMap: "", // Google Map Link
+    locationOnMap: "",
     amenities: [],
     activeSolutions: [],
-    isActive: false, // Published/Draft
+    isActive: false,
     seo: {
       metaTitle: "",
       metaDescription: "",
@@ -44,26 +47,72 @@ export default function AddPropertyPage() {
     },
   });
 
-  const [images, setImages] = useState([]);
-  const [imagePreviews, setImagePreviews] = useState([]);
+  // Gallery State: Array of { type: 'url' | 'file', url: string, file?: File }
+  const [gallery, setGallery] = useState([]);
 
-  // Fetch Dependencies
+  // Fetch Data
   useEffect(() => {
-    const fetchDependencies = async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetch("/api/admin/properties/dependencies");
+        // Dependencies
+        const depRes = await fetch("/api/admin/properties/dependencies");
+        const depData = await depRes.json();
+        if (depData.success) {
+          setDependencies(depData.data);
+        }
+
+        // Property Data
+        const res = await fetch(`/api/admin/properties/${id}`);
         const data = await res.json();
+
         if (data.success) {
-          setDependencies(data.data);
+          const p = data.data;
+          setFormData({
+            name: p.name || "",
+            slug: p.slug || "",
+            propertyCode: p.propertyCode || "",
+            description: p.description || "",
+            city: p.city?._id || p.city || "",
+            area: p.area?._id || p.area || "",
+            size: p.size || "",
+            location: p.location || "",
+            fullAddress: p.fullAddress || "",
+            locationOnMap: p.locationOnMap || "",
+            amenities: p.amenities
+              ? p.amenities.map((a) => (typeof a === "object" ? a._id : a))
+              : [],
+            activeSolutions: p.activeSolutions
+              ? p.activeSolutions.map((s) =>
+                  typeof s === "object" ? s._id : s,
+                )
+              : [],
+            isActive: p.isActive,
+            seo: {
+              metaTitle: p.seo?.metaTitle || "",
+              metaDescription: p.seo?.metaDescription || "",
+              codeSnippet: p.seo?.codeSnippet || "",
+            },
+          });
+
+          // Gallery
+          if (p.images && p.images.length > 0) {
+            setGallery(p.images.map((url) => ({ type: "url", url })));
+          }
+        } else {
+          alert("Failed to fetch property details");
+          router.push("/admin/properties");
         }
       } catch (error) {
-        console.error("Failed to fetch dependencies", error);
+        console.error("Failed to fetch data", error);
+      } finally {
+        setInitialLoading(false);
       }
     };
-    fetchDependencies();
-  }, []);
 
-  // Handle Input Change
+    if (id) fetchData();
+  }, [id, router]);
+
+  // Handlers
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => {
@@ -71,17 +120,13 @@ export default function AddPropertyPage() {
         ...prev,
         [name]: type === "checkbox" ? checked : value,
       };
-
-      // Auto-generate slug from name
-      if (name === "name") {
+      if (name === "name" && !prev.slug) {
         newData.slug = slugify(value, { lower: true });
       }
-
       return newData;
     });
   };
 
-  // Handle Checkbox Grid Change (Amenities/Solutions)
   const handleCheckboxChange = (category, id) => {
     setFormData((prev) => {
       const list = prev[category];
@@ -93,37 +138,42 @@ export default function AddPropertyPage() {
     });
   };
 
-  // Handle Image Upload
+  // Gallery Handlers
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 0) {
-      setImages((prev) => [...prev, ...files]);
-
-      const newPreviews = files.map((file) => URL.createObjectURL(file));
-      setImagePreviews((prev) => [...prev, ...newPreviews]);
+      const newItems = files.map((file) => ({
+        type: "file",
+        file,
+        url: URL.createObjectURL(file),
+      }));
+      setGallery((prev) => [...prev, ...newItems]);
     }
   };
 
   const removeImage = (index) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
-    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+    setGallery((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Submit Form
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       const data = new FormData();
+
+      // Basic Fields
       Object.keys(formData).forEach((key) => {
-        if (key === "seo") return;
-        if (Array.isArray(formData[key])) {
-          formData[key].forEach((item) => data.append(key, item));
-        } else {
-          data.append(key, formData[key]);
-        }
+        if (key === "seo" || key === "amenities" || key === "activeSolutions")
+          return;
+        data.append(key, formData[key]);
       });
+
+      // Checkbox Arrays
+      formData.amenities.forEach((id) => data.append("amenities", id));
+      formData.activeSolutions.forEach((id) =>
+        data.append("activeSolutions", id),
+      );
 
       // SEO
       if (formData.seo) {
@@ -132,12 +182,17 @@ export default function AddPropertyPage() {
         data.append("seo[codeSnippet]", formData.seo.codeSnippet);
       }
 
-      images.forEach((image) => {
-        data.append("images", image);
+      // Images
+      gallery.forEach((item) => {
+        if (item.type === "url") {
+          data.append("existingImages", item.url);
+        } else if (item.type === "file") {
+          data.append("images", item.file);
+        }
       });
 
-      const res = await fetch("/api/admin/properties", {
-        method: "POST",
+      const res = await fetch(`/api/admin/properties/${id}`, {
+        method: "PUT",
         body: data,
       });
 
@@ -146,15 +201,23 @@ export default function AddPropertyPage() {
       if (result.success) {
         router.push("/admin/properties");
       } else {
-        alert(result.error || "Failed to create property");
+        alert(result.error || "Failed to update property");
       }
     } catch (error) {
-      console.error("Error creating property:", error);
+      console.error("Error updating property:", error);
       alert("Something went wrong");
     } finally {
       setLoading(false);
     }
   };
+
+  if (initialLoading) {
+    return (
+      <div className="p-10 flex justify-center">
+        <Loader2 className="animate-spin text-brand-primary" />
+      </div>
+    );
+  }
 
   return (
     <form
@@ -162,7 +225,7 @@ export default function AddPropertyPage() {
       className="space-y-6 max-w-[1440px] mx-auto w-full"
     >
       <PageHeader
-        title="Add New Property"
+        title="Edit Property"
         actions={
           <>
             <button
@@ -182,7 +245,7 @@ export default function AddPropertyPage() {
               ) : (
                 <Save size={16} />
               )}
-              Save Property
+              Update
             </button>
           </>
         }
@@ -250,7 +313,6 @@ export default function AddPropertyPage() {
             />
           </div>
 
-          {/* Amenities & Solutions */}
           <div className="space-y-6">
             <FormCheckboxGrid
               label="Amenities"
@@ -274,7 +336,6 @@ export default function AddPropertyPage() {
               onChange={handleCheckboxChange}
             />
 
-            {/* SEO Section */}
             <SEOForm
               values={formData.seo}
               onChange={(newSeo) =>
@@ -286,7 +347,6 @@ export default function AddPropertyPage() {
 
         {/* Sidebar - Right */}
         <div className="space-y-6">
-          {/* Property Status */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <FormSelect
               label="Property Status"
@@ -305,15 +365,47 @@ export default function AddPropertyPage() {
             />
           </div>
 
-          {/* Image Gallery */}
-          <ImageUploader
-            label="Image Gallery"
-            images={imagePreviews}
-            onImageChange={handleImageChange}
-            onRemoveImage={removeImage}
-          />
+          {/* Custom Gallery Logic since FormElements ImageUploader might rely on simple implementation */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 className="text-sm font-semibold text-gray-700 mb-3">
+              Image Gallery
+            </h3>
 
-          {/* Property Code */}
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              {gallery.map((item, index) => (
+                <div
+                  key={index}
+                  className="relative aspect-video rounded-lg overflow-hidden group border border-gray-200"
+                >
+                  <img
+                    src={item.url}
+                    alt={`Gallery ${index}`}
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeImage(index)}
+                    className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <label className="flex flex-col items-center justify-center w-full h-32 cursor-pointer hover:bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg transition-colors">
+              <UploadCloud size={32} className="text-brand-primary mb-2" />
+              <span className="text-sm text-gray-500">Upload New Images</span>
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageChange}
+              />
+            </label>
+          </div>
+
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <FormInput
               label="Property Code"
@@ -324,7 +416,6 @@ export default function AddPropertyPage() {
             />
           </div>
 
-          {/* Location */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
             <h3 className="text-sm font-semibold text-gray-900">Location</h3>
             <div className="space-y-4">
@@ -344,7 +435,7 @@ export default function AddPropertyPage() {
                   value={formData.locationOnMap}
                   onChange={handleChange}
                   placeholder="Paste google map link"
-                  className="w-full rounded-lg border border-gray-200 px-4 py-2 focus:border-brand-primary focus:ring-brand-primary"
+                  className="w-full rounded-lg border border-gray-200 px-4 py-2 text-sm focus:border-brand-primary focus:ring-brand-primary"
                 />
               </div>
               <FormTextarea

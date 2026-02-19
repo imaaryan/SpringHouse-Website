@@ -65,6 +65,11 @@ export async function POST(request) {
       companyImages,
       featuredSpaces,
       isActive,
+      seo: {
+        metaTitle: formData.get("seo[metaTitle]"),
+        metaDescription: formData.get("seo[metaDescription]"),
+        codeSnippet: formData.get("seo[codeSnippet]"),
+      },
     };
 
     const newSolution = await Solution.create(payload);

@@ -46,6 +46,11 @@ const citySchema = new mongoose.Schema(
         type: String,
       },
     },
+    seo: {
+      metaTitle: String,
+      metaDescription: String,
+      codeSnippet: String,
+    },
   },
   { timestamps: true },
 );

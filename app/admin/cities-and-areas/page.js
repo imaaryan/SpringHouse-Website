@@ -4,6 +4,7 @@ import { Plus, Trash2, MoreHorizontal, Pencil } from "lucide-react";
 import PageHeader from "@/app/components/admin/PageHeader";
 import DataTable from "@/app/components/admin/DataTable";
 import Modal from "@/app/components/admin/Modal";
+import SEOForm from "@/app/components/admin/SEOForm";
 
 export default function CitiesAndAreasPage() {
   // Cities State
@@ -136,7 +137,10 @@ export default function CitiesAndAreasPage() {
       const res = await fetch(`/api/admin/cities/${editingCity._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: editingCity.name }),
+        body: JSON.stringify({
+          name: editingCity.name,
+          seo: editingCity.seo,
+        }),
       });
       const data = await res.json();
       if (data.success) {
@@ -560,6 +564,14 @@ export default function CitiesAndAreasPage() {
               className="w-full rounded-lg border border-gray-200 px-4 py-2 text-sm focus:border-brand-primary focus:ring-brand-primary"
             />
           </div>
+
+          <SEOForm
+            values={editingCity?.seo || {}}
+            onChange={(newSeo) =>
+              setEditingCity((prev) => ({ ...prev, seo: newSeo }))
+            }
+          />
+
           <div className="flex justify-end gap-3 pt-2">
             <button
               onClick={() => setIsEditCityOpen(false)}

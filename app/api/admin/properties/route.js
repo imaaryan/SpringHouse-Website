@@ -52,7 +52,14 @@ export async function POST(request) {
       isActive,
       amenities,
       activeSolutions,
+      amenities,
+      activeSolutions,
       images: uploadedInames,
+      seo: {
+        metaTitle: formData.get("seo[metaTitle]"),
+        metaDescription: formData.get("seo[metaDescription]"),
+        codeSnippet: formData.get("seo[codeSnippet]"),
+      },
     };
 
     // logic for manual slug if provided

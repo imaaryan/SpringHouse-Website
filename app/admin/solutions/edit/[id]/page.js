@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { Loader2, Save, UploadCloud, X, Plus } from "lucide-react";
 import PageHeader from "@/app/components/admin/PageHeader";
 import {
@@ -13,9 +13,13 @@ import {
 import slugify from "slugify";
 import SEOForm from "@/app/components/admin/SEOForm";
 
-export default function AddSolutionPage() {
+export default function EditSolutionPage() {
   const router = useRouter();
+  const params = useParams();
+  const { id } = params;
+
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [dependencies, setDependencies] = useState({
     testimonials: [],
   });
@@ -24,7 +28,7 @@ export default function AddSolutionPage() {
     name: "",
     slug: "",
     description: "",
-    isActive: false, // Default Draft
+    isActive: false,
     fourPoints: ["", "", "", ""],
     testimonials: [],
     seo: {
@@ -35,32 +39,83 @@ export default function AddSolutionPage() {
   });
 
   // Image States
-  const [image, setImage] = useState(null); // Single Featured Image
-  const [imagePreview, setImagePreview] = useState(null);
+  const [image, setImage] = useState(null); // File object (for new upload)
+  const [imagePreview, setImagePreview] = useState(null); // URL (existing or new preview)
 
-  const [companyImages, setCompanyImages] = useState([]); // Multiple
-  const [companyImagePreviews, setCompanyImagePreviews] = useState([]);
+  const [companyImages, setCompanyImages] = useState([]); // Mixed: Files or URL strings
+  const [companyImagePreviews, setCompanyImagePreviews] = useState([]); // URLs
 
-  // Featured Spaces State: Array of { name: "", image: File|null, preview: "" }
-  const [featuredSpaces, setFeaturedSpaces] = useState([
-    { name: "", image: null, preview: "" },
-  ]);
+  // Featured Spaces
+  const [featuredSpaces, setFeaturedSpaces] = useState([]);
 
-  // Fetch Dependencies
+  // Fetch Dependencies and Data
   useEffect(() => {
-    const fetchDependencies = async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetch("/api/admin/solutions/dependencies");
+        // Fetch Dependencies
+        const depRes = await fetch("/api/admin/solutions/dependencies");
+        const depData = await depRes.json();
+        if (depData.success) {
+          setDependencies(depData.data);
+        }
+
+        // Fetch Solution Data
+        const res = await fetch(`/api/admin/solutions/${id}`);
         const data = await res.json();
+
         if (data.success) {
-          setDependencies(data.data);
+          const s = data.data;
+          setFormData({
+            name: s.name || "",
+            slug: s.slug || "",
+            description: s.description || "",
+            isActive: s.isActive,
+            fourPoints:
+              s.fourPoints && s.fourPoints.length === 4
+                ? s.fourPoints
+                : ["", "", "", ""],
+            testimonials: s.testimonials
+              ? s.testimonials.map((t) => (typeof t === "object" ? t._id : t))
+              : [],
+            seo: {
+              metaTitle: s.seo?.metaTitle || "",
+              metaDescription: s.seo?.metaDescription || "",
+              codeSnippet: s.seo?.codeSnippet || "",
+            },
+          });
+
+          // Images
+          if (s.image) setImagePreview(s.image);
+
+          if (s.companyImages && s.companyImages.length > 0) {
+            setCompanyImages(s.companyImages); // URLs
+            setCompanyImagePreviews(s.companyImages);
+          }
+
+          if (s.featuredSpaces && s.featuredSpaces.length > 0) {
+            setFeaturedSpaces(
+              s.featuredSpaces.map((space) => ({
+                name: space.name,
+                image: null,
+                preview: space.image,
+              })),
+            );
+          } else {
+            setFeaturedSpaces([{ name: "", image: null, preview: "" }]);
+          }
+        } else {
+          alert("Failed to fetch solution details");
+          router.push("/admin/solutions");
         }
       } catch (error) {
-        console.error("Failed to fetch dependencies", error);
+        console.error("Failed to fetch data", error);
+      } finally {
+        setInitialLoading(false);
       }
     };
-    fetchDependencies();
-  }, []);
+
+    if (id) fetchData();
+  }, [id, router]);
 
   // Handle Input Change
   const handleChange = (e) => {
@@ -70,23 +125,21 @@ export default function AddSolutionPage() {
         ...prev,
         [name]: type === "checkbox" ? checked : value,
       };
-
-      if (name === "name") {
+      if (name === "name" && !prev.slug) {
+        // Only auto-slug if slug is empty, to avoid overwriting existing manual slugs
+        // preventing unwanted url changes on edit
         newData.slug = slugify(value, { lower: true });
       }
-
       return newData;
     });
   };
 
-  // Handle Four Points
   const handlePointChange = (index, value) => {
     const newPoints = [...formData.fourPoints];
     newPoints[index] = value;
     setFormData((prev) => ({ ...prev, fourPoints: newPoints }));
   };
 
-  // Handle Checkbox Grid (Testimonials)
   const handleCheckboxChange = (category, id) => {
     setFormData((prev) => {
       const list = prev[category];
@@ -98,7 +151,7 @@ export default function AddSolutionPage() {
     });
   };
 
-  // Handle Featured Image
+  // Image Handlers
   const handleFeaturedImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -107,7 +160,6 @@ export default function AddSolutionPage() {
     }
   };
 
-  // Handle Company Images
   const handleCompanyImagesChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 0) {
@@ -122,7 +174,6 @@ export default function AddSolutionPage() {
     setCompanyImagePreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Handle Featured Spaces
   const addSpace = () => {
     setFeaturedSpaces((prev) => [
       ...prev,
@@ -147,7 +198,6 @@ export default function AddSolutionPage() {
     setFeaturedSpaces(newSpaces);
   };
 
-  // Submit Form
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -155,37 +205,48 @@ export default function AddSolutionPage() {
     try {
       const data = new FormData();
 
-      // Basic Fields
       data.append("name", formData.name);
       data.append("slug", formData.slug);
       data.append("description", formData.description);
       data.append("isActive", formData.isActive);
 
       // SEO
-      data.append("seo[metaTitle]", formData.seo.metaTitle);
-      data.append("seo[metaDescription]", formData.seo.metaDescription);
-      data.append("seo[codeSnippet]", formData.seo.codeSnippet);
+      if (formData.seo) {
+        data.append("seo[metaTitle]", formData.seo.metaTitle);
+        data.append("seo[metaDescription]", formData.seo.metaDescription);
+        data.append("seo[codeSnippet]", formData.seo.codeSnippet);
+      }
 
-      // Arrays
       formData.fourPoints.forEach((point) => data.append("fourPoints", point));
       formData.testimonials.forEach((id) => data.append("testimonials", id));
 
-      // Featured Image
-      if (image) data.append("image", image);
+      if (image) {
+        data.append("image", image);
+      } else if (imagePreview) {
+        // If no new file, but we have a preview (existing URL), we might not need to send anything
+        // if the backend keeps existing by default.
+        // BUT my backend logic checks: if (imageFile === "") ...
+        // if (imageFile && typeof imageFile === "object") ...
+        // If I don't send "image" field, result is null.
+        // Backend: const imageFile = formData.get("image"); let imagePath = existingSolution.image;
+        // So if field is missing, it keeps existing. GOOD.
+      }
 
       // Company Images
       companyImages.forEach((img) => data.append("companyImages", img));
 
-      // Featured Spaces (Complex)
+      // Featured Spaces
       featuredSpaces.forEach((space, index) => {
         data.append(`featuredSpaces[${index}][name]`, space.name);
         if (space.image) {
           data.append(`featuredSpaces[${index}][image]`, space.image);
+        } else if (space.preview) {
+          data.append(`featuredSpaces[${index}][image]`, space.preview);
         }
       });
 
-      const res = await fetch("/api/admin/solutions", {
-        method: "POST",
+      const res = await fetch(`/api/admin/solutions/${id}`, {
+        method: "PUT",
         body: data,
       });
 
@@ -194,15 +255,23 @@ export default function AddSolutionPage() {
       if (result.success) {
         router.push("/admin/solutions");
       } else {
-        alert(result.error || "Failed to create solution");
+        alert(result.error || "Failed to update solution");
       }
     } catch (error) {
-      console.error("Error creating solution:", error);
+      console.error("Error updating solution:", error);
       alert("Something went wrong");
     } finally {
       setLoading(false);
     }
   };
+
+  if (initialLoading) {
+    return (
+      <div className="p-10 flex justify-center">
+        <Loader2 className="animate-spin text-brand-primary" />
+      </div>
+    );
+  }
 
   return (
     <form
@@ -210,20 +279,29 @@ export default function AddSolutionPage() {
       className="space-y-6 max-w-[1440px] mx-auto w-full"
     >
       <PageHeader
-        title="Add New Solutions"
+        title="Edit Solution"
         actions={
-          <button
-            type="submit"
-            disabled={loading}
-            className="flex items-center gap-2 rounded-lg bg-brand-primary px-6 py-2.5 text-sm font-medium text-white hover:bg-teal-600 transition shadow-sm uppercase disabled:opacity-50"
-          >
-            {loading ? (
-              <Loader2 className="animate-spin" size={16} />
-            ) : (
-              <Save size={16} />
-            )}
-            Save
-          </button>
+          <>
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 uppercase transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex items-center gap-2 rounded-lg bg-brand-primary px-6 py-2.5 text-sm font-medium text-white hover:bg-teal-600 transition shadow-sm uppercase disabled:opacity-50"
+            >
+              {loading ? (
+                <Loader2 className="animate-spin" size={16} />
+              ) : (
+                <Save size={16} />
+              )}
+              Update
+            </button>
+          </>
         }
       />
 
@@ -256,7 +334,6 @@ export default function AddSolutionPage() {
             />
           </div>
 
-          {/* Company Images */}
           <ImageUploader
             label="Company Images"
             images={companyImagePreviews}
@@ -264,7 +341,6 @@ export default function AddSolutionPage() {
             onRemoveImage={removeCompanyImage}
           />
 
-          {/* Featured Spaces (Custom) */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h3 className="text-sm font-semibold text-gray-900 mb-4">
               Featured Spaces
@@ -275,7 +351,6 @@ export default function AddSolutionPage() {
                   key={index}
                   className="flex gap-4 items-start p-4 border border-gray-100 rounded-lg bg-gray-50/50"
                 >
-                  {/* Image Upload for Space */}
                   <label className="flex flex-col items-center justify-center w-24 h-24 shrink-0 rounded-lg border-2 border-dashed border-gray-300 bg-white hover:bg-gray-50 cursor-pointer overflow-hidden">
                     {space.preview ? (
                       <img
@@ -335,7 +410,6 @@ export default function AddSolutionPage() {
             </div>
           </div>
 
-          {/* Testimonials */}
           <FormCheckboxGrid
             label="Testimonials"
             name="testimonials"
@@ -347,7 +421,6 @@ export default function AddSolutionPage() {
             onChange={handleCheckboxChange}
           />
 
-          {/* SEO Section */}
           <SEOForm
             values={formData.seo}
             onChange={(newSeo) =>
@@ -358,7 +431,6 @@ export default function AddSolutionPage() {
 
         {/* Sidebar - Right */}
         <div className="space-y-6">
-          {/* Status */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <FormSelect
               label="Property Status"
@@ -377,7 +449,6 @@ export default function AddSolutionPage() {
             />
           </div>
 
-          {/* Featured Image */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h3 className="text-sm font-semibold text-gray-700 mb-3">
               Featured Image
@@ -405,9 +476,7 @@ export default function AddSolutionPage() {
               ) : (
                 <label className="flex flex-col items-center justify-center w-full h-full cursor-pointer hover:bg-gray-100 transition-colors">
                   <UploadCloud size={32} className="text-brand-primary mb-2" />
-                  <span className="text-sm text-gray-500">
-                    Upload / Drag and Drop the Image
-                  </span>
+                  <span className="text-sm text-gray-500">Upload</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -419,7 +488,6 @@ export default function AddSolutionPage() {
             </div>
           </div>
 
-          {/* Featured Points */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
             <h3 className="text-sm font-semibold text-gray-900">
               Featured Points

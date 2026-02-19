@@ -6,7 +6,7 @@ export async function PUT(request, { params }) {
   try {
     await connectDB();
     const { id } = await params;
-    const { name } = await request.json();
+    const { name, seo } = await request.json();
 
     if (!name) {
       return NextResponse.json(
@@ -17,7 +17,7 @@ export async function PUT(request, { params }) {
 
     const updatedCity = await City.findByIdAndUpdate(
       id,
-      { name }, // Only name for now as per quick add form
+      { name, seo },
       { new: true, runValidators: true },
     );
 

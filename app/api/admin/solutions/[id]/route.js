@@ -135,6 +135,11 @@ export async function PUT(request, { params }) {
       companyImages: newCompanyImages,
       featuredSpaces,
       isActive,
+      seo: {
+        metaTitle: formData.get("seo[metaTitle]"),
+        metaDescription: formData.get("seo[metaDescription]"),
+        codeSnippet: formData.get("seo[codeSnippet]"),
+      },
     };
 
     if (slug && slug !== existingSolution.slug) {
