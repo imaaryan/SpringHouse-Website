@@ -4,26 +4,10 @@ import { Plus, Trash2, MoreHorizontal, Pencil } from "lucide-react";
 import PageHeader from "@/app/components/admin/PageHeader";
 import DataTable from "@/app/components/admin/DataTable";
 import Modal from "@/app/components/admin/Modal";
-import SEOForm from "@/app/components/admin/SEOForm";
 
-export default function CitiesAndAreasPage() {
-  // Cities State
+export default function AreasPage() {
+  // Cities State (Needed for Dropdown)
   const [cities, setCities] = useState([]);
-  const [loadingCities, setLoadingCities] = useState(true);
-  const [newCityName, setNewCityName] = useState("");
-  const [creatingCity, setCreatingCity] = useState(false);
-  const [selectedCities, setSelectedCities] = useState([]);
-  const [cityPagination, setCityPagination] = useState({
-    page: 1,
-    limit: 10,
-    total: 0,
-    totalPages: 0,
-  });
-
-  // Edit City State
-  const [isEditCityOpen, setIsEditCityOpen] = useState(false);
-  const [editingCity, setEditingCity] = useState(null);
-  const [updatingCity, setUpdatingCity] = useState(false);
 
   // Areas State
   const [areas, setAreas] = useState([]);
@@ -48,21 +32,16 @@ export default function CitiesAndAreasPage() {
   const [activeMenu, setActiveMenu] = useState(null);
 
   // Fetch Data
-  const fetchCities = async (page = 1) => {
-    setLoadingCities(true);
+  const fetchCities = async () => {
     try {
-      const res = await fetch(
-        `/api/admin/cities?page=${page}&limit=${cityPagination.limit}`,
-      );
+      // Fetch all cities for dropdown (limit 100 for now or implement search)
+      const res = await fetch(`/api/admin/cities?page=1&limit=100`);
       const data = await res.json();
       if (data.success) {
         setCities(data.data);
-        setCityPagination((prev) => ({ ...data.pagination, page }));
       }
     } catch (error) {
       console.error("Error fetching cities:", error);
-    } finally {
-      setLoadingCities(false);
     }
   };
 
@@ -104,88 +83,6 @@ export default function CitiesAndAreasPage() {
     };
   }, [activeMenu]);
 
-  // --- CITY ACTIONS ---
-
-  const handleCreateCity = async () => {
-    if (!newCityName.trim()) return;
-    setCreatingCity(true);
-
-    try {
-      const res = await fetch("/api/admin/cities", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: newCityName }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setNewCityName("");
-        fetchCities();
-      } else {
-        alert(data.error);
-      }
-    } catch (error) {
-      alert("Failed to create city");
-    } finally {
-      setCreatingCity(false);
-    }
-  };
-
-  const handleUpdateCity = async () => {
-    if (!editingCity || !editingCity.name.trim()) return;
-    setUpdatingCity(true);
-    try {
-      const res = await fetch(`/api/admin/cities/${editingCity._id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: editingCity.name,
-          seo: editingCity.seo,
-        }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        fetchCities();
-        setIsEditCityOpen(false);
-        setEditingCity(null);
-      } else {
-        alert(data.error);
-      }
-    } catch (error) {
-      alert("Failed to update city");
-    } finally {
-      setUpdatingCity(false);
-    }
-  };
-
-  const deleteCities = async (ids) => {
-    if (
-      !confirm(
-        `Delete ${ids.length} cities? This will also delete associated areas.`,
-      )
-    )
-      return;
-    try {
-      const res = await fetch("/api/admin/cities", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ids }),
-      });
-      if (res.ok) {
-        fetchCities();
-        fetchAreas(); // Areas might be deleted too
-        setSelectedCities([]);
-      }
-    } catch (error) {
-      alert("Failed to delete");
-    }
-  };
-
-  const openEditCityModal = (city) => {
-    setEditingCity(city);
-    setIsEditCityOpen(true);
-    setActiveMenu(null); // Close menu
-  };
-
   // --- AREA ACTIONS ---
 
   const handleCreateArea = async () => {
@@ -202,7 +99,6 @@ export default function CitiesAndAreasPage() {
         setNewAreaName("");
         setNewAreaCity("");
         fetchAreas();
-        fetchCities(); // City area count update
       } else {
         alert(data.error);
       }
@@ -228,7 +124,6 @@ export default function CitiesAndAreasPage() {
       const data = await res.json();
       if (data.success) {
         fetchAreas();
-        fetchCities(); // Update counts if city changed (though logic might be complex, counts are re-fetched)
         setIsEditAreaOpen(false);
         setEditingArea(null);
       } else {
@@ -252,7 +147,6 @@ export default function CitiesAndAreasPage() {
       if (res.ok) {
         fetchAreas();
         setSelectedAreas([]);
-        fetchCities(); // Update counts
       }
     } catch (error) {
       alert("Failed to delete");
@@ -260,9 +154,6 @@ export default function CitiesAndAreasPage() {
   };
 
   const openEditAreaModal = (area) => {
-    // Area from aggregation defines specific fields.
-    // area.cityId is likely available from the aggregation pipeline I wrote:
-    // $project: { cityId: "$cityData._id" }
     setEditingArea({
       _id: area._id,
       name: area.name,
@@ -273,71 +164,6 @@ export default function CitiesAndAreasPage() {
   };
 
   // --- COLUMNS ---
-
-  const cityColumns = [
-    {
-      header: "City",
-      accessor: "name",
-      render: (r) => (
-        <span className="font-medium text-gray-900">{r.name}</span>
-      ),
-    },
-    {
-      header: "No. of Areas",
-      accessor: "areaCount",
-      render: (r) => (
-        <span className="text-gray-600 font-mono">{r.areaCount}</span>
-      ),
-    },
-    {
-      header: "No. Properties",
-      accessor: "propertyCount",
-      render: (r) => (
-        <span className="text-gray-600 font-mono">{r.propertyCount}</span>
-      ),
-    },
-    {
-      header: "",
-      className: "text-right",
-      render: (row) => (
-        <div className="relative">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleMenu(row._id);
-            }}
-            className="text-gray-400 hover:text-gray-600 p-1.5 rounded-full hover:bg-gray-100 transition-colors"
-          >
-            <MoreHorizontal size={18} />
-          </button>
-          {activeMenu === row._id && (
-            <div className="absolute right-8 top-0 z-20 w-40 origin-top-right rounded-lg bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none py-1 border border-gray-100">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  openEditCityModal(row);
-                }}
-                className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-              >
-                <Pencil className="mr-2 h-3.5 w-3.5 text-gray-400" />
-                Edit City
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteCities([row._id]);
-                }}
-                className="flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-              >
-                <Trash2 className="mr-2 h-3.5 w-3.5" />
-                Delete
-              </button>
-            </div>
-          )}
-        </div>
-      ),
-    },
-  ];
 
   const areaColumns = [
     {
@@ -404,76 +230,13 @@ export default function CitiesAndAreasPage() {
 
   return (
     <div className="space-y-12 max-w-[1440px] mx-auto w-full">
-      {/* <PageHeader title="Cities & Areas" /> */}
-
-      {/* CITIES SECTION */}
-      <section className="space-y-6">
-        <h2 className="text-lg font-heading font-bold text-gray-800">
-          Add City
-        </h2>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-          {/* Add City Form */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex gap-4">
-            <input
-              type="text"
-              placeholder="City Name"
-              className="flex-1 rounded-lg border border-gray-200 px-4 py-2 text-sm focus:border-brand-primary focus:ring-brand-primary"
-              value={newCityName}
-              onChange={(e) => setNewCityName(e.target.value)}
-            />
-            <button
-              onClick={handleCreateCity}
-              disabled={creatingCity || !newCityName}
-              className="flex items-center gap-2 rounded-lg bg-brand-primary px-4 py-2 text-sm font-medium text-white hover:bg-teal-600 disabled:opacity-50 transition shadow-sm uppercase whitespace-nowrap"
-            >
-              <Plus size={16} /> Add City
-            </button>
-          </div>
-
-          {/* Cities Table */}
-          <div className="lg:col-span-2 mt-[-50px]">
-            <div
-              className={`mb-4 flex justify-end ${selectedCities.length === 0 ? "invisible" : ""}`}
-            >
-              <button
-                onClick={() => deleteCities(selectedCities)}
-                className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-medium text-red-600 hover:bg-red-100 transition shadow-sm uppercase"
-              >
-                <Trash2 size={14} />
-                Delete Selected ({selectedCities.length})
-              </button>
-            </div>
-            <DataTable
-              columns={cityColumns}
-              data={cities}
-              loading={loadingCities}
-              pagination={cityPagination}
-              onPageChange={(page) => fetchCities(page)}
-              selection={{
-                selectedItems: selectedCities,
-                onSelectAll: (e) =>
-                  setSelectedCities(
-                    e.target.checked ? cities.map((c) => c._id) : [],
-                  ),
-                onSelectItem: (id) =>
-                  setSelectedCities((prev) =>
-                    prev.includes(id)
-                      ? prev.filter((i) => i !== id)
-                      : [...prev, id],
-                  ),
-              }}
-            />
-          </div>
-        </div>
-      </section>
-
-      <div className="border-t border-gray-200"></div>
+      <PageHeader title="Areas" /> 
 
       {/* AREAS SECTION */}
       <section className="space-y-6">
-        <h2 className="text-lg font-heading font-bold text-gray-800">
+        {/* <h2 className="text-lg font-heading font-bold text-gray-800">
           Add Area
-        </h2>
+        </h2> */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {/* Add Area Form */}
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-4">
@@ -545,51 +308,6 @@ export default function CitiesAndAreasPage() {
       </section>
 
       {/* MODALS */}
-      <Modal
-        isOpen={isEditCityOpen}
-        onClose={() => setIsEditCityOpen(false)}
-        title="Edit City"
-      >
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              City Name
-            </label>
-            <input
-              type="text"
-              value={editingCity?.name || ""}
-              onChange={(e) =>
-                setEditingCity((prev) => ({ ...prev, name: e.target.value }))
-              }
-              className="w-full rounded-lg border border-gray-200 px-4 py-2 text-sm focus:border-brand-primary focus:ring-brand-primary"
-            />
-          </div>
-
-          <SEOForm
-            values={editingCity?.seo || {}}
-            onChange={(newSeo) =>
-              setEditingCity((prev) => ({ ...prev, seo: newSeo }))
-            }
-          />
-
-          <div className="flex justify-end gap-3 pt-2">
-            <button
-              onClick={() => setIsEditCityOpen(false)}
-              className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg border border-gray-300 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleUpdateCity}
-              disabled={updatingCity}
-              className="px-4 py-2 text-sm font-medium text-white bg-brand-primary hover:bg-teal-600 rounded-lg transition-colors disabled:opacity-50"
-            >
-              {updatingCity ? "Saving..." : "Save Changes"}
-            </button>
-          </div>
-        </div>
-      </Modal>
-
       <Modal
         isOpen={isEditAreaOpen}
         onClose={() => setIsEditAreaOpen(false)}

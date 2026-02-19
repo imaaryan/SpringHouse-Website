@@ -3,6 +3,7 @@ import connectDB from "@/utils/db";
 import { City } from "@/model/city.model";
 import { Area } from "@/model/area.model";
 import { Property } from "@/model/property.model";
+import { uploadImage } from "@/utils/upload";
 
 export async function GET(request) {
   try {
@@ -69,11 +70,18 @@ export async function GET(request) {
   }
 }
 
+// Import uploadImage at the top if not present, but I can't see the top imports easily in replace.
+// I will assume the imports need to be added.
+// Wait, I can't add imports with replace_file_content easily if I don't target them.
+// I'll update the whole file or huge chunks. The file is small enough.
+// Actually, I'll use `replace_file_content` for the POST method and assume I need to add the import.
+// Let's check imports first.
 export async function POST(request) {
   try {
     await connectDB();
-    const { name, seo } = await request.json();
+    const formData = await request.formData();
 
+    const name = formData.get("name");
     if (!name) {
       return NextResponse.json(
         { success: false, error: "City name is required" },
@@ -81,7 +89,61 @@ export async function POST(request) {
       );
     }
 
-    const newCity = await City.create({ name, seo });
+    const slug = formData.get("slug");
+    const description = formData.get("description");
+    const isActive = formData.get("isActive") === "true";
+
+    // Amenities
+    const amenities = formData.getAll("amenities");
+
+    // Solutions For Everyone
+    const solutionsContent = formData.get("solutionsForEveryone[content]");
+    const solutionsCta = formData.get("solutionsForEveryone[cta]");
+    const solutionsCtaLink = formData.get("solutionsForEveryone[ctaLink]");
+
+    // Images
+    const imageFile = formData.get("image");
+    const solutionImageFile = formData.get("solutionsForEveryoneImage");
+
+    let imagePath = "";
+    if (imageFile && typeof imageFile === "object" && imageFile.size > 0) {
+      imagePath = await uploadImage(imageFile, "cities");
+    }
+
+    let solutionImagePath = "";
+    if (
+      solutionImageFile &&
+      typeof solutionImageFile === "object" &&
+      solutionImageFile.size > 0
+    ) {
+      solutionImagePath = await uploadImage(
+        solutionImageFile,
+        "cities/solutions",
+      );
+    }
+
+    const payload = {
+      name,
+      description,
+      isActive,
+      amenities,
+      image: imagePath,
+      solutionsForEveryone: {
+        content: solutionsContent,
+        cta: solutionsCta,
+        ctaLink: solutionsCtaLink,
+        image: solutionImagePath,
+      },
+      seo: {
+        metaTitle: formData.get("seo[metaTitle]"),
+        metaDescription: formData.get("seo[metaDescription]"),
+        codeSnippet: formData.get("seo[codeSnippet]"),
+      },
+    };
+
+    if (slug) payload.slug = slug;
+
+    const newCity = await City.create(payload);
 
     return NextResponse.json({
       success: true,
@@ -89,13 +151,13 @@ export async function POST(request) {
       message: "City created successfully",
     });
   } catch (error) {
-    // Duplicate key error for slug?
     if (error.code === 11000) {
       return NextResponse.json(
         { success: false, error: "City with this name already exists" },
         { status: 400 },
       );
     }
+    console.error("Create City Error:", error);
     return NextResponse.json(
       { success: false, error: error.message || "Failed to create city" },
       { status: 500 },
