@@ -36,7 +36,7 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div>
+    <div className="space-y-6 max-w-[1440px] mx-auto w-full">
       {/* <div className="mb-8">
         <h1 className="font-heading text-3xl text-brand-dark">
           Dashboard Overview
