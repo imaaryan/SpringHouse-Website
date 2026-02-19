@@ -40,15 +40,18 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen w-full bg-brand-light font-body">
       {/* Left Side - Brand Panel */}
-      <div className="hidden w-1/2 flex-col justify-center bg-brand-primary p-12 text-white lg:flex">
-        <div className="max-w-md">
-          <h1 className="mb-4 font-heading text-5xl tracking-wide">
-            SpringHouse
-          </h1>
-          <p className="text-lg opacity-90">
-            Welcome to the centralized admin dashboard. Manage your properties,
-            content, and settings with ease and efficiency.
-          </p>
+      <div
+        className="hidden w-1/2 flex-col justify-center bg-cover bg-center  text-white lg:flex"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 170, 166, 0.8), rgba(0, 170, 166, 0.8)), url('/assets/images/auth-one-bg.jpg')`,
+        }}
+      >
+        <div className="relative z-10 max-w-md flex flex-col justify-center items-center">
+          <img
+            src="/assets/springhouse.webp"
+            alt="logo"
+            className="h-34 filter brightness-[11] pb-6"
+          />
         </div>
       </div>
 
@@ -57,7 +60,7 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           <div className="mb-8 text-center lg:text-left">
             <h2 className="mb-2 font-heading text-3xl text-brand-dark">
-              Admin Login
+              ADMIN LOGIN
             </h2>
             <p className="text-gray-500">Sign in to access your dashboard</p>
           </div>

@@ -1,15 +1,23 @@
+/* 1. Import Google Fonts (Montserrat) */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 
-@theme {
-  --color-brand-primary: #00aaa6;
-  --color-brand-light: #f5f3f3;
-  --color-brand-dark: #282828;
-
-  --font-heading: "gobold", sans-serif;
-  --font-body: "Montserrat", sans-serif;
+/* 2. Define Local Font (Gobold) */
+@font-face {
+  font-family: "gobold";
+  src: url("/assets/font/Gobold Regular.otf");
 }
 
-/* Ensure fonts are loaded if not already imported in style.css, 
-   but since they are in style.css which is imported in layout.js, 
-   we just strictly define the font-family utilities here if needed 
-   or rely on the theme variables above which map to font-heading and font-body utilities. */
+@theme {
+  /* Brand Colors from style.css */
+  --color-brand-primary: #00aaa6; /* --theme-primarycolor */
+  --color-brand-light: #f5f3f3; /* --theme-lightcolor */
+  --color-brand-dark: #282828; /* Custom dark for admin, keeping for contrast */
+  --color-brand-black: #000000; /* --theme-blackcolor */
+  --color-brand-white: #ffffff; /* --theme-whitecolor */
+  --color-brand-para: #626262; /* --theme-paracolor */
+
+  /* Fonts */
+  --font-heading: "gobold", sans-serif; /* --theme-mainhead */
+  --font-body: "Montserrat", sans-serif; /* --theme-mainpara */
+}
