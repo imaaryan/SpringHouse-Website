@@ -50,9 +50,6 @@ export async function POST(request) {
       locationOnMap, // Usually "location" field in model is distinct or same? Model has `location` AND `locationOnMap`. `location` seems to be short text.
       location: formData.get("location"), // Short location text
       isActive,
-      amenities,
-      activeSolutions,
-      amenities,
       activeSolutions,
       images: uploadedInames,
       seo: {

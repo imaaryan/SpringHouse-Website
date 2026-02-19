@@ -7,7 +7,7 @@ import { applySlugify } from "@/utils/slugMiddleware";
 export async function GET(request, { params }) {
   try {
     await connectDB();
-    const { id } = params;
+    const { id } = await params;
     const property = await Property.findById(id).populate(
       "city area amenities activeSolutions",
     );
@@ -31,7 +31,7 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     await connectDB();
-    const { id } = params;
+    const { id } = await params;
     const formData = await request.formData();
 
     const existingProperty = await Property.findById(id);
@@ -126,7 +126,7 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     await connectDB();
-    const { id } = params;
+    const { id } = await params;
     const deletedProperty = await Property.findByIdAndDelete(id);
 
     if (!deletedProperty) {

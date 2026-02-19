@@ -6,7 +6,7 @@ import { uploadImage } from "@/utils/upload";
 export async function GET(request, { params }) {
   try {
     await connectDB();
-    const { id } = params;
+    const { id } = await params;
 
     // Use findById directly
     // Using simple query instead of finding by ID from params inside try block
@@ -36,7 +36,7 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     await connectDB();
-    const { id } = params;
+    const { id } = await params;
     const formData = await request.formData();
 
     const existingSolution = await Solution.findById(id);
@@ -169,7 +169,7 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     await connectDB();
-    const { id } = params;
+    const { id } = await params;
     const deleted = await Solution.findByIdAndDelete(id);
 
     if (!deleted) {
