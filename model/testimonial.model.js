@@ -17,6 +17,10 @@ const testimonialSchema = new mongoose.Schema(
     featuredImage: {
       type: String,
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true },
 );
