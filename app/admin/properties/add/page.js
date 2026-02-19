@@ -192,8 +192,6 @@ export default function AddPropertyPage() {
               value={formData.slug}
               onChange={handleChange}
               placeholder="url"
-              disabled
-              className="bg-gray-50"
             />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FormSelect

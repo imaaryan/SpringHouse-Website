@@ -44,12 +44,6 @@ const solutionSchema = new mongoose.Schema(
         image: String,
       },
     ],
-    activeProperties: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Property",
-      },
-    ],
     isActive: {
       type: Boolean,
       default: true,
