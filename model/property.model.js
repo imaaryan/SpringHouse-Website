@@ -14,6 +14,9 @@ const propertySchema = new mongoose.Schema(
       required: [true, "Property name is required"],
       trim: true,
     },
+    propertyCode: {
+      type: String,
+    },
     description: {
       type: String,
     },
