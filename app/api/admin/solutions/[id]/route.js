@@ -126,6 +126,38 @@ export async function PUT(request, { params }) {
       i++;
     }
 
+    // Networking
+    const networkingTitle = formData.get("networking[title]") || "";
+    const networkingContent = formData.get("networking[content]") || "";
+    const networkingImageFile = formData.get("networkingImage");
+    let networkingImagePath = existingSolution.networking?.image || "";
+    if (
+      networkingImageFile &&
+      typeof networkingImageFile === "object" &&
+      networkingImageFile.size > 0
+    ) {
+      networkingImagePath = await uploadImage(
+        networkingImageFile,
+        "solutions/networking",
+      );
+    } else if (networkingImageFile === "") {
+      networkingImagePath = ""; // Allow clearing if empty string logic used, optional
+    }
+
+    // Our Community
+    const newCommunityImageInputs = formData.getAll("communityImages");
+    const existingCommunityImageInputs = formData.getAll(
+      "existingCommunityImages",
+    );
+    const communityImages = [...existingCommunityImageInputs];
+
+    for (const input of newCommunityImageInputs) {
+      if (input && typeof input === "object" && input.size > 0) {
+        const path = await uploadImage(input, "solutions/community");
+        if (path) communityImages.push(path);
+      }
+    }
+
     const updatePayload = {
       name,
       description,
@@ -134,6 +166,12 @@ export async function PUT(request, { params }) {
       testimonials,
       companyImages: newCompanyImages,
       featuredSpaces,
+      ourCommunity: communityImages,
+      networking: {
+        title: networkingTitle,
+        content: networkingContent,
+        image: networkingImagePath,
+      },
       isActive,
       seo: {
         metaTitle: formData.get("seo[metaTitle]"),

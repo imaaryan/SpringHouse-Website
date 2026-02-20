@@ -44,6 +44,16 @@ const solutionSchema = new mongoose.Schema(
         image: String,
       },
     ],
+    ourCommunity: [
+      {
+        type: String,
+      },
+    ],
+    networking: {
+      title: String,
+      content: String,
+      image: String,
+    },
     isActive: {
       type: Boolean,
       default: true,

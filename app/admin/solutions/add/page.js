@@ -27,6 +27,8 @@ export default function AddSolutionPage() {
     isActive: false, // Default Draft
     fourPoints: ["", "", "", ""],
     testimonials: [],
+    networking: { title: "", content: "" },
+    ourCommunity: [],
     seo: {
       metaTitle: "",
       metaDescription: "",
@@ -40,6 +42,12 @@ export default function AddSolutionPage() {
 
   const [companyImages, setCompanyImages] = useState([]); // Multiple
   const [companyImagePreviews, setCompanyImagePreviews] = useState([]);
+
+  const [networkingImage, setNetworkingImage] = useState(null);
+  const [networkingImagePreview, setNetworkingImagePreview] = useState(null);
+
+  const [communityImages, setCommunityImages] = useState([]);
+  const [communityImagePreviews, setCommunityImagePreviews] = useState([]);
 
   // Featured Spaces State: Array of { name: "", image: File|null, preview: "" }
   const [featuredSpaces, setFeaturedSpaces] = useState([
@@ -122,6 +130,38 @@ export default function AddSolutionPage() {
     setCompanyImagePreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
+  // Handle Networking Image
+  const handleNetworkingImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setNetworkingImage(file);
+      setNetworkingImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleNetworkingTextChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      networking: { ...prev.networking, [name]: value },
+    }));
+  };
+
+  // Handle Community Images
+  const handleCommunityImagesChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length > 0) {
+      setCommunityImages((prev) => [...prev, ...files]);
+      const newPreviews = files.map((file) => URL.createObjectURL(file));
+      setCommunityImagePreviews((prev) => [...prev, ...newPreviews]);
+    }
+  };
+
+  const removeCommunityImage = (index) => {
+    setCommunityImages((prev) => prev.filter((_, i) => i !== index));
+    setCommunityImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
   // Handle Featured Spaces
   const addSpace = () => {
     setFeaturedSpaces((prev) => [
@@ -183,6 +223,16 @@ export default function AddSolutionPage() {
           data.append(`featuredSpaces[${index}][image]`, space.image);
         }
       });
+
+      // Networking
+      data.append("networking[title]", formData.networking.title || "");
+      data.append("networking[content]", formData.networking.content || "");
+      if (networkingImage) {
+        data.append("networkingImage", networkingImage);
+      }
+
+      // Community Images
+      communityImages.forEach((img) => data.append("communityImages", img));
 
       const res = await fetch("/api/admin/solutions", {
         method: "POST",
@@ -263,6 +313,125 @@ export default function AddSolutionPage() {
             onImageChange={handleCompanyImagesChange}
             onRemoveImage={removeCompanyImage}
           />
+
+          {/* Networking */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">
+              Networking
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="md:col-span-1 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 flex items-center justify-center relative overflow-hidden h-32">
+                {networkingImagePreview ? (
+                  <>
+                    <img
+                      src={networkingImagePreview}
+                      alt="Networking"
+                      className="w-full h-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setNetworkingImage(null);
+                        setNetworkingImagePreview(null);
+                      }}
+                      className="absolute top-2 right-2 bg-white flex items-center justify-center rounded-full p-1 shadow-md text-red-500 hover:bg-red-50 z-10"
+                    >
+                      <X size={14} />
+                    </button>
+                  </>
+                ) : (
+                  <label className="cursor-pointer flex flex-col items-center justify-center w-full h-full">
+                    <UploadCloud size={24} className="text-gray-400 mb-1" />
+                    <span className="text-xs text-gray-500">Upload Image</span>
+                    <input
+                      type="file"
+                      className="hidden"
+                      accept="image/*"
+                      onChange={handleNetworkingImageChange}
+                    />
+                  </label>
+                )}
+              </div>
+              <div className="md:col-span-2 space-y-4">
+                <FormInput
+                  label="Title"
+                  name="title"
+                  value={formData.networking.title}
+                  onChange={handleNetworkingTextChange}
+                  placeholder="Networking Title"
+                />
+                <FormTextarea
+                  label="Content"
+                  name="content"
+                  value={formData.networking.content}
+                  onChange={handleNetworkingTextChange}
+                  rows={3}
+                  placeholder="Networking content..."
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Our Community */}
+          <section className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-[15px] font-bold text-gray-800">
+                Our Community
+              </h2>
+              <label className="cursor-pointer bg-brand-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-teal-600 transition shadow-sm">
+                Add Images
+                <input
+                  type="file"
+                  multiple
+                  className="hidden"
+                  accept="image/*"
+                  onChange={(e) => handleCommunityImagesChange(e, true)}
+                />
+              </label>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 min-h-[160px]">
+              {communityImagePreviews.length === 0 ? (
+                <div className="flex items-center justify-center h-full text-gray-400 text-sm">
+                  No images added yet. Click 'Add Images' to upload.
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                  {communityImagePreviews.map((preview, i) => (
+                    <div
+                      key={i}
+                      className="h-28 relative rounded-lg overflow-hidden border border-gray-200 group"
+                    >
+                      <img
+                        src={preview}
+                        alt="Community"
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeCommunityImage(i)}
+                        className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md text-red-500 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <line x1="18" y1="6" x2="6" y2="18"></line>
+                          <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
 
           {/* Featured Spaces (Custom) */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">

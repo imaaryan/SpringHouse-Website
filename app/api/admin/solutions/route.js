@@ -55,6 +55,28 @@ export async function POST(request) {
       i++;
     }
 
+    // Networking
+    const networkingTitle = formData.get("networking[title]") || "";
+    const networkingContent = formData.get("networking[content]") || "";
+    const networkingImageFile = formData.get("networkingImage");
+    let networkingImagePath = "";
+    if (networkingImageFile && networkingImageFile.size > 0) {
+      networkingImagePath = await uploadImage(
+        networkingImageFile,
+        "solutions/networking",
+      );
+    }
+
+    // Our Community Images
+    const communityImageFiles = formData.getAll("communityImages");
+    const communityImages = [];
+    for (const file of communityImageFiles) {
+      if (file && file.size > 0) {
+        const path = await uploadImage(file, "solutions/community");
+        if (path) communityImages.push(path);
+      }
+    }
+
     const payload = {
       name,
       slug: slug || undefined,
@@ -64,6 +86,12 @@ export async function POST(request) {
       testimonials,
       companyImages,
       featuredSpaces,
+      ourCommunity: communityImages,
+      networking: {
+        title: networkingTitle,
+        content: networkingContent,
+        image: networkingImagePath,
+      },
       isActive,
       seo: {
         metaTitle: formData.get("seo[metaTitle]"),
