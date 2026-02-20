@@ -27,17 +27,18 @@ const homepageSchema = new mongoose.Schema(
     ],
     features: [
       {
-        name: String,
+        content: String,
         image: String,
       },
     ],
     solutionsForEveryone: {
-      title: String,
       content: String,
       image: String,
+      cta: String,
+      ctaLink: String,
     },
     networking: {
-      name: String,
+      title: String,
       content: String,
       image: String,
     },
