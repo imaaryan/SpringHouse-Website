@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring House</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+    <link rel="stylesheet" href="css/main.css?var=3"/>
+    <link rel="stylesheet" href="css/style.css?var=3"/>
+    <link rel="stylesheet" href="css/responsive.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+    <style>
+.dropdown ul {
+    animation: growDown 300ms ease-in-out forwards;
+    transform-origin: top center;
+}
+
+        .container-fluid {
+            width: 90%;
+        }
+
+        .springhouse-image {
+            position: relative;
+        }
+
+        .spring-housebaner .shape-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background: var(--theme-whitecolor);
+            width: 33vw;
+            height: 30vh;
+            border-radius: 0 20px 0 0;
+        }
+
+        .spring-housebaner .shape-left-top {
+            position: absolute;
+            top: -19px;
+            left: -2px;
+            transform: rotate(270deg);
+        }
+
+        .spring-housebaner .shape-right-bottom {
+            position: absolute;
+            right: -14px;
+            bottom: 3px;
+            -webkit-transform: rotate(270deg);
+            -ms-transform: rotate(270deg);
+            transform: rotate(270deg);
+        }
+
+        .spring-content {
+            top: -26vh;
+            left: 30px;
+            position: relative;
+        }
+
+        .section-span {
+            font-size: 1vw;
+        }
+
+        .section-title {
+            font-size: 3vw;
+        }
+
+        .locations-image {
+            position: relative;
+            overflow: hidden;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+
+        .locations-image .shape-bottom {
+            height: 140px;
+            width: 40vh;
+        }
+
+        .locations-image .shape-left-top {
+            position: absolute;
+            /* background: red; */
+            top: -27px;
+            left: -1px;
+            transform: rotate(270deg);
+        }
+
+        .location-content {
+            position: relative;
+            top: -108px;
+            left: 22px;
+        }
+
+        .locations-image img {
+            height: 450px;
+            object-fit: cover;
+            object-position: center;
+            /*
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+     border-bottom-right-radius: 20px;
+*/
+        }
+
+        .locations-image .shape-right-bottom {
+            position: absolute;
+            right: -28px;
+            bottom: -2px;
+            -webkit-transform: rotate(270deg);
+            -ms-transform: rotate(270deg);
+            transform: rotate(270deg);
+        }
+
+        .location-img1 img {
+            height: 52vh;
+        }
+
+        .location-img1 .shape-bottom {
+            height: 17vh;
+            width: 23vh;
+        }
+
+        .location-content1 {
+            left: 20px;
+            position: relative;
+            top: -14vh;
+        }
+
+        .location-img1 .shape-right-bottom {
+            bottom: -4px;
+        }
+
+        .locations-image.location-img1 {
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+
+        .locations-image:hover img {
+            transform: scale(1.1);
+        }
+
+        .managed-para {
+            /* background: url(../img/tanspaent-bg.png); */
+            background-repeat: no-repeat;
+            background-size: cover;
+            /* background-position: bottom; */
+            padding: 0;
+            background: transparent;
+            border-radius: 20px;
+        }
+
+        .blog-card .shape-bottom {
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            background: var(--theme-whitecolor);
+            width: 200px;
+            height: 97px;
+            border-radius: 0 20px 0 0;
+        }
+
+        .blog-card .shape-right-bottom {
+            position: absolute;
+            right: -14px;
+            bottom: 16px;
+        }
+
+        .blog-image img {
+            border-bottom-right-radius: 10px;
+        }
+
+        .blog-para p {
+            font-size: 30px;
+        }
+
+        .blog-date.textright {
+            margin-top: 25px;
+            color: #575757;
+        }
+
+        .get-call-icon .call-icon img {
+            max-width: 40px;
+            transition: 0.5s;
+        }
+
+        .footer-links a {
+            font-size: 12px;
+            color: var(--theme-whitecolor);
+            font-family: var(--theme-mainpara);
+            font-weight: 400;
+            position: relative;
+            padding: 0px 8px;
+            text-wrap-mode: nowrap;
+        }
+
+        .footer-links a::after {
+            content: "";
+            position: absolute;
+            right: 0px;
+            top: 52%;
+            transform: translateY(-45%);
+            width: 1px;
+            height: 53%;
+            border-right: 1px solid var(--theme-whitecolor);
+        }
+
+        .footer-links.pt30 {
+            margin-left: -8px;
+        }
+
+        .networking-rightside button.btn.btn-secondary {
+            position: absolute;
+            z-index: 99;
+            top: 16%;
+            right: 40%;
+            background: #fff;
+            border-radius: 50px;
+            height: 25px;
+            width: 25px;
+        }
+
+        .networking-rightside {
+            padding: 0px 40px;
+            position: relative;
+        }
+        .springhouse-image {
+    position: relative;
+    border-radius: 20px;
+}
+
+        .service-img .shape-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background: #f5f3f3;
+            width: 148px;
+            height: 85px;
+            border-radius: 0 20px 0 0;
+        }
+
+        .service-para {
+            margin-top: -30px;
+        }
+
+        .service-head {
+            top: -65px;
+            position: relative;
+            text-align: left;
+            z-index: 99;
+            left: 10px;
+        }
+
+        .service-content {
+            background: var(--theme-lightcolor);
+            padding: 0px 20px 30px 20px;
+            position: relative;
+            margin-top: 0px;
+            z-index: 1;
+            border-radius: 0 0 var(--theme-mediumradius) var(--theme-mediumradius);
+        }
+
+        .s-p {
+            margin-top: 0px;
+        }
+
+        .service-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        header.sticky {
+            transition: 0.5s;
+        }
+
+        header.sticky .nav__container {
+/*
+            padding-top: 8px;
+            padding-bottom: 8px;
+*/
+        }
+
+        .spring-housebaner video {
+            height: 81vh;
+            object-fit: cover;
+        }
+
+        .spring-housebaner .section-span {
+            letter-spacing: 3px;
+        }
+
+        form select.form-select {
+            padding: 10px 18px;
+            background-color: #ffffffdb;
+            border: 1px solid #ffffffdb;
+        }
+
+        form select.form-select {
+            padding: 2vh 3vh;
+            background-color: #ffffffdb;
+            border: 1px solid #ffffffdb;
+            font-size: 2.4vh;
+        }
+
+        .form-select:focus {
+            box-shadow: none !important;
+            border-color: transparent !important;
+        }
+
+        .spring-housebaner .row1 {
+            position: absolute;
+            right: 28px;
+            bottom: 20vh;
+            width: 51vw;
+            z-index: 99;
+        }
+
+        .explore {
+            width: 100%;
+            padding: 2vh 0vh;
+            font-size: 2.2vh;
+        }
+
+        .managed-office-bg :hover .section-title {
+            text-shadow: 0px 1px 4px #000;
+        }
+
+        .networking-image {
+            background-image: url(img/networking.png);
+            height: 100vh;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+        .spring-housebaner .row1 {
+bottom: 32vh;
+}
+    </style>
+</head>
+
+<body>
+    <style>
+        .nav__container {
+            width: 90%;
+        }
+        </style>
+
+    <div id="main" style="min-height: 1730px;">
+    <div style="position: sticky;top: 0px;">
+        <header>
+          <div class="nav__container">
+            <div class="nav__mobile">
+              <div class="nav__logo"><a href="index.php"><img src="img/logo.png" alt="spring-house-logo"></a></div>
+              <div class="nav__btn">
+                <a aria-label="Mobile menu" class="nav-toggle fade"><span></span><span class="mrg"></span><span class="mrg"></span></a>
+              </div>
+            </div>
+              <nav class="menu-toggle">
+                <ul class="nav__menu">
+                  <li><a href="">About us</a></li>
+                  <li class="dropdown"><a href="#">Locations</a>
+                    <ul>
+                      <li><a href="">Gurugram</a></li>
+                      <li><a href="">Delhi</a></li>
+                      <li><a href="">Noida</a></li>
+                    </ul>
+                  </li>
+                  <li class="dropdown"><a href="#">Solutions</a>
+                    <ul>
+                      <li><a href="">Managed Space</a></li>
+                      <li><a href="">Virtual Office</a></li>
+                      <li><a href="">Coworking</a></li>
+                      <li><a href="">Day Pass</a></li>
+                       <li><a href="">Meeting Room</a></li>
+                         <li><a href="">Event Space</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="" class="managed-office">Managed Office</a></li>
+                </ul>
+              </nav>
+              <div class="navbar-btn-box">
+                <a href="javascript:void(0)" class="themebtn themebtn1 membership-login">Membership Login</a>
+                <a href="javascript:void(0)" class="themebtn themebtn2 lets-talk">Let's Talk!</a>
+              </div>
+          </div>
+        </header>
+
+    <div class="spring-housebaner relative pt30" id="page2">
+        <div class="container-fluid">
+            <div class="springhouse-image overflow-hidden">
+                <video autoplay="" loop="" playsinline="" poster="img/home-banner.jpg" preload="metadata" muted class="banner-video">
+                    <source src="img/banner-video.mp4" type="video/mp4">Your browser does not support the video tag.
+                </video>
+                <div class="row row1" style="transform: translateY(100px);">
+                    <div class="col-md-12">
+                        <form class="form-p">
+                            <div class="row" style="justify-content: end;">
+                                <div class="col-md-4">
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option selected="">Select A City</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option selected="">Select A Solution</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="submit" name="submit-btn" class="themebtn explore themebtn2 d-block">Explore</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="shape-bottom">
+                    <div class="shape-left-top">
+                        <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #ffffff;">
+                            <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#fff"></path>
+                        </svg>
+                    </div>
+                    <div class="shape-right-bottom">
+                        <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #ffffff;">
+                            <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#0e0f11" style="fill: #ffffff;"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+                    <style>
+                       #text-container h2, text-container h2 span{
+                           color: transparent;
+                       }
+                    </style>
+                <div class="spring-content" id="text-container">
+                    <h2 class="section-span">Work. Connect. Create.</h2>
+                    <h2 class="section-title mt-2 mb-0">a space to work.</h2>
+                        <h2 class="section-title">a community to grow.</h2>
+                </div>
+
+
+
+    </div>
+    </div>
+    </div>
+    </div>
+    <style>
+        .form-p {
+            display: none;
+        }
+    </style>
+    <div class="presence ptb60 pt-0">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <span class="section-title-span">presence</span>
+                </div>
+            </div>
+            <div class="row  pt30">
+                <div class="col-lg-3 col-md-4">
+                    <div class="counter-box">
+                        <div class="counter-number">
+                            <span class="counter font46">15</span> <span class="plus font46">+</span>
+                        </div>
+                        <p class="font20">Locations</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <div class="counter-box">
+                        <div class="counter-number">
+                            <span class="counter font46">300</span> <span class="plus font46">+</span>
+                        </div>
+                        <p class="font20">Organisations</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4s">
+                    <div class="counter-box">
+                        <div class="counter-number">
+                            <span class="counter font46">450</span> <span class="plus font46">k+</span>
+                        </div>
+                        <p class="font20">Square Feet Area</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <div class="counter-box">
+                        <div class="counter-number">
+                            <span class="counter font46">5</span> <span class="plus font46">k+</span>
+                        </div>
+                        <p class="font20">Support Staff</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="loctions pb30">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <span class="section-title-span">Locations</span>
+                </div>
+            </div>
+            <div class="row pt30">
+                <div class="col-lg-12">
+                    <a href="" class="locationscard relative">
+                        <div class="locations-image">
+                            <img src="img/gurugram.jpg" alt="gurugram">
+                            <div class="shape-bottom">
+                                <div class="shape-left-top">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.8rem; height: 1.8rem; stroke: #ffffff;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#fff"></path>
+                                    </svg>
+                                </div>
+                                <div class="shape-right-bottom">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.8rem; height: 1.8rem; stroke: #ffffff;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#0e0f11" style="fill: #ffffff;"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="location-content">
+                            <span class="section-span"><span class="wavy-line">14</span> centerss</span>
+                            <h4 class="section-title mt-2">Gurugram</h4>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="row gx-5">
+                <div class="col-lg-6 pr30">
+                    <a href="" class="locationscard relative">
+                        <div class="locations-image location-img1">
+                            <img src="img/noida1.png" alt="gurugram">
+                            <div class="shape-bottom">
+                                <div class="shape-left-top">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.8rem; height: 1.8rem; stroke: #ffffff;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#fff"></path>
+                                    </svg>
+                                </div>
+                                <div class="shape-right-bottom">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.8rem; height: 1.8rem; stroke: #ffffff;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#0e0f11" style="fill: #ffffff;"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="location-content1">
+                            <span class="section-span"><span class="wavy-line">2</span> centers</span>
+                            <h4 class="section-title mt-2">Delhi</h4>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-6 pl30">
+                    <a href="" class="locationscard relative">
+                        <div class="locations-image location-img1">
+                            <img src="img/delhi1.png" alt="gurugram">
+                            <div class="shape-bottom">
+                                <div class="shape-left-top">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.8rem; height: 1.8rem; stroke: #ffffff;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#fff"></path>
+                                    </svg>
+                                </div>
+                                <div class="shape-right-bottom">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.8rem; height: 1.8rem; stroke: #ffffff;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#0e0f11" style="fill: #ffffff;"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="location-content1 absolute">
+                            <span class="section-span "><span class="wavy-line">1</span> centers</span>
+                            <h4 class="section-title mt-2">Noida</h4>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="design-ideal">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <span class="section-title-span">Design Your Ideal Work Nest</span>
+                </div>
+            </div>
+            <div class="row pt30">
+                <div class="col-lg-3">
+                    <a href="" class="design-your-card">
+                        <div class="design-image">
+                            <img src="img/open-work-desk.png" alt="">
+                        </div>
+                        <div class="design-para mt-3">
+                            <p class="font24 text-center capitalize textblack">Open Work desks</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3">
+                    <a href="" class="design-your-card">
+                        <div class="design-image">
+                            <img src="img/private-focus.png" alt="">
+                        </div>
+                        <div class="design-para mt-3">
+                            <p class="font24 text-center capitalize textblack">Private Focus Pods</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3">
+                    <a href="" class="design-your-card">
+                        <div class="design-image">
+                            <img src="img/client-reception.png" alt="">
+                        </div>
+                        <div class="design-para mt-3">
+                            <p class="font24 text-center capitalize textblack">Client Lounge & Reception</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3">
+                    <a href="" class="design-your-card">
+                        <div class="design-image">
+                            <img src="img/leisure.png" alt="">
+                        </div>
+                        <div class="design-para mt-3">
+                            <p class="font24 text-center capitalize textblack">Leisure Zones</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="managed-office-section ptb60">
+        <div class="container-fluid">
+            <div class="managed-office-bg">
+
+                <div class="row">
+                    <img src="img/spring-managed.png">
+                    <div class="col-lg-6">
+                        <div class="managed-para relative">
+                            <style>
+                                .managed-office-bg {
+                                    position: relative;
+                                    overflow: hidden;
+                                    padding: 0;
+                                }
+
+                                .managed-office-bg img {
+                                    transition: 0.5s;
+                                }
+
+                                .managed-office-bg .row {
+                                    overflow: hidden;
+                                    position: relative;
+                                    transition: 0.5s;
+                                }
+
+                                .managed-office-bg :hover img {
+                                    transform: scale(1.1);
+                                }
+
+                                .managed-para.relative {
+                                    position: absolute;
+                                    z-index: 99;
+                                    top: 39px;
+                                    transition: 0.5s;
+                                }
+
+                                .svg-container {
+                                    /* position: absolute; */
+                                    position: relative;
+                                    width: 615px;
+                                    height: 450px;
+                                    padding: 27px;
+                                    /* z-index: 999; */
+                                    /* bottom: auto; */
+                                }
+
+                                .svg-box {
+                                    position: absolute;
+                                    top: 0;
+                                    left: 30px;
+                                }
+
+                                .svg-text {
+                                    position: absolute;
+                                    top: 22px;
+                                    left: 40px;
+                                    width: 89%;
+                                    padding: 29px;
+                                }
+
+                                .svg-text p {
+                                    font-size: 18px;
+                                    color: #1c1c1c;
+                                    opacity: 1;
+                                    z-index: 99;
+                                    position: relative;
+                                    line-height: 30px;
+                                }
+
+                                .textright.tt {
+                                    bottom: 15px;
+                                    position: absolute;
+                                    right: 40%;
+                                }
+
+                                .textright a.morebtn {
+                                    color: #282828;
+                                    font-size: 18px;
+                                    text-transform: uppercase;
+                                }
+
+                                .postion {
+                                    left: auto;
+                                    position: absolute;
+                                    top: auto;
+                                    right: 58px;
+                                    bottom: 0;
+                                }
+
+                                .postion h4 {
+                                    color: #fff;
+                                    font-size: 25px;
+                                    text-align: center;
+                                }
+
+                                .service-img img {
+
+
+                                    border-top-left-radius: 10px;
+                                    border-top-right-radius: 10px;
+                                }
+                            </style>
+                            <div class="svg-container">
+                                <!-- SVG Shape -->
+                                <svg class="svg-box" width="580" height="450" viewBox="0 0 615 491" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 0H595C607.15 0 617 9.85 617 22V397C617 409.15 607.15 419 595 419H430C421.716 419 415 425.716 415 434V471C415 482.046 406.046 491 395 491H22C9.85 491 0 481.15 0 469V22C0 9.85 9.85 0 22 0H20Z" fill="#ffffffc4"></path>
+                                </svg>
+
+
+                                <!-- Optional Text Inside -->
+                                <div class="svg-text">
+                                    <p>
+                                        A fully serviced private office designed exclusively for one company, complete with housekeeping, a cafeteria, and operational support. Enjoy a distraction-free workspace with end-to-end facility management, high-speed internet, and customizable layouts to fit your business needs. With security, maintenance, and tech-enabled infrastructure taken care of, you can focus entirely on growth and operations without the hassle of daily management.
+                                    </p>
+
+                                </div>
+                                <div class="textright tt">
+                                    <a href="javascript:void(0)" class="morebtn ">More Details</a>
+                                </div>
+                            </div>
+                            <div class="location-content1 postion">
+                                <h4 class="section-title">managed<br>
+                                    offices</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="service-section">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-4 co-md-6 mb-4">
+                    <div class="service-card relative">
+                        <div class="service-img">
+                            <img src="img/j1.png" alt="">
+                            <div class="shape-bottom">
+                                <div class="shape-left-top">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #f5f3f3;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#f5f3f3"></path>
+                                    </svg>
+                                </div>
+                                <div class="shape-right-bottom">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #f5f3f3;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#0e0f11" style="fill: #f5f3f3;"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="service-content">
+                            <div class="service-head absolute">
+                                <h4 class="font24">virtual <br />
+                                    offices</h4>
+                            </div>
+                            <div class="service-para mb-3">
+                                <p>Establish a professional business presence with our virtual office solutions, including GST registration, mail handling, and company incorporation services. Perfect for startups and businesses seeking credibility without a physical office space.</p>
+                            </div>
+                            <div class="service-btn mt-2">
+                                <a href="javascript:void(0)" class="textright morebtn font17">More Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 co-md-6 mb-4">
+                    <div class="service-card relative">
+                        <div class="service-img">
+                            <img src="img/j2.png" alt="">
+                            <div class="shape-bottom">
+                                <div class="shape-left-top">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #f5f3f3;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#f5f3f3"></path>
+                                    </svg>
+                                </div>
+                                <div class="shape-right-bottom">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #f5f3f3;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#0e0f11" style="fill: #f5f3f3;"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="service-content">
+                            <div class="service-head " style="left:0">
+                                <h4 class="font24">coworking <br />
+                                </h4>
+                            </div>
+                            <div class="service-para s-p mb-3">
+                                <p>Whether you need an open desk for collaboration or a private space for focus, our coworking solutions offer flexibility for freelancers, startups, and teams. Customize your setup, work alongside a dynamic community, and enjoy a workspace designed to reflect your brand and culture.</p>
+                            </div>
+                            <div class="service-btn mt-2">
+                                <a href="javascript:void(0)" class="textright morebtn font17">More Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 co-md-6 mb-4">
+                    <div class="service-card relative">
+                        <div class="service-img">
+                            <img src="img/j3.png" alt="">
+                            <div class="shape-bottom">
+                                <div class="shape-left-top">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #f5f3f3;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#f5f3f3"></path>
+                                    </svg>
+                                </div>
+                                <div class="shape-right-bottom">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #f5f3f3;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#0e0f11" style="fill: #f5f3f3;"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="service-content">
+                            <div class="service-head">
+                                <h4 class="font24">meeting <br />
+                                    rooms</h4>
+                            </div>
+                            <div class="service-para mb-3">
+                                <p>Need a conference room rental? Our meeting rooms are designed for client presentations, team discussions, and brainstorming sessions. Book a conference room on rent that ensures privacy, productivity, and seamless collaboration.</p>
+                            </div>
+                            <div class="service-btn mb-0">
+                                <a href="javascript:void(0)" class="textright morebtn font17">More Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 co-md-6 mb-4">
+                    <div class="service-card relative">
+                        <div class="service-img">
+                            <img src="img/j4.png" alt="">
+                            <div class="shape-bottom">
+                                <div class="shape-left-top">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #f5f3f3;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#f5f3f3"></path>
+                                    </svg>
+                                </div>
+                                <div class="shape-right-bottom">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #f5f3f3;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#0e0f11" style="fill: #f5f3f3;"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="service-content">
+                            <div class="service-head ">
+                                <h4 class="font24">event <br />
+                                    space</h4>
+                            </div>
+                            <div class="service-para mb-3">
+                                <p>Our event spaces are ideal for product launches, networking meet-ups, and workshops. Fully equipped and available for event space rental, whether for a private gathering or a public event.</p>
+                            </div>
+                            <div class="service-btn mt-2">
+                                <a href="javascript:void(0)" class="textright morebtn font17">More Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 co-md-6 mb-4">
+                    <div class="service-card relative">
+                        <div class="service-img">
+                            <img src="img/j5.png" alt="">
+                            <div class="shape-bottom">
+                                <div class="shape-left-top">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #f5f3f3;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#f5f3f3"></path>
+                                    </svg>
+                                </div>
+                                <div class="shape-right-bottom">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #f5f3f3;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#0e0f11" style="fill: #f5f3f3;"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="service-content">
+                            <div class="service-head ">
+                                <h4 class="font24">day pass <br />
+                                </h4>
+                            </div>
+                            <div class="service-para mb-3 s-p">
+                                <p>Get full office access for a day at any SpringHouse coworking space near you. Enjoy high-speed internet, printing, and flexible seating in a secure and collaborative environment designed for productivity.</p>
+                            </div>
+                            <div class="service-btn mt-2">
+                                <a href="javascript:void(0)" class="textright morebtn font17">More Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="networking ptb60">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <span class="section-title-span">Networking</span>
+                </div>
+            </div>
+            <div class="row pt30 d-flex align-items-center justify-content-center">
+                <div class="col-lg-4">
+                    <div class="networking-rightside">
+                        <div class="networking-para">
+                            <p class="font51">"Alone we can do so little; <span>together we can do so much.</span> "</p>
+                        </div>
+                        <div class="networking-name">
+                            <p class="textright font24">~ Helen Keller</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="networking-rightside">
+
+                        <div class="networking-image-ss relative">
+                            <img src="img/networking.png" class="networking-img" alt="networking">
+                            <div type="button" class="btn btn-secondary tool tooltip" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                                <div class="image-box tooltiptext">
+                                    <div class="spring"><img class="spring-img" src="img/spring1.svg"></div>
+                                    <span class="">Fostering Collaboration Through Shared Spaces</span>
+                                </div>
+
+                            </div>
+                            <style>
+                                .tooltip {
+                                    display: inline-block;
+                                    border-bottom: 1px dotted black;
+                                    position: absolute;
+                                    z-index: 99;
+                                    top: 16%;
+                                    right: 40%;
+                                    background: #fff;
+                                    border-radius: 50px;
+                                    height: 20px;
+                                    width: 20px;
+                                    opacity: 1;
+                                    padding: 0;
+                                }
+
+                                .tooltip .tooltiptext {
+                                    visibility: hidden;
+                                    background: url(img/vector.svg);
+                                    color: #282828;
+                                    text-align: left;
+                                    border-radius: 6px;
+                                    position: absolute;
+                                    z-index: 1;
+                                    background-size: contain;
+                                    background-position: center;
+                                    background-repeat: no-repeat;
+                                    padding: 20px 26px;
+                                    overflow: visible;
+                                }
+
+                                .tool:hover::before {
+                                    display: none;
+                                }
+
+                                .tool:hover::after {
+                                    display: none;
+                                }
+
+                                /*
+              .tooltip:hover {
+    background-image: url(img/teal.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border-color: transparent;
+    width: 45px;
+    height: 45px;
+    top: 13%;
+}
+*/
+                                .tooltip .tooltiptext span {
+                                    text-align: left;
+                                    font-size: 18px;
+                                    font-family: 'Montserrat';
+                                }
+
+                                .tooltip:hover .tooltiptext {
+                                    visibility: visible;
+                                }
+
+                                .image-box {
+                                    width: 255px;
+                                    height: 150px;
+                                    background-color: #ddd;
+                                    border-radius: 16px;
+                                    position: relative;
+                                    /* overflow: hidden; */
+                                }
+
+                                .tooltip:hover .tooltiptext {
+                                    visibility: visible;
+                                }
+
+                                .tool::after {
+                                    opacity: 0;
+                                    display: flex;
+                                    flex-direction: row;
+                                    justify-content: center;
+                                    align-items: center;
+                                    position: absolute;
+                                    top: 0px;
+                                    left: 0px;
+                                    right: 0;
+                                    bottom: 0;
+                                    content: "";
+                                    height: 100%;
+                                    width: 100%;
+                                    border: 1px solid #fff;
+                                    border-radius: 100%;
+                                    -webkit-animation-name: ripple;
+                                    animation-name: ripple;
+                                    -webkit-animation-duration: 3s;
+                                    animation-duration: 3s;
+                                    -webkit-animation-delay: 0s;
+                                    animation-delay: 0s;
+                                    -webkit-animation-iteration-count: infinite;
+                                    animation-iteration-count: infinite;
+                                    -webkit-animation-timing-function: cubic-bezier(0.65, 0, 0.34, 1);
+                                    animation-timing-function: cubic-bezier(0.65, 0, 0.34, 1);
+                                    z-index: -1;
+                                }
+
+                                .tool::before {
+                                    opacity: 0;
+                                    display: flex;
+                                    flex-direction: row;
+                                    justify-content: center;
+                                    align-items: center;
+                                    position: absolute;
+                                    top: 0px;
+                                    left: 0px;
+                                    right: 0;
+                                    bottom: 0;
+                                    content: "";
+                                    height: 100%;
+                                    width: 100%;
+                                    border: 1px solid #fff;
+                                    border-radius: 100%;
+                                    -webkit-animation-name: ripple;
+                                    animation-name: ripple;
+                                    -webkit-animation-duration: 3s;
+                                    animation-duration: 3s;
+                                    -webkit-animation-delay: 0.5s;
+                                    animation-delay: 0.5s;
+                                    -webkit-animation-iteration-count: infinite;
+                                    animation-iteration-count: infinite;
+                                    -webkit-animation-timing-function: cubic-bezier(0.65, 0, 0.34, 1);
+                                    animation-timing-function: cubic-bezier(0.65, 0, 0.34, 1);
+                                    z-index: -1;
+                                }
+
+                                @-webkit-keyframes ripple {
+                                    from {
+                                        opacity: 1;
+                                        transform: scale3d(0.80, 0.80, 1);
+                                    }
+
+                                    to {
+                                        opacity: 0;
+                                        transform: scale3d(3, 3, 1);
+                                    }
+                                }
+
+                                @keyframes ripple {
+                                    from {
+                                        opacity: 1;
+                                        transform: scale3d(0.80, 0.80, 1);
+                                    }
+
+                                    to {
+                                        opacity: 0;
+                                        transform: scale3d(3, 3, 1);
+                                    }
+                                }
+                            </style>
+                            <div type="button" class="btn btn-secondary tool tooltip1" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                                <div class="image-box tooltiptext">
+                                    <div class="spring"><img class="spring-img" src="img/spring1.svg"></div>
+                                    <span class="">Fostering Collaboration Through Shared
+                                        Spaces</span>
+                                </div>
+
+                            </div>
+                            <style>
+                                .tooltip1 {
+                                    display: inline-block;
+                                    border-bottom: 1px dotted black;
+                                    position: absolute;
+                                    z-index: 99;
+                                    top: 22%;
+                                    left: 14%;
+                                    background: #fff;
+                                    border-radius: 50px;
+                                    height: 20px;
+                                    width: 20px;
+                                    opacity: 1;
+                                    padding: 0;
+                                }
+
+                                .tooltip1 .tooltiptext {
+                                    visibility: hidden;
+                                    background: url(img/vector.svg);
+                                    color: #282828;
+                                    text-align: left;
+                                    border-radius: 6px;
+                                    position: absolute;
+                                    z-index: 1;
+                                    background-size: contain;
+                                    background-position: center;
+                                    background-repeat: no-repeat;
+                                    padding: 20px 26px;
+                                    overflow: visible;
+                                }
+
+                                .tooltip1 .tooltiptext span {
+                                    text-align: left;
+                                    font-size: 18px;
+                                    font-family: 'Montserrat';
+                                }
+
+                                .tooltip1:hover .tooltiptext {
+                                    visibility: visible;
+                                }
+
+                                .image-box {
+                                    width: 255px;
+                                    height: 150px;
+                                    background-color: #ddd;
+                                    border-radius: 16px;
+                                    position: relative;
+                                    overflow: hidden;
+                                }
+
+                                /*
+   .image-box::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 90px;
+    height: 55px;
+    background-color: #ffffff;
+    border-top-left-radius: 9px;
+    box-shadow: -1px -1px 0 0 #ddd;
+}
+*/
+                            </style>
+                            <div type="button" class="btn btn-secondary tool tooltip2" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                                <div class="image-box tooltiptext">
+                                    <div class="spring"><img class="spring-img" src="img/spring1.svg"></div>
+                                    <span class="">Fostering Collaboration Through Shared
+                                        Spaces</span>
+                                </div>
+
+                            </div>
+                            <style>
+                                .tooltip2 {
+                                    display: inline-block;
+                                    border-bottom: 1px dotted black;
+                                    position: absolute;
+                                    z-index: 99;
+                                    top: 55%;
+                                    left: 50%;
+                                    background: #fff;
+                                    border-radius: 50px;
+                                    height: 20px;
+                                    width: 20px;
+                                    opacity: 1;
+                                    padding: 0;
+                                }
+
+                                .tooltip2 .tooltiptext {
+                                    visibility: hidden;
+                                    background: url(img/vector.svg);
+                                    color: #282828;
+                                    text-align: left;
+                                    border-radius: 6px;
+                                    position: absolute;
+                                    z-index: 1;
+                                    background-size: contain;
+                                    background-position: center;
+                                    background-repeat: no-repeat;
+                                    padding: 20px 26px;
+                                    overflow: visible;
+                                }
+
+                                .tool:hover {
+                                    color: #fff;
+                                    background-color: #04aba7;
+                                    border-color: #04aba7;
+                                }
+
+                                /*
+                            .tooltip2:hover {
+    background-image: url(img/teal.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border-color: transparent;
+    width: 45px;
+    height: 45px;
+    top: 54%;
+}
+*/
+                                .tooltip2 .tooltiptext span {
+                                    text-align: left;
+                                    font-size: 18px;
+                                    font-family: 'Montserrat';
+                                }
+
+                                .tooltip2:hover .tooltiptext {
+                                    visibility: visible;
+                                }
+
+                                .image-box {
+                                    width: 255px;
+                                    height: 150px;
+                                    background-color: #ddd;
+                                    border-radius: 16px;
+                                    position: relative;
+                                    overflow: hidden;
+                                }
+
+                                /*
+   .image-box::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 90px;
+    height: 55px;
+    background-color: #ffffff;
+    border-top-left-radius: 9px;
+    box-shadow: -1px -1px 0 0 #ddd;
+}
+*/
+                            </style>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="our-comunity">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <span class="section-title-span" style="padding-left:0">Our Community</span>
+                </div>
+            </div>
+            <div class="client-grid pt30">
+                <div class="client-grid-item">
+                    <div class="client-logo">
+                        <img src="img/nokia.png" alt="client-logo">
+                    </div>
+                </div>
+                <div class="client-grid-item">
+                    <div class="client-logo">
+                        <img src="img/nokia.png" alt="client-logo">
+                    </div>
+                </div>
+                <div class="client-grid-item">
+                    <div class="client-logo">
+                        <img src="img/nokia.png" alt="client-logo">
+                    </div>
+                </div>
+                <div class="client-grid-item">
+                    <div class="client-logo">
+                        <img src="img/nokia.png" alt="client-logo">
+                    </div>
+                </div>
+                <div class="client-grid-item">
+                    <div class="client-logo">
+                        <img src="img/nokia.png" alt="client-logo">
+                    </div>
+                </div>
+                <div class="client-grid-item">
+                    <div class="client-logo">
+                        <img src="img/nokia.png" alt="client-logo">
+                    </div>
+                </div>
+                <div class="client-grid-item">
+                    <div class="client-logo">
+                        <img src="img/nokia.png" alt="client-logo">
+                    </div>
+                </div>
+                <div class="client-grid-item">
+                    <div class="client-logo">
+                        <img src="img/nokia.png" alt="client-logo">
+                    </div>
+                </div>
+                <div class="client-grid-item">
+                    <div class="client-logo">
+                        <img src="img/nokia.png" alt="client-logo">
+                    </div>
+                </div>
+                <div class="client-grid-item">
+                    <div class="client-logo">
+                        <img src="img/nokia.png" alt="client-logo">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="testimonials ptb60">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <span class="section-title-span">testimonials</span>
+                </div>
+            </div>
+            <div class="testimonial-slider pt30">
+                <div>
+                    <div class="testimonial-card">
+                    <div class="row d-flex align-items-center justify-content-center">
+                                    <div class="col-lg-3">
+                                        <div class="testimonial-img relative">
+                                            <div class="testimonial-client-img"><img src="img/peyush-bansal.png" alt="peyush-bansal"></div>
+                                            <div class="testimonial-spring absolute"><img src="img/spring.png" alt="spring"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <div class="testimonial-content relative">
+                                            <div class="testimonial-quote absolute"><img src="img/quote.png" alt="quote"></div>
+                                            <div class="testimonial-para pe-5">
+                                                <p class="font32">Very comfortable workplace with great ambience and pleasant work culture. Good facilities. Highly recommend this place to budding entrepreneurs.</p>
+                                            </div>
+                                            <div class="testimonial-name">
+                                                <p class="font19 textright">~ Peyush Bansal <br />
+                                                    CEO, Lenskart</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="testimonial-card">
+                        <div class="row d-flex align-items-center justify-content-center">
+                            <div class="col-lg-3">
+                                <div class="testimonial-img relative">
+                                    <div class="testimonial-client-img"><img src="img/peyush-bansal.png" alt="peyush-bansal"></div>
+                                    <div class="testimonial-spring absolute"><img src="img/spring.png" alt="spring"></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="testimonial-content relative">
+                                    <div class="testimonial-quote absolute"><img src="img/quote.png" alt="quote"></div>
+                                    <div class="testimonial-para">
+                                        <p class="font34">Very comfortable workplace with great ambience and pleasant work culture. Good facilities. Highly recommend this place to budding entrepreneurs.</p>
+                                    </div>
+                                    <div class="testimonial-name">
+                                        <p class="font19 textright">~ Peyush Bansal <br />
+                                            CEO, Lenskart</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="testimonial-card">
+                        <div class="row d-flex align-items-center justify-content-center">
+                            <div class="col-lg-3">
+                                <div class="testimonial-img relative">
+                                    <div class="testimonial-client-img"><img src="img/peyush-bansal.png" alt="peyush-bansal"></div>
+                                    <div class="testimonial-spring absolute"><img src="img/spring.png" alt="spring"></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="testimonial-content relative">
+                                    <div class="testimonial-quote absolute"><img src="img/quote.png" alt="quote"></div>
+                                    <div class="testimonial-para">
+                                        <p class="font34">Very comfortable workplace with great ambience and pleasant work culture. Good facilities. Highly recommend this place to budding entrepreneurs.</p>
+                                    </div>
+                                    <div class="testimonial-name">
+                                        <p class="font19 textright">~ Peyush Bansal <br />
+                                            CEO, Lenskart</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="testimonial-card">
+                        <div class="row d-flex align-items-center justify-content-center">
+                            <div class="col-lg-3">
+                                <div class="testimonial-img relative">
+                                    <div class="testimonial-client-img"><img src="img/peyush-bansal.png" alt="peyush-bansal"></div>
+                                    <div class="testimonial-spring absolute"><img src="img/spring.png" alt="spring"></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="testimonial-content relative">
+                                    <div class="testimonial-quote absolute"><img src="img/quote.png" alt="quote"></div>
+                                    <div class="testimonial-para">
+                                        <p class="font34">Very comfortable workplace with great ambience and pleasant work culture. Good facilities. Highly recommend this place to budding entrepreneurs.</p>
+                                    </div>
+                                    <div class="testimonial-name">
+                                        <p class="font19 textright">~ Peyush Bansal <br />
+                                            CEO, Lenskart</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="blogs">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <span class="section-title-span">blogs</span>
+                </div>
+            </div>
+            <div class="row pt30">
+                <div class="col-lg-4">
+                    <div class="blog-card">
+                        <div class="blog-image relative"><img src="img/blog1.png" alt="">
+                            <div class="shape-bottom">
+                                <div class="shape-left-top">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #ffffff;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#fff"></path>
+                                    </svg>
+                                </div>
+                                <div class="shape-right-bottom">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #ffffff;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#0e0f11" style="fill: #ffffff;"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="blog-content text-shape relative">
+                            <div class="blog-para">
+                                <p class="">Best Budget-Friendly Offices in Gurgaon, Delhi, and Noida</p>
+                            </div>
+                            <div class="blog-date textright">
+                                <span class="font17 textright">26-03-2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="blog-card" data-aos="fade-up">
+                        <div class="blog-image relative"><img src="img/blog2.png" alt="">
+                            <div class="shape-bottom">
+                                <div class="shape-left-top">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #ffffff;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#fff"></path>
+                                    </svg>
+                                </div>
+                                <div class="shape-right-bottom">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #ffffff;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#0e0f11" style="fill: #ffffff;"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="blog-content text-shape relative">
+                            <div class="blog-para">
+                                <p class="">Best Budget-Friendly Offices in Gurgaon, Delhi, and Noida</p>
+                            </div>
+                            <div class="blog-date textright">
+                                <span class="font17 textright">26-03-2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="blog-card" data-aos="fade-up">
+                        <div class="blog-image relative"><img src="img/blog3.png" alt="">
+                            <div class="shape-bottom">
+                                <div class="shape-left-top">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #ffffff;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#fff"></path>
+                                    </svg>
+                                </div>
+                                <div class="shape-right-bottom">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #ffffff;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#0e0f11" style="fill: #ffffff;"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="blog-content text-shape relative">
+                            <div class="blog-para">
+                                <p class="">Best Budget-Friendly Offices in Gurgaon, Delhi, and Noida</p>
+                            </div>
+                            <div class="blog-date textright">
+                                <span class="font17 textright">26-03-2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="get-touch ptb60">
+        <div class="container">
+            <div class="row">
+               <div class="col-sm-10 mx-auto">
+<div class="row d-flex align-items-center justify-content-center">
+<div class="col-lg-5">
+                    <div class="get-left-touch relative">
+                        <div class="get-call">
+                            <div class="get-call-icon relative">
+                                <div class="icon-shape-circle"></div>
+                                <div class="call-icon"><img src="img/call.png" alt=""></div>
+                            </div>
+                            <div class="get-call-no">
+                                <a href="tel: +91 9899936669">+91 9899936669</a>
+                            </div>
+                        </div>
+                        <div class="get-image-bottom mt20 relative">
+                            <div class="get-image">
+                                <img src="img/get-touch.png" alt="">
+                            </div>
+                            <div class="circle-arrow">
+                                <div class="arrow"><img src="img/arrow-left.png" alt=""></div>
+                            </div>
+                            <div class="shape-bottom-right">
+                                <div class="shape-right-top">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #ffffff;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#fff"></path>
+                                    </svg>
+                                </div>
+                                <div class="shape-left-bottom">
+                                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" style="width: 1.0rem; height: 1.0rem; stroke: #ffffff;">
+                                        <path d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z" fill="#0e0f11" style="fill: #ffffff;"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7" data-aos="fade-left">
+                    <div class="get-right-touch">
+                        <div class="get-right-head">
+                            <h2 class="font46 textcenter">get in touch <span>with us</span></h2>
+                        </div>
+                        <div class="get-right-form-design mt20">
+                            <form action="">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Full Name">
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-5">
+                                        <div class="mb-3">
+                                            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Company Name">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-7">
+                                        <div class="mb-3">
+                                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Work Email Address">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="mb-3">
+                                            <input type="phone" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Contact Number">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-7">
+                                        <div class="mb-3">
+                                            <select class="form-select">
+                                                <option selected="">Location</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="mb-3">
+                                            <input type="phone" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Area">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-7">
+                                        <div class="mb-3">
+                                            <select class="form-select">
+                                                <option selected="">Property</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <select class="form-select">
+                                                <option selected="">Solution</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3 input-box relative">
+                                            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Desk Required">
+                                            <div class="desk-additionbox">
+                                                <span class="incre">+</span>
+                                                <span class="decre">-</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" name="submit-btn" class="themebtn themebtn2 mx-auto d-block">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+</div>
+               </div>
+            </div>
+        </div>
+    </div>
+    <footer class="relative">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-7 pe-5">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="footer-content">
+                                <div class="footer-head">
+                                    <p class="font12">Coworking Space:</p>
+                                </div>
+                                <div class="footer-links pt30">
+                                    <a href="javascript:void(0)">co working space </a>
+                                    <a href="javascript:void(0)">co working</a>
+                                    <a href="javascript:void(0)">business space for rent</a>
+                                    <a href="javascript:void(0)">business space for rent near me</a>
+                                    <a href="javascript:void(0)">co working near me</a>
+                                    <a href="javascript:void(0)">business property for rent</a>
+                                    <a href="javascript:void(0)">commercial places to rent</a>
+                                    <a href="javascript:void(0)">co working</a>
+                                    <a href="javascript:void(0)">co working space in delhi ncr</a>
+                                    <a href="javascript:void(0)">commercial office space for rent</a>
+                                    <a href="javascript:void(0)">co office space</a>
+                                    <a href="javascript:void(0)">business room for rent</a>
+                                    <a href="javascript:void(0)">co working office</a>
+                                    <a href="javascript:void(0)">commercial office for rent</a>
+                                    <a href="javascript:void(0)">commercial office space</a>
+                                    <a href="javascript:void(0)">best coworking spaces</a>
+                                    <a href="javascript:void(0)">co working place</a>
+                                    <a href="javascript:void(0)">co work near me</a>
+                                    <a href="javascript:void(0)">business space</a>
+                                    <a href="javascript:void(0)">commercial office on rent</a>
+                                    <a href="javascript:void(0)">commercial office space to rent</a>
+                                    <a href="javascript:void(0)">big co working space </a>
+                                    <a href="javascript:void(0)">business rooms</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="footer-content">
+                                <div class="footer-head">
+                                    <p class="font12">Event Space:</p>
+                                </div>
+                                <div class="footer-links pt30">
+                                    <a href="javascript:void(0)">event venues </a>
+                                    <a href="javascript:void(0)">events space</a>
+                                    <a href="javascript:void(0)">event space rental</a>
+                                    <a href="javascript:void(0)">event spaces near me</a>
+                                    <a href="javascript:void(0)">event venues near me</a>
+                                    <a href="javascript:void(0)">event halls near me</a>
+                                    <a href="javascript:void(0)">event centers near me</a>
+                                    <a href="javascript:void(0)">event rental </a>
+                                    <a href="javascript:void(0)"> event hall</a>
+                                    <a href="javascript:void(0)">event locations near me</a>
+                                    <a href="javascript:void(0)">event hall for rent near me</a>
+                                    <a href="javascript:void(0)">event space rental near me</a>
+                                    <a href="javascript:void(0)">event centers</a>
+                                    <a href="javascript:void(0)">event rooms near me</a>
+                                    <a href="javascript:void(0)">corporate event venues</a>
+                                    <a href="javascript:void(0)">event room rental</a>
+                                    <a href="javascript:void(0)">private event spaces near me</a>
+                                    <a href="javascript:void(0)">event halls for rent</a>
+                                    <a href="javascript:void(0)">event locations</a>
+                                    <a href="javascript:void(0)">event rooms</a>
+                                    <a href="javascript:void(0)">event venue rental</a>
+                                    <a href="javascript:void(0)">corporate event spaces</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="footer-content">
+                                <div class="footer-head">
+                                    <p class="font12">Meeting Rooms:</p>
+                                </div>
+                                <div class="footer-links pt30">
+                                    <a href="javascript:void(0)">meeting rooms </a>
+                                    <a href="javascript:void(0)">meeting rooms near me</a>
+                                    <a href="javascript:void(0)">rent a meeting room</a>
+                                    <a href="javascript:void(0)">meeting halls near me</a>
+                                    <a href="javascript:void(0)">conference meeting rooms near me</a>
+                                    <a href="javascript:void(0)">meeting conference room</a>
+                                    <a href="javascript:void(0)">conference room meeting</a>
+                                    <a href="javascript:void(0)">conference room meeting room</a>
+                                    <a href="javascript:void(0)">meeting and conference rooms</a>
+                                    <a href="javascript:void(0)">meeting room conference room</a>
+                                    <a href="javascript:void(0)">meeting rooms for rent near me</a>
+                                    <a href="javascript:void(0)">meeting spaces near me</a>
+                                    <a href="javascript:void(0)">meeting room hire</a>
+                                    <a href="javascript:void(0)">meeting room booking</a>
+                                    <a href="javascript:void(0)">meeting venues near me</a>
+                                    <a href="javascript:void(0)">meeting spaces</a>
+                                    <a href="javascript:void(0)">meeting room hire near me</a>
+                                    <a href="javascript:void(0)">meeting places near me </a>
+                                    <a href="javascript:void(0)">meeting venues</a>
+                                    <a href="javascript:void(0)">meeting halls for rent near me</a>
+                                    <a href="javascript:void(0)">corporate meeting spaces</a>
+                                    <a href="javascript:void(0)">virtual meeting rooms </a>
+                                    <a href="javascript:void(0)">small meeting room</a>
+                                    <a href="javascript:void(0)">meeting hall</a>
+                                    <a href="javascript:void(0)">meeting hall for rent</a>
+                                    <a href="javascript:void(0)">office meeting room</a>
+                                    <a href="javascript:void(0)">corporate meeting venues</a>
+                                    <a href="javascript:void(0)">space for meeting</a>
+                                    <a href="javascript:void(0)">the meeting room</a>
+                                    <a href="javascript:void(0)">meeting room space for rent</a>
+                                    <a href="javascript:void(0)">conference meeting room</a>
+                                    <a href="javascript:void(0)">meeting venue hire</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 ps-4">
+                    <div class="footer-follow">
+                        <div class="footer-box">
+                            <div class="follow-head">
+                                <p class="font20">Follow us</p>
+                            </div>
+                            <div class="follow-social-link mt-3">
+                                <a href="javascript:void(0)" class="insta"><img class="actule" src="img/insta-hover.png"><img src="img/Instagram.png" alt="working space – SpringHouse coworking office view"></a>
+                                <a href="javascript:void(0)" class="face"><img class="actule" src="img/fb-hover.png"><img src="img/Facebook.png" alt="working space – SpringHouse coworking office view"></a>
+                                <a href="javascript:void(0)" class="link"><img class="actule" src="img/insta-hover.png"><img src="img/LinkedIn.png" alt="working space – SpringHouse coworking office view"></a>
+    <!--
+                                <a href="javascript:void(0)"><img src="img/insta-hover.png" alt=""></a>
+                                <a href="javascript:void(0)"><img src="img/fb-hover.png" alt=""></a>
+                                <a href="javascript:void(0)"><img src="img/linkedin-hover.png" alt=""></a>
+    -->
+                            </div>
+                        </div>
+                        <div class="footer-box">
+                            <div class="follow-head">
+                                <p class="font20">Head quarters</p>
+                            </div>
+                            <div class="follow-address">
+                                <a href="javascript:void(0)"><p>LG 006, DLF Grand Mall, MG Rd,  <br/>
+                                Gurugram, Haryana 122001</p></a>
+                            </div>
+                        </div>
+                        <div class="footer-box">
+                            <div class="follow-head">
+                                <p class="font20">CONTACT US</p>
+                            </div>
+                            <div class="follow-address">
+                                <a href="tel: +91 9899936669"><p>+91-9899936669</p></a>
+                                <a href="mailto: springup@springhouse.in"><p>springup@springhouse.in</p></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+
+
+
+     <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
+      integrity="sha512-16esztaSRplJROstbIIdwX3N97V1+pZvV33ABoG1H2OyTttBxEGkTsoIVsiP1iaTtM8b3+hu2kB6pQ4Clr5yug=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"
+      integrity="sha512-Ic9xkERjyZ1xgJ5svx3y0u3xrvfT/uPkV99LBwe68xjy/mGtO+4eURHZBW2xW4SZbFrF1Tf090XqB+EVgXnVjw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script src="js/script-sunraw.js"></script>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+    <script src="js/jquery.counterup.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/slider.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+      $('.counter').countUp();
+
+      </script>
+    <script>
+        jQuery(document).ready(function(){
+        $('.image-slider').slick({
+          dots: false,
+          arrows: true,
+          autoplay: true,
+          autoplaySpeed: 3000,
+          infinite: true,
+          speed: 800,
+          slidesToShow: 1,
+          slidesToScroll: 1
+        });
+      });
+        jQuery(document).ready(function(){
+        $('.image-slider1').slick({
+          dots: false,
+          arrows: true,
+          autoplay: false,
+          autoplaySpeed: 3000,
+          infinite: true,
+          speed: 800,
+          slidesToShow: 1,
+          slidesToScroll: 1
+        });
+      });
+    </script>
+    <script>
+                AOS.init({
+                    duration: 1000
+                });
+
+            </script>
+    <script>
+    $(document).ready(function(){
+      var $slider = $('.timeline-slider');
+
+      $slider.slick({
+        arrows: false,
+        dots: false,
+        infinite: false,
+        speed: 500,
+         vertical: true,
+        slidesToShow: 1,
+        adaptiveHeight: true
+      });
+
+      $('.timeline-nav button').on('click', function(){
+        var slideIndex = $(this).data('slide');
+        $slider.slick('slickGoTo', slideIndex);
+
+        $('.timeline-nav button').removeClass('active');
+        $(this).addClass('active');
+      });
+
+      $slider.on('beforeChange', function(event, slick, currentSlide, nextSlide){
+        $('.timeline-nav button').removeClass('active');
+        $('.timeline-nav button[data-slide="' + nextSlide + '"]').addClass('active');
+      });
+    });
+    </script>
+
+
+
+    <script>
+        $(document).ready(function() {
+            var formShown = false; // Flag to check if form is already shown
+
+            $(window).scroll(function() {
+                var scroll = $(window).scrollTop();
+                if (scroll > 20 && !formShown) { // When scroll is more than 300px and not yet shown
+                    $('.form-p').fadeIn();
+                    formShown = true; // Mark as shown so it won't hide again
+                }
+            });
+        });
+    </script>
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+</body>
+
+</html>
