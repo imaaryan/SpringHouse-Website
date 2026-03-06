@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { applySlugify } from "../utils/slugMiddleware.js";
+import { applySlugify } from "@/utils/slugMiddleware";
 
 const aboutUsSchema = new mongoose.Schema(
   {

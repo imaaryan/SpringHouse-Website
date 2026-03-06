@@ -252,12 +252,7 @@ export default function FaqAdminPage() {
         }
       />
 
-      <div className="mb-6">
-        <SEOForm
-          values={globalSeo}
-          onChange={(newSeo) => setGlobalSeo(newSeo)}
-        />
-      </div>
+    
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200">
         <div className="flex justify-between items-center bg-gray-50 p-6 border-b border-gray-200 rounded-t-xl">
@@ -305,6 +300,14 @@ export default function FaqAdminPage() {
           )}
         </div>
       </div>
+
+  <div className="mb-6">
+        <SEOForm
+          values={globalSeo}
+          onChange={(newSeo) => setGlobalSeo(newSeo)}
+        />
+      </div>
+
     </form>
   );
 }

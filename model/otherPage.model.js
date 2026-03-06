@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
-import { applySlugify } from "../utils/slugMiddleware.js";
+import { applySlugify } from "@/utils/slugMiddleware";
 
 const otherPageSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "Page name is required"],
+      required: true,
       trim: true,
     },
     slug: {
@@ -16,6 +16,7 @@ const otherPageSchema = new mongoose.Schema(
     },
     content: {
       type: String,
+      required: true,
     },
     isActive: {
       type: Boolean,

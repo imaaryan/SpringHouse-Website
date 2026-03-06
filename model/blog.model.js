@@ -1,23 +1,24 @@
 import mongoose from "mongoose";
-import { applySlugify } from "../utils/slugMiddleware.js";
+import { applySlugify } from "@/utils/slugMiddleware";
 
 const blogSchema = new mongoose.Schema(
   {
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     slug: {
       type: String,
       unique: true,
       trim: true,
       lowercase: true,
     },
-    title: {
+    content: {
       type: String,
-      required: [true, "Title is required"],
-      trim: true,
+      required: true,
     },
     imageURL: {
-      type: String,
-    },
-    content: {
       type: String,
     },
     isActive: {

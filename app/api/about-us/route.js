@@ -2,7 +2,6 @@ import connectDB from "@/utils/db";
 import { AboutUs } from "@/model/aboutUs.model";
 import { NextResponse } from "next/server";
 import { uploadImage } from "@/utils/upload";
-import { applySlugify } from "../utils/slugMiddleware.js"; // Wait, slugMiddleware is likely not needed here if manually handled or via save()
 
 export async function GET() {
   await connectDB();

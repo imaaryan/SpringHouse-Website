@@ -313,15 +313,7 @@ export default function AboutUsAdmin() {
         }
       />
 
-      {/* SEO Section */}
-      <div className="mb-6">
-        <SEOForm
-          values={formData.seo}
-          onChange={(newSeo) =>
-            setFormData((prev) => ({ ...prev, seo: newSeo }))
-          }
-        />
-      </div>
+     
 
       {/* Hero Section */}
       <section className="space-y-4">
@@ -539,6 +531,16 @@ export default function AboutUsAdmin() {
           </div>
         </div>
       </section>
+
+       {/* SEO Section */}
+      <div className="mb-6">
+        <SEOForm
+          values={formData.seo}
+          onChange={(newSeo) =>
+            setFormData((prev) => ({ ...prev, seo: newSeo }))
+          }
+        />
+      </div>
     </form>
   );
 }
