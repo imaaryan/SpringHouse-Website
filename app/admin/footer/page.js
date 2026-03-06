@@ -284,7 +284,7 @@ export default function FooterAdminPage() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-8 max-w-[1200px] mx-auto w-full pb-20"
+      className="space-y-8 max-w-[1440px] mx-auto w-full pb-20"
     >
       <PageHeader
         title="Footer Configuration"
