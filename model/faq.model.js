@@ -13,6 +13,11 @@ const faqSchema = new mongoose.Schema(
         answer: String,
       },
     ],
+    seo: {
+      metaTitle: String,
+      metaDescription: String,
+      codeSnippet: String,
+    },
   },
   { timestamps: true },
 );
