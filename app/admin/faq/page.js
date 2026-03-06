@@ -252,8 +252,6 @@ export default function FaqAdminPage() {
         }
       />
 
-    
-
       <div className="bg-white rounded-xl shadow-sm border border-gray-200">
         <div className="flex justify-between items-center bg-gray-50 p-6 border-b border-gray-200 rounded-t-xl">
           <div>
@@ -294,20 +292,19 @@ export default function FaqAdminPage() {
                 No FAQ Sections Created
               </p>
               <p className="text-sm mt-1 mb-4">
-                Click "Add FAQ Section" above to get started.
+                Click &quot;Add FAQ Section&quot; above to get started.
               </p>
             </div>
           )}
         </div>
       </div>
 
-  <div className="mb-6">
+      <div className="mb-6">
         <SEOForm
           values={globalSeo}
           onChange={(newSeo) => setGlobalSeo(newSeo)}
         />
       </div>
-
     </form>
   );
 }

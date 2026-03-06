@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useState, useEffect } from "react";
 import { Loader2, Save } from "lucide-react";
@@ -441,8 +443,6 @@ export default function HomepageAdmin() {
         }
       />
 
-      
-
       {/* Hero Section */}
       <section className="space-y-4">
         <h2 className="text-[15px] font-bold text-gray-800">Hero Section</h2>
@@ -697,7 +697,7 @@ export default function HomepageAdmin() {
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 min-h-[160px]">
           {previews.ourCommunity.length === 0 ? (
             <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-              No images added yet. Click 'Add Images' to upload.
+              No images added yet. Click &apos;Add Images&apos; to upload.
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -767,7 +767,6 @@ export default function HomepageAdmin() {
           }
         />
       </div>
-      
     </form>
   );
 }

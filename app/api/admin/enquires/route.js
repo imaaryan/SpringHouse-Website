@@ -1,0 +1,63 @@
+import { NextResponse } from "next/server";
+import connectDB from "@/utils/db";
+import { Enquiry } from "@/model/enquiry.model";
+
+export async function GET(request) {
+  try {
+    await connectDB();
+
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get("page")) || 1;
+    const limit = parseInt(searchParams.get("limit")) || 10;
+    const skip = (page - 1) * limit;
+
+    const [enquiries, total] = await Promise.all([
+      Enquiry.find({}).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+      Enquiry.countDocuments({}),
+    ]);
+
+    return NextResponse.json({
+      success: true,
+      data: enquiries,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
+  } catch (error) {
+    console.error("Enquiries fetch error:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to fetch enquiries" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function DELETE(request) {
+  try {
+    await connectDB();
+    const { ids } = await request.json();
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return NextResponse.json(
+        { success: false, error: "No enquiry IDs provided" },
+        { status: 400 },
+      );
+    }
+
+    await Enquiry.deleteMany({ _id: { $in: ids } });
+
+    return NextResponse.json({
+      success: true,
+      message: "Enquiries deleted successfully",
+    });
+  } catch (error) {
+    console.error("Bulk Delete Error:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to delete enquiries" },
+      { status: 500 },
+    );
+  }
+}

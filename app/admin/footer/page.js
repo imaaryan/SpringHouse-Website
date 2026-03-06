@@ -141,7 +141,7 @@ const LinkBlockEditor = ({
       ))}
       {items.length === 0 && (
         <div className="text-center py-10 bg-white rounded-xl border border-gray-200 text-gray-500">
-          No blocks added yet. Click "Add Block" above.
+          No blocks added yet. Click &quot;Add Block&quot; above.
         </div>
       )}
     </div>
@@ -330,7 +330,7 @@ export default function FooterAdminPage() {
             </h3>
             <p className="text-sm text-gray-500 mb-4">
               Use the rich text editor below to format text, add links, and
-              change heading sizes for the footer's bottom section.
+              change heading sizes for the footer&apos;s bottom section.
             </p>
             <div className="bg-white rounded-lg">
               <ReactQuill

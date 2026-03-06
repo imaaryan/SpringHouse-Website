@@ -1,0 +1,63 @@
+import { NextResponse } from "next/server";
+import connectDB from "@/utils/db";
+import { Career } from "@/model/career.model";
+
+export async function GET(request) {
+  try {
+    await connectDB();
+
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get("page")) || 1;
+    const limit = parseInt(searchParams.get("limit")) || 10;
+    const skip = (page - 1) * limit;
+
+    const [careers, total] = await Promise.all([
+      Career.find({}).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+      Career.countDocuments({}),
+    ]);
+
+    return NextResponse.json({
+      success: true,
+      data: careers,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
+  } catch (error) {
+    console.error("Careers fetch error:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to fetch applicants" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function DELETE(request) {
+  try {
+    await connectDB();
+    const { ids } = await request.json();
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return NextResponse.json(
+        { success: false, error: "No applicant IDs provided" },
+        { status: 400 },
+      );
+    }
+
+    await Career.deleteMany({ _id: { $in: ids } });
+
+    return NextResponse.json({
+      success: true,
+      message: "Applicants deleted successfully",
+    });
+  } catch (error) {
+    console.error("Bulk Delete Error:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to delete applicants" },
+      { status: 500 },
+    );
+  }
+}

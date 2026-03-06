@@ -1,0 +1,98 @@
+
+> springhouse@0.1.0 lint
+> eslint
+
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/about-us/page.js
+  240:11  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/amenities/page.js
+   59:6   warning  React Hook useEffect has a missing dependency: 'fetchAmenities'. Either include it or remove the dependency array                                                                                                                                                                        react-hooks/exhaustive-deps
+  185:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  268:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  367:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/areas/page.js
+  69:6  warning  React Hook useEffect has a missing dependency: 'fetchAreas'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/blogs/page.js
+  47:6  warning  React Hook useEffect has a missing dependency: 'fetchBlogs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/careers/page.js
+  41:6  warning  React Hook useEffect has a missing dependency: 'fetchCareers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/cities/add/page.js
+  276:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  394:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/cities/edit/[id]/page.js
+  326:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  439:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/cities/page.js
+  45:6  warning  React Hook useEffect has a missing dependency: 'fetchCities'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/enquires/page.js
+  41:6  warning  React Hook useEffect has a missing dependency: 'fetchEnquires'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/faq/page.js
+  297:23  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  297:39  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/footer/page.js
+  144:38  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  144:48  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  333:50  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/homepage/page.js
+  142:6   warning  React Hook useEffect has missing dependencies: 'formData.features' and 'formData.presence'. Either include them or remove the dependency array. You can also replace multiple useState variables with useReducer if 'setFormData' needs the current value of 'formData.presence'         react-hooks/exhaustive-deps
+  362:11  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  700:42  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  700:53  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  709:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/layout.js
+  45:11  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/other-pages/page.js
+  47:6  warning  React Hook useEffect has a missing dependency: 'fetchPages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/properties/edit/[id]/page.js
+  380:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/properties/page.js
+  54:6  warning  React Hook useEffect has a missing dependency: 'fetchProperties'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/solutions/add/page.js
+  326:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  404:23  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  450:23  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  557:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/solutions/edit/[id]/page.js
+  426:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  504:23  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  548:23  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  651:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/solutions/page.js
+   47:6   warning  React Hook useEffect has a missing dependency: 'fetchSolutions'. Either include it or remove the dependency array                                                                                                                                                                        react-hooks/exhaustive-deps
+  132:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/testimonials/add/page.js
+  163:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/testimonials/edit/[id]/page.js
+  207:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/admin/testimonials/page.js
+  47:6  warning  React Hook useEffect has a missing dependency: 'fetchTestimonials'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/components/admin/FormElements.js
+  138:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/aaryan/Projects/Rank One Leads/Full Stack/SpringHouse/Source Code/SpringHouse-Main/app/login/page.js
+  50:11  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+✖ 43 problems (7 errors, 36 warnings)
+
