@@ -15,18 +15,8 @@ const footerSchema = new mongoose.Schema(
       },
     ],
 
-    // 2. Bottom paragraph/block links (Discover, Office Solutions, Events)
-    bottomBlocks: [
-      {
-        title: { type: String, required: true },
-        links: [
-          {
-            label: { type: String, required: true },
-            url: { type: String, required: true },
-          },
-        ],
-      },
-    ],
+    // 2. Bottom text editor content
+    bottomBlocks: { type: String, default: "" },
 
     // 3. Social Media Icons URLs
     socialLinks: {
@@ -46,6 +36,9 @@ const footerSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const Footer = mongoose.models.Footer || mongoose.model("Footer", footerSchema);
+if (mongoose.models.Footer) {
+  delete mongoose.models.Footer;
+}
+const Footer = mongoose.model("Footer", footerSchema);
 
 export default Footer;

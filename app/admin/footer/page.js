@@ -3,6 +3,150 @@ import React, { useState, useEffect } from "react";
 import { Loader2, Save, Plus, Trash2, GripVertical } from "lucide-react";
 import PageHeader from "@/app/components/admin/PageHeader";
 import { FormInput } from "@/app/components/admin/FormElements";
+import dynamic from "next/dynamic";
+import "react-quill-new/dist/quill.snow.css";
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
+
+// Moved completely outside of the main component scope
+const LinkBlockEditor = ({
+  title,
+  sectionName,
+  items,
+  onAddBlock,
+  onRemoveBlock,
+  onUpdateBlockTitle,
+  onAddLink,
+  onRemoveLink,
+  onUpdateLink,
+}) => (
+  <div className="space-y-6">
+    <div className="flex justify-between items-center bg-gray-50 p-4 border border-gray-200 rounded-lg">
+      <div>
+        <h2 className="text-base font-bold text-gray-800">{title}</h2>
+        <p className="text-sm text-gray-500 mt-1">
+          Manage the groups of links here.
+        </p>
+      </div>
+      <button
+        type="button"
+        onClick={() => onAddBlock(sectionName)}
+        className="flex items-center gap-1.5 text-sm font-medium text-brand-primary bg-white px-4 py-2 border border-brand-primary/20 rounded-md hover:bg-brand-primary/5 transition"
+      >
+        <Plus size={16} /> Add Block
+      </button>
+    </div>
+
+    <div className="grid grid-cols-1 gap-6">
+      {items.map((block, blockIdx) => (
+        <div
+          key={blockIdx}
+          className="bg-white rounded-xl shadow-sm border border-gray-200 p-5"
+        >
+          <div className="flex justify-between items-start mb-4 gap-4">
+            <div className="flex-1">
+              <FormInput
+                label="Block Title"
+                value={block.title}
+                onChange={(e) =>
+                  onUpdateBlockTitle(sectionName, blockIdx, e.target.value)
+                }
+                placeholder="e.g. COMPANY"
+                required
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => onRemoveBlock(sectionName, blockIdx)}
+              className="mt-7 p-2 text-red-500 hover:bg-red-50 rounded-lg transition"
+              title="Remove Block"
+            >
+              <Trash2 size={18} />
+            </button>
+          </div>
+
+          {/* Links loop */}
+          <div className="space-y-3 bg-gray-50/50 p-4 rounded-lg border border-gray-100">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-semibold text-gray-700">Links</span>
+              <button
+                type="button"
+                onClick={() => onAddLink(sectionName, blockIdx)}
+                className="text-xs font-semibold text-brand-primary hover:text-teal-700 flex items-center gap-1"
+              >
+                + Add Link
+              </button>
+            </div>
+
+            {block.links.length === 0 && (
+              <div className="text-sm text-gray-400 italic">
+                No links added to this block yet.
+              </div>
+            )}
+
+            {block.links.map((link, linkIdx) => (
+              <div
+                key={linkIdx}
+                className="flex gap-4 items-center bg-white p-3 rounded border border-gray-200 shadow-sm relative group"
+              >
+                <div className="text-gray-300 cursor-move">
+                  <GripVertical size={18} />
+                </div>
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    value={link.label}
+                    onChange={(e) =>
+                      onUpdateLink(
+                        sectionName,
+                        blockIdx,
+                        linkIdx,
+                        "label",
+                        e.target.value,
+                      )
+                    }
+                    placeholder="Label (e.g. Blogs)"
+                    className="w-full text-sm outline-none border-b border-transparent focus:border-brand-primary pb-1 transition-colors"
+                    required
+                  />
+                </div>
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    value={link.url}
+                    onChange={(e) =>
+                      onUpdateLink(
+                        sectionName,
+                        blockIdx,
+                        linkIdx,
+                        "url",
+                        e.target.value,
+                      )
+                    }
+                    placeholder="URL (e.g. /blogs or https://...)"
+                    className="w-full text-sm outline-none border-b border-transparent focus:border-brand-primary pb-1 text-gray-500 transition-colors font-mono"
+                    required
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => onRemoveLink(sectionName, blockIdx, linkIdx)}
+                  className="text-gray-400 hover:text-red-500 p-1 opacity-0 group-hover:opacity-100 transition"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+      {items.length === 0 && (
+        <div className="text-center py-10 bg-white rounded-xl border border-gray-200 text-gray-500">
+          No blocks added yet. Click "Add Block" above.
+        </div>
+      )}
+    </div>
+  </div>
+);
 
 export default function FooterAdminPage() {
   const [loading, setLoading] = useState(true);
@@ -10,7 +154,7 @@ export default function FooterAdminPage() {
 
   const [formData, setFormData] = useState({
     columns: [],
-    bottomBlocks: [],
+    bottomBlocks: "",
     socialLinks: { instagram: "", facebook: "", linkedin: "" },
     contactInfo: { address: "", phone: "", whatsapp: "", email: "" },
   });
@@ -24,7 +168,7 @@ export default function FooterAdminPage() {
           const d = json.data;
           setFormData({
             columns: d.columns || [],
-            bottomBlocks: d.bottomBlocks || [],
+            bottomBlocks: d.bottomBlocks || "",
             socialLinks: d.socialLinks || {
               instagram: "",
               facebook: "",
@@ -137,139 +281,6 @@ export default function FooterAdminPage() {
     );
   }
 
-  // Helper component to render a block of links (used for both Columns and BottomBlocks)
-  const LinkBlockEditor = ({ title, sectionName, items }) => (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center bg-gray-50 p-4 border border-gray-200 rounded-lg">
-        <div>
-          <h2 className="text-base font-bold text-gray-800">{title}</h2>
-          <p className="text-sm text-gray-500 mt-1">
-            Manage the groups of links here.
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => addBlock(sectionName)}
-          className="flex items-center gap-1.5 text-sm font-medium text-brand-primary bg-white px-4 py-2 border border-brand-primary/20 rounded-md hover:bg-brand-primary/5 transition"
-        >
-          <Plus size={16} /> Add Block
-        </button>
-      </div>
-
-      <div className="grid grid-cols-1 gap-6">
-        {items.map((block, blockIdx) => (
-          <div
-            key={blockIdx}
-            className="bg-white rounded-xl shadow-sm border border-gray-200 p-5"
-          >
-            <div className="flex justify-between items-start mb-4 gap-4">
-              <div className="flex-1">
-                <FormInput
-                  label="Block Title"
-                  value={block.title}
-                  onChange={(e) =>
-                    updateBlockTitle(sectionName, blockIdx, e.target.value)
-                  }
-                  placeholder="e.g. COMPANY"
-                  required
-                />
-              </div>
-              <button
-                type="button"
-                onClick={() => removeBlock(sectionName, blockIdx)}
-                className="mt-7 p-2 text-red-500 hover:bg-red-50 rounded-lg transition"
-                title="Remove Block"
-              >
-                <Trash2 size={18} />
-              </button>
-            </div>
-
-            {/* Links loop */}
-            <div className="space-y-3 bg-gray-50/50 p-4 rounded-lg border border-gray-100">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-semibold text-gray-700">
-                  Links
-                </span>
-                <button
-                  type="button"
-                  onClick={() => addLink(sectionName, blockIdx)}
-                  className="text-xs font-semibold text-brand-primary hover:text-teal-700 flex items-center gap-1"
-                >
-                  + Add Link
-                </button>
-              </div>
-
-              {block.links.length === 0 && (
-                <div className="text-sm text-gray-400 italic">
-                  No links added to this block yet.
-                </div>
-              )}
-
-              {block.links.map((link, linkIdx) => (
-                <div
-                  key={linkIdx}
-                  className="flex gap-4 items-center bg-white p-3 rounded border border-gray-200 shadow-sm relative group"
-                >
-                  <div className="text-gray-300 cursor-move">
-                    <GripVertical size={18} />
-                  </div>
-                  <div className="flex-1">
-                    <input
-                      type="text"
-                      value={link.label}
-                      onChange={(e) =>
-                        updateLink(
-                          sectionName,
-                          blockIdx,
-                          linkIdx,
-                          "label",
-                          e.target.value,
-                        )
-                      }
-                      placeholder="Label (e.g. Blogs)"
-                      className="w-full text-sm outline-none border-b border-transparent focus:border-brand-primary pb-1 transition-colors"
-                      required
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <input
-                      type="text"
-                      value={link.url}
-                      onChange={(e) =>
-                        updateLink(
-                          sectionName,
-                          blockIdx,
-                          linkIdx,
-                          "url",
-                          e.target.value,
-                        )
-                      }
-                      placeholder="URL (e.g. /blogs or https://...)"
-                      className="w-full text-sm outline-none border-b border-transparent focus:border-brand-primary pb-1 text-gray-500 transition-colors font-mono"
-                      required
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => removeLink(sectionName, blockIdx, linkIdx)}
-                    className="text-gray-400 hover:text-red-500 p-1 opacity-0 group-hover:opacity-100 transition"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-        {items.length === 0 && (
-          <div className="text-center py-10 bg-white rounded-xl border border-gray-200 text-gray-500">
-            No blocks added yet. Click "Add Block" above.
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
   return (
     <form
       onSubmit={handleSubmit}
@@ -301,18 +312,36 @@ export default function FooterAdminPage() {
               title="Top Columns"
               sectionName="columns"
               items={formData.columns}
+              onAddBlock={addBlock}
+              onRemoveBlock={removeBlock}
+              onUpdateBlockTitle={updateBlockTitle}
+              onAddLink={addLink}
+              onRemoveLink={removeLink}
+              onUpdateLink={updateLink}
             />
           </section>
 
           <hr className="border-gray-300" />
 
-          {/* Bottom Blocks */}
-          <section>
-            <LinkBlockEditor
-              title="Bottom Links Blocks"
-              sectionName="bottomBlocks"
-              items={formData.bottomBlocks}
-            />
+          {/* Bottom Blocks Editor */}
+          <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <h3 className="text-base font-bold text-gray-800 mb-2">
+              Bottom Content Editor
+            </h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Use the rich text editor below to format text, add links, and
+              change heading sizes for the footer's bottom section.
+            </p>
+            <div className="bg-white rounded-lg">
+              <ReactQuill
+                theme="snow"
+                value={formData.bottomBlocks}
+                onChange={(val) =>
+                  setFormData((prev) => ({ ...prev, bottomBlocks: val }))
+                }
+                className="h-[250px] mb-12"
+              />
+            </div>
           </section>
         </div>
 

@@ -23,7 +23,7 @@ export async function PUT(request) {
 
     const updateData = {
       columns: body.columns || [],
-      bottomBlocks: body.bottomBlocks || [],
+      bottomBlocks: body.bottomBlocks || "",
       socialLinks: body.socialLinks || {
         instagram: "",
         facebook: "",
@@ -51,7 +51,11 @@ export async function PUT(request) {
   } catch (error) {
     console.error("Footer Update Error:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to update footer" },
+      {
+        success: false,
+        error: "Failed to update footer",
+        details: error.message,
+      },
       { status: 500 },
     );
   }
