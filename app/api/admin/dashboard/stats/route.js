@@ -14,7 +14,7 @@ export async function GET() {
         Property.countDocuments(),
         City.countDocuments(),
         Area.countDocuments(),
-        Enquiry.countDocuments(),
+        Enquiry.countDocuments({ isRead: false }),
       ]);
 
     return NextResponse.json({
