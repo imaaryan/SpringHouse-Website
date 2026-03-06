@@ -27,9 +27,15 @@ const careerSchema = new mongoose.Schema(
     whyWannaJoin: {
       type: String,
     },
+    isRead: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true },
 );
 
-export const Career =
-  mongoose.models.Career || mongoose.model("Career", careerSchema);
+if (mongoose.models.Career) {
+  delete mongoose.models.Career;
+}
+export const Career = mongoose.model("Career", careerSchema);

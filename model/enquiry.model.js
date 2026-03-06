@@ -40,5 +40,7 @@ const enquirySchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export const Enquiry =
-  mongoose.models.Enquiry || mongoose.model("Enquiry", enquirySchema);
+if (mongoose.models.Enquiry) {
+  delete mongoose.models.Enquiry;
+}
+export const Enquiry = mongoose.model("Enquiry", enquirySchema);

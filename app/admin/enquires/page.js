@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useState, useEffect } from "react";
-import { Trash2 } from "lucide-react";
+import { Trash2, CheckCircle2, Circle } from "lucide-react";
 import PageHeader from "@/app/components/admin/PageHeader";
 import DataTable from "@/app/components/admin/DataTable";
 
@@ -41,6 +41,25 @@ export default function EnquiresPage() {
   useEffect(() => {
     fetchEnquires(pagination.page);
   }, [pagination.page]);
+
+  // Read toggle logic
+  const handleToggleRead = async (id, currentStatus) => {
+    try {
+      const res = await fetch(`/api/admin/enquires`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, isRead: !currentStatus }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        fetchEnquires(pagination.page);
+      } else {
+        alert("Failed to update status");
+      }
+    } catch (error) {
+      alert("Error updating status");
+    }
+  };
 
   // Selection Logic
   const handleSelectAll = (e) => {
@@ -138,6 +157,32 @@ export default function EnquiresPage() {
             year: "numeric",
           })}
         </div>
+      ),
+    },
+    {
+      header: "Status",
+      render: (row) => (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleToggleRead(row._id, row.isRead);
+          }}
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold shadow-sm transition-all border-2 ${
+            row.isRead
+              ? "bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100 opacity-60 hover:opacity-100"
+              : "bg-red-50 text-red-600 border-red-200 hover:bg-red-100"
+          }`}
+        >
+          {row.isRead ? (
+            <>
+              <CheckCircle2 size={14} /> Viewed
+            </>
+          ) : (
+            <>
+              <Circle size={14} className="fill-red-500/20 text-red-500" /> New
+            </>
+          )}
+        </button>
       ),
     },
   ];

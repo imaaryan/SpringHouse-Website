@@ -61,3 +61,30 @@ export async function DELETE(request) {
     );
   }
 }
+
+export async function PUT(request) {
+  try {
+    await connectDB();
+    const { id, isRead } = await request.json();
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: "Applicant ID required" },
+        { status: 400 },
+      );
+    }
+
+    await Career.findByIdAndUpdate(id, { isRead });
+
+    return NextResponse.json({
+      success: true,
+      message: "Applicant read status updated",
+    });
+  } catch (error) {
+    console.error("Update Request Error:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to update read status" },
+      { status: 500 },
+    );
+  }
+}
