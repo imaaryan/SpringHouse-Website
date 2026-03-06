@@ -4,6 +4,7 @@ import { useRouter, useParams } from "next/navigation";
 import { Loader2, Save } from "lucide-react";
 import PageHeader from "@/app/components/admin/PageHeader";
 import { FormInput, FormSelect } from "@/app/components/admin/FormElements";
+import SEOForm from "@/app/components/admin/SEOForm";
 import slugify from "slugify";
 import dynamic from "next/dynamic";
 import "react-quill-new/dist/quill.snow.css";
@@ -21,6 +22,11 @@ export default function EditOtherPage() {
     slug: "",
     content: "",
     isActive: true,
+    seo: {
+      metaTitle: "",
+      metaDescription: "",
+      codeSnippet: "",
+    },
   });
 
   useEffect(() => {
@@ -37,6 +43,11 @@ export default function EditOtherPage() {
             slug: page.slug || "",
             content: page.content || "",
             isActive: page.isActive !== false,
+            seo: {
+              metaTitle: page.seo?.metaTitle || "",
+              metaDescription: page.seo?.metaDescription || "",
+              codeSnippet: page.seo?.codeSnippet || "",
+            },
           });
         }
       } catch (e) {
@@ -173,6 +184,13 @@ export default function EditOtherPage() {
               />
             </div>
           </div>
+
+          <SEOForm
+            values={formData.seo}
+            onChange={(newSeo) =>
+              setFormData((prev) => ({ ...prev, seo: newSeo }))
+            }
+          />
         </div>
 
         {/* Sidebar - Right */}

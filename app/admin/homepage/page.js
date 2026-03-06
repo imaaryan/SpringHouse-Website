@@ -7,6 +7,7 @@ import {
   FormTextarea,
   FormCheckboxGrid,
 } from "@/app/components/admin/FormElements";
+import SEOForm from "@/app/components/admin/SEOForm";
 
 export default function HomepageAdmin() {
   const [loading, setLoading] = useState(true);
@@ -43,6 +44,11 @@ export default function HomepageAdmin() {
       content: "",
     },
     testimonials: [], // Array of ObjectIds
+    seo: {
+      metaTitle: "",
+      metaDescription: "",
+      codeSnippet: "",
+    },
   });
 
   // Image states (Files and Previews)
@@ -104,6 +110,11 @@ export default function HomepageAdmin() {
               content: hp.networking?.content || "",
             },
             testimonials: hp.testimonials || [],
+            seo: {
+              metaTitle: hp.seo?.metaTitle || "",
+              metaDescription: hp.seo?.metaDescription || "",
+              codeSnippet: hp.seo?.codeSnippet || "",
+            },
           });
 
           const communityArr = [...(hp.ourCommunity || [])];
@@ -301,6 +312,12 @@ export default function HomepageAdmin() {
       // Testimonials
       formData.testimonials.forEach((id) => data.append("testimonials", id));
 
+      if (formData.seo) {
+        data.append("seo[metaTitle]", formData.seo.metaTitle || "");
+        data.append("seo[metaDescription]", formData.seo.metaDescription || "");
+        data.append("seo[codeSnippet]", formData.seo.codeSnippet || "");
+      }
+
       const res = await fetch("/api/admin/homepage", {
         method: "PUT",
         body: data,
@@ -423,6 +440,16 @@ export default function HomepageAdmin() {
           </button>
         }
       />
+
+      {/* SEO Section */}
+      <div className="mb-6">
+        <SEOForm
+          values={formData.seo}
+          onChange={(newSeo) =>
+            setFormData((prev) => ({ ...prev, seo: newSeo }))
+          }
+        />
+      </div>
 
       {/* Hero Section */}
       <section className="space-y-4">

@@ -160,6 +160,11 @@ export async function PUT(request) {
     };
     homepage.ourCommunity = communityImagePaths;
     homepage.testimonials = testimonials;
+    homepage.seo = {
+      metaTitle: formData.get("seo[metaTitle]") || "",
+      metaDescription: formData.get("seo[metaDescription]") || "",
+      codeSnippet: formData.get("seo[codeSnippet]") || "",
+    };
 
     await homepage.save();
 

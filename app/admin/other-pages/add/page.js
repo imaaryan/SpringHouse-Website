@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Loader2, Save } from "lucide-react";
 import PageHeader from "@/app/components/admin/PageHeader";
 import { FormInput, FormSelect } from "@/app/components/admin/FormElements";
+import SEOForm from "@/app/components/admin/SEOForm";
 import slugify from "slugify";
 import dynamic from "next/dynamic";
 import "react-quill-new/dist/quill.snow.css";
@@ -19,6 +20,11 @@ export default function AddOtherPage() {
     slug: "",
     content: "",
     isActive: true, // Published
+    seo: {
+      metaTitle: "",
+      metaDescription: "",
+      codeSnippet: "",
+    },
   });
 
   // Handle Input Change
@@ -138,6 +144,13 @@ export default function AddOtherPage() {
               />
             </div>
           </div>
+
+          <SEOForm
+            values={formData.seo}
+            onChange={(newSeo) =>
+              setFormData((prev) => ({ ...prev, seo: newSeo }))
+            }
+          />
         </div>
 
         {/* Sidebar - Right */}

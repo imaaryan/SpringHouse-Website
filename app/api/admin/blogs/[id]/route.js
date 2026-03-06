@@ -45,6 +45,11 @@ export async function PUT(request, { params }) {
       title,
       content,
       isActive,
+      seo: {
+        metaTitle: formData.get("seo[metaTitle]") || "",
+        metaDescription: formData.get("seo[metaDescription]") || "",
+        codeSnippet: formData.get("seo[codeSnippet]") || "",
+      },
     };
 
     if (slug) updateData.slug = slug;

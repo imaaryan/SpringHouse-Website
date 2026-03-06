@@ -8,6 +8,7 @@ import {
   FormSelect,
   ImageUploader,
 } from "@/app/components/admin/FormElements";
+import SEOForm from "@/app/components/admin/SEOForm";
 import slugify from "slugify";
 import dynamic from "next/dynamic";
 import "react-quill-new/dist/quill.snow.css";
@@ -25,6 +26,11 @@ export default function EditBlogPage() {
     slug: "",
     content: "",
     isActive: true,
+    seo: {
+      metaTitle: "",
+      metaDescription: "",
+      codeSnippet: "",
+    },
   });
 
   const [images, setImages] = useState([]);
@@ -44,6 +50,11 @@ export default function EditBlogPage() {
             slug: blog.slug || "",
             content: blog.content || "",
             isActive: blog.isActive !== false,
+            seo: {
+              metaTitle: blog.seo?.metaTitle || "",
+              metaDescription: blog.seo?.metaDescription || "",
+              codeSnippet: blog.seo?.codeSnippet || "",
+            },
           });
 
           if (blog.imageURL) {
@@ -104,8 +115,15 @@ export default function EditBlogPage() {
     try {
       const data = new FormData();
       Object.keys(formData).forEach((key) => {
+        if (key === "seo") return;
         data.append(key, formData[key] === null ? "" : formData[key]);
       });
+
+      if (formData.seo) {
+        data.append("seo[metaTitle]", formData.seo.metaTitle || "");
+        data.append("seo[metaDescription]", formData.seo.metaDescription || "");
+        data.append("seo[codeSnippet]", formData.seo.codeSnippet || "");
+      }
 
       if (images.length > 0) {
         data.append("image", images[0]);
@@ -205,6 +223,13 @@ export default function EditBlogPage() {
               />
             </div>
           </div>
+
+          <SEOForm
+            values={formData.seo}
+            onChange={(newSeo) =>
+              setFormData((prev) => ({ ...prev, seo: newSeo }))
+            }
+          />
         </div>
 
         {/* Sidebar - Right */}

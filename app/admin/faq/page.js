@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Loader2, Save, Plus, Trash2, GripVertical } from "lucide-react";
 import PageHeader from "@/app/components/admin/PageHeader";
 import { FormInput } from "@/app/components/admin/FormElements";
+import SEOForm from "@/app/components/admin/SEOForm";
 
 // This functional component handles an individual Section and its array of Questions
 const FaqSectionEditor = ({
@@ -103,6 +104,11 @@ export default function FaqAdminPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [sections, setSections] = useState([]);
+  const [globalSeo, setGlobalSeo] = useState({
+    metaTitle: "",
+    metaDescription: "",
+    codeSnippet: "",
+  });
 
   useEffect(() => {
     const fetchFaqs = async () => {
@@ -112,6 +118,13 @@ export default function FaqAdminPage() {
         if (json.success && json.data) {
           // Format state to handle incoming array.
           setSections(json.data);
+          if (json.data.length > 0 && json.data[0].seo) {
+            setGlobalSeo({
+              metaTitle: json.data[0].seo.metaTitle || "",
+              metaDescription: json.data[0].seo.metaDescription || "",
+              codeSnippet: json.data[0].seo.codeSnippet || "",
+            });
+          }
         }
       } catch (error) {
         console.error("Failed to fetch FAQs:", error);
@@ -175,11 +188,24 @@ export default function FaqAdminPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
+
+    // Inject global SEO into the first section
+    const currentSections = JSON.parse(JSON.stringify(sections));
+    if (currentSections.length > 0) {
+      currentSections[0].seo = globalSeo;
+    } else {
+      currentSections.push({
+        sectionName: "General FAQs",
+        questions: [],
+        seo: globalSeo,
+      });
+    }
+
     try {
       const res = await fetch("/api/admin/faq/bulk", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sections }),
+        body: JSON.stringify({ sections: currentSections }),
       });
       const result = await res.json();
       if (result.success) {
@@ -225,6 +251,13 @@ export default function FaqAdminPage() {
           </button>
         }
       />
+
+      <div className="mb-6">
+        <SEOForm
+          values={globalSeo}
+          onChange={(newSeo) => setGlobalSeo(newSeo)}
+        />
+      </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200">
         <div className="flex justify-between items-center bg-gray-50 p-6 border-b border-gray-200 rounded-t-xl">

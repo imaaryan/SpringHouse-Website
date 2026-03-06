@@ -26,6 +26,11 @@ export async function POST(request) {
       title,
       content,
       isActive,
+      seo: {
+        metaTitle: formData.get("seo[metaTitle]") || "",
+        metaDescription: formData.get("seo[metaDescription]") || "",
+        codeSnippet: formData.get("seo[codeSnippet]") || "",
+      },
     };
 
     if (imageURL) payload.imageURL = imageURL;

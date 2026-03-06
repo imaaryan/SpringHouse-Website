@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Loader2, Save, Plus } from "lucide-react";
 import PageHeader from "@/app/components/admin/PageHeader";
 import { FormInput, FormTextarea } from "@/app/components/admin/FormElements";
+import SEOForm from "@/app/components/admin/SEOForm";
 
 export default function AboutUsAdmin() {
   const [loading, setLoading] = useState(true);
@@ -21,6 +22,11 @@ export default function AboutUsAdmin() {
     history: [],
     whyUs: ["", "", "", ""],
     whoAreWe: ["", "", "", ""],
+    seo: {
+      metaTitle: "",
+      metaDescription: "",
+      codeSnippet: "",
+    },
   });
 
   // Image states
@@ -68,6 +74,11 @@ export default function AboutUsAdmin() {
             history: historyArr,
             whyUs: whyUsArr.slice(0, 4),
             whoAreWe: whoAreWeArr.slice(0, 4),
+            seo: {
+              metaTitle: data.seo?.metaTitle || "",
+              metaDescription: data.seo?.metaDescription || "",
+              codeSnippet: data.seo?.codeSnippet || "",
+            },
           });
 
           setPreview({
@@ -180,6 +191,12 @@ export default function AboutUsAdmin() {
       // Banner
       if (imageFile.mainBanner) {
         data.append("mainBanner", imageFile.mainBanner);
+      }
+
+      if (formData.seo) {
+        data.append("seo[metaTitle]", formData.seo.metaTitle || "");
+        data.append("seo[metaDescription]", formData.seo.metaDescription || "");
+        data.append("seo[codeSnippet]", formData.seo.codeSnippet || "");
       }
 
       const res = await fetch("/api/admin/about-us", {
@@ -295,6 +312,16 @@ export default function AboutUsAdmin() {
           </button>
         }
       />
+
+      {/* SEO Section */}
+      <div className="mb-6">
+        <SEOForm
+          values={formData.seo}
+          onChange={(newSeo) =>
+            setFormData((prev) => ({ ...prev, seo: newSeo }))
+          }
+        />
+      </div>
 
       {/* Hero Section */}
       <section className="space-y-4">

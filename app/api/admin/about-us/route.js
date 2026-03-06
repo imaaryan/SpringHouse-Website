@@ -84,6 +84,11 @@ export async function PUT(request) {
     aboutUs.history = history;
     aboutUs.whyUs = whyUs;
     aboutUs.whoAreWe = whoAreWe;
+    aboutUs.seo = {
+      metaTitle: formData.get("seo[metaTitle]") || "",
+      metaDescription: formData.get("seo[metaDescription]") || "",
+      codeSnippet: formData.get("seo[codeSnippet]") || "",
+    };
 
     await aboutUs.save();
 
