@@ -55,7 +55,7 @@ export default function AdminDashboard() {
             <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-400">
               {card.title}
             </h3>
-            <p className="mt-2 font-heading text-4xl text-brand-primary">
+            <p className="mt-2 font-heading text-3xl text-brand-primary">
               {loading ? "..." : card.value}
             </p>
           </div>

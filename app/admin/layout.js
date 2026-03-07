@@ -66,7 +66,7 @@ export default function AdminLayout({ children }) {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center rounded-lg px-4 py-3 text-sm font-semibold transition-colors uppercase ${
+                    className={`flex items-center rounded-lg px-4 py-3 text-sm font-semibold transition-colors uppercase no-underline ${
                       isActive
                         ? "bg-brand-primary/10 text-brand-primary"
                         : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
@@ -80,7 +80,12 @@ export default function AdminLayout({ children }) {
           </div>
 
           <div className="p-4 border-t border-gray-100">
-            <Link href="/" target="_blank" rel="noopener noreferrer">
+            <Link
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="no-underline"
+            >
               <button className="flex w-full items-center uppercase justify-center rounded-lg bg-[#e6fffe] px-4 py-2 text-sm font-medium text-[#00AAA6] transition hover:bg-[#d9fcfc] cursor-pointer gap-4">
                 View Website
                 <SquareArrowOutUpRight size={16} />
