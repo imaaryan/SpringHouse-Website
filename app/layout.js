@@ -39,12 +39,7 @@ export default function RootLayout({ children }) {
           type="text/css"
           href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"
         />
-        <link rel="stylesheet" href="/frontend_assets/css/main.css?v=1.0" />
-        <link rel="stylesheet" href="/frontend_assets/css/style.css?v=1.0" />
-        <link
-          rel="stylesheet"
-          href="/frontend_assets/css/responsive.css?v=1.0"
-        />
+
         <link
           rel="stylesheet"
           href="https://unpkg.com/aos@2.3.1/dist/aos.css"
