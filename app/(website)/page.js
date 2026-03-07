@@ -19,19 +19,15 @@ export default function Home() {
       <Header />
       <HeroBanner />
       <PresenceCounter />
-
-      {/* Both solutions will be rendered. CSS from the HTML will hide/show them based on media queries natively */}
-      <SolutionsDesktop />
-      <SolutionsMobile />
-
       <LocationCards />
       <DesignYourIdeal />
-      <OurCommunity />
+      <SolutionsDesktop />
+      <SolutionsMobile />
       <Networking />
+      <OurCommunity />
       <Testimonials />
       <Blogs />
       <ContactForm />
-
       <Footer />
       <ModalsAndScripts />
     </>

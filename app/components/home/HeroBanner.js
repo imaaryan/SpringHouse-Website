@@ -25,7 +25,7 @@ export default function HeroBanner() {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-11 h-11"
-                style={{ width: "1.0rem", height: "1.0rem", stroke: "#ffffff" }}
+                style={{ width: "1.0rem", height: "1.4rem", stroke: "#ffffff" }}
               >
                 <path
                   d="M11 1.54972e-06L0 0L2.38419e-07 11C1.65973e-07 4.92487 4.92487 1.62217e-06 11 1.54972e-06Z"
@@ -53,10 +53,10 @@ export default function HeroBanner() {
 
         <div className="spring-content" data-aos="fade-up">
           <span className="section-span">CREATE. SIEZE. PROGRESS.</span>
-          <h2 className="section-title mt-2">
+          <h2 className="section-title mt-4">
             <p>
-              <span style={{ fontSize: "20px" }}>
-                <span style={{ fontFamily: "Arial,Helvetica,sans-serif" }}>
+              <span style={{ fontSize: "50px" }}>
+                <span style={{ fontFamily: "GoBold,Helvetica,sans-serif" }}>
                   a space to work.
                   <br />a community to grow.
                 </span>

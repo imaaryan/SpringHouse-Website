@@ -27,7 +27,7 @@ export default function SolutionsDesktop() {
                       className="w-11 h-11"
                       style={{
                         width: "1.0rem",
-                        height: "1.0rem",
+                        height: "1.4rem",
                         stroke: "#f5f3f3",
                       }}
                     >
@@ -58,7 +58,7 @@ export default function SolutionsDesktop() {
                   </div>
                 </div>
                 <div className="service-head">
-                  <h4 className="font24">Managed Office</h4>
+                  <h4 className="font24">Managed  <br /> Office</h4>
                 </div>
               </div>
 
@@ -67,9 +67,7 @@ export default function SolutionsDesktop() {
                   <p>
                     Experience a fully serviced private office at SpringHouse,
                     designed exclusively for your company. Our comprehensive
-                    service package covers utilities, maintenance, cleaning,
-                    security, and operational support, ensuring a hassle-free
-                    workspace.
+                    service package covers utilities, maintenance, cleaning...
                   </p>
                 </div>
                 <div className="service-btn mt-2">
@@ -98,7 +96,7 @@ export default function SolutionsDesktop() {
                       className="w-11 h-11"
                       style={{
                         width: "1.0rem",
-                        height: "1.0rem",
+                        height: "1.4rem",
                         stroke: "#f5f3f3",
                       }}
                     >
@@ -129,7 +127,7 @@ export default function SolutionsDesktop() {
                   </div>
                 </div>
                 <div className="service-head">
-                  <h4 className="font24">Virtual Office</h4>
+                  <h4 className="font24">Virtual  <br /> Office</h4>
                 </div>
               </div>
 
@@ -208,9 +206,7 @@ export default function SolutionsDesktop() {
                   <p>
                     Whether you need an open desk for collaboration or a private
                     space for focus, our coworking solutions offer flexibility
-                    for freelancers, startups, and teams. Customize your setup,
-                    work alongside a dynamic community, and enjoy a workspace
-                    designed to reflect your brand and culture....
+                    for freelancers, startups, and teams. Customize your setup...
                   </p>
                 </div>
                 <div className="service-btn mt-2">
@@ -239,7 +235,7 @@ export default function SolutionsDesktop() {
                       className="w-11 h-11"
                       style={{
                         width: "1.0rem",
-                        height: "1.0rem",
+                        height: "1.4rem",
                         stroke: "#f5f3f3",
                       }}
                     >
@@ -270,7 +266,7 @@ export default function SolutionsDesktop() {
                   </div>
                 </div>
                 <div className="service-head">
-                  <h4 className="font24">Day Pass</h4>
+                  <h4 className="font24">Day  <br /> Pass</h4>
                 </div>
               </div>
 
@@ -280,7 +276,7 @@ export default function SolutionsDesktop() {
                     Get full office access for a day at any SpringHouse
                     coworking space near you. Enjoy high-speed internet,
                     printing, and flexible seating in a secure and collaborative
-                    environment designed for productivity....
+                    environment designed for....
                   </p>
                 </div>
                 <div className="service-btn mt-2">
@@ -309,7 +305,7 @@ export default function SolutionsDesktop() {
                       className="w-11 h-11"
                       style={{
                         width: "1.0rem",
-                        height: "1.0rem",
+                        height: "1.4rem",
                         stroke: "#f5f3f3",
                       }}
                     >
@@ -340,7 +336,7 @@ export default function SolutionsDesktop() {
                   </div>
                 </div>
                 <div className="service-head">
-                  <h4 className="font24">Meeting Room</h4>
+                  <h4 className="font24">Meeting  <br /> Room</h4>
                 </div>
               </div>
 
@@ -349,8 +345,7 @@ export default function SolutionsDesktop() {
                   <p>
                     Need a conference room rental? Our meeting rooms are
                     designed for client presentations, team discussions, and
-                    brainstorming sessions. Book a conference room on rent that
-                    ensures privacy, productivity, and seamless collaboration...
+                    brainstorming sessions. Book a conference room on rent...
                   </p>
                 </div>
                 <div className="service-btn mt-2">
@@ -379,7 +374,7 @@ export default function SolutionsDesktop() {
                       className="w-11 h-11"
                       style={{
                         width: "1.0rem",
-                        height: "1.0rem",
+                        height: "1.4rem",
                         stroke: "#f5f3f3",
                       }}
                     >
@@ -410,7 +405,7 @@ export default function SolutionsDesktop() {
                   </div>
                 </div>
                 <div className="service-head">
-                  <h4 className="font24">Event Space</h4>
+                  <h4 className="font24">Event  <br /> Space</h4>
                 </div>
               </div>
 
