@@ -34,7 +34,7 @@ export async function PUT(request, { params }) {
     const body = await request.json();
 
     const updatedPage = await OtherPage.findByIdAndUpdate(id, body, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
 

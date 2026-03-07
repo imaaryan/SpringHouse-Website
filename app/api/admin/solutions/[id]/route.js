@@ -187,7 +187,7 @@ export async function PUT(request, { params }) {
     const updatedSolution = await Solution.findByIdAndUpdate(
       id,
       updatePayload,
-      { new: true, runValidators: true },
+      { returnDocument: "after", runValidators: true },
     );
 
     return NextResponse.json({

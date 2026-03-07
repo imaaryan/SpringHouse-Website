@@ -43,7 +43,7 @@ export async function PUT(request) {
     }
 
     const area = await Area.findByIdAndUpdate(_id, updateData, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
 

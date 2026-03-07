@@ -26,7 +26,7 @@ export async function PUT(request, { params }) {
     }
 
     const updatedAmenity = await Amenity.findByIdAndUpdate(id, updateData, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
 

@@ -62,7 +62,7 @@ export async function PUT(request, { params }) {
     }
 
     const updatedBlog = await Blog.findByIdAndUpdate(id, updateData, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
 

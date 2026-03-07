@@ -36,7 +36,7 @@ export async function PUT(request) {
       settings = await Setting.create(payload);
     } else {
       settings = await Setting.findByIdAndUpdate(settings._id, payload, {
-        new: true,
+        returnDocument: "after",
       });
     }
 

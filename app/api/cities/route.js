@@ -43,7 +43,7 @@ export async function PUT(request) {
     }
 
     const city = await City.findByIdAndUpdate(_id, updateData, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
 

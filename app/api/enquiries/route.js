@@ -44,7 +44,7 @@ export async function PUT(request) {
     }
 
     const enquiry = await Enquiry.findByIdAndUpdate(_id, updateData, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
 

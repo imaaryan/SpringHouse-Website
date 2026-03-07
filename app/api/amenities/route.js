@@ -73,7 +73,7 @@ export async function PUT(request) {
     }
 
     const amenity = await Amenity.findByIdAndUpdate(_id, body, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
 

@@ -76,7 +76,7 @@ export async function PUT(request) {
     }
 
     const testimonial = await Testimonial.findByIdAndUpdate(_id, body, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
 

@@ -115,7 +115,7 @@ export async function POST(request) {
     }
 
     const homepage = await Homepage.findOneAndUpdate({}, body, {
-      new: true,
+      returnDocument: "after",
       upsert: true,
       runValidators: true,
       setDefaultsOnInsert: true,

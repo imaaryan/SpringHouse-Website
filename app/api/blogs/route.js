@@ -73,7 +73,7 @@ export async function PUT(request) {
     }
 
     const blog = await Blog.findByIdAndUpdate(_id, body, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
 

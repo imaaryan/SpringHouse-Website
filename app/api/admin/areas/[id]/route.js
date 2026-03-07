@@ -18,7 +18,7 @@ export async function PUT(request, { params }) {
     const updatedArea = await Area.findByIdAndUpdate(
       id,
       { name, city },
-      { new: true, runValidators: true },
+      { returnDocument: "after", runValidators: true },
     );
 
     if (!updatedArea) {

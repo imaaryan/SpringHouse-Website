@@ -67,7 +67,7 @@ export async function PUT(request, { params }) {
         isActive,
         featuredImage: imagePath,
       },
-      { new: true, runValidators: true },
+      { returnDocument: "after", runValidators: true },
     );
 
     return NextResponse.json({

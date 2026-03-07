@@ -95,7 +95,7 @@ export async function PUT(request, { params }) {
     };
 
     const updatedCity = await City.findByIdAndUpdate(id, updatePayload, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
 

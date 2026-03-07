@@ -132,7 +132,7 @@ export async function PUT(request) {
     body.companyImages = uploadedCompanyImages;
 
     const solution = await Solution.findByIdAndUpdate(_id, body, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
 

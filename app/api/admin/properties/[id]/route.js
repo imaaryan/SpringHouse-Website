@@ -106,7 +106,7 @@ export async function PUT(request, { params }) {
     const updatedProperty = await Property.findByIdAndUpdate(
       id,
       updatePayload,
-      { new: true, runValidators: true },
+      { returnDocument: "after", runValidators: true },
     );
 
     return NextResponse.json({

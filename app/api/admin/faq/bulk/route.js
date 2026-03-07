@@ -36,7 +36,7 @@ export async function PUT(request) {
         // Update existing
         const { _id, ...updateData } = section;
         return FAQ.findByIdAndUpdate(_id, updateData, {
-          new: true,
+          returnDocument: "after",
           runValidators: true,
         });
       } else {

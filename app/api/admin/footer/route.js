@@ -41,7 +41,7 @@ export async function PUT(request) {
 
     if (footerData) {
       footerData = await Footer.findByIdAndUpdate(footerData._id, updateData, {
-        new: true,
+        returnDocument: "after",
       });
     } else {
       footerData = await Footer.create(updateData);
