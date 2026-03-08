@@ -57,7 +57,7 @@ export default function LocationHero({ location = "gurugram" }) {
               </div>
               <div className="location-content">
                 <h4 className="section-title">
-                  find a space to match the size of your ambition in gurugram
+                  gurugram
                 </h4>
               </div>
             </div>

@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
-"use client";
+import "../globals.css";
+("use client");
 import React from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";

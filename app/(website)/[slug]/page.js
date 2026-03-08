@@ -4,8 +4,10 @@ import LocationHero from "@/app/components/location/LocationHero";
 import AboutLocation from "@/app/components/location/AboutLocation";
 import PropertiesList from "@/app/components/location/PropertiesList";
 import LocationAmenities from "@/app/components/location/LocationAmenities";
-import ManagedOfficeBanner from "@/app/components/location/ManagedOfficeBanner";
-import WorkspaceSolutions from "@/app/components/location/WorkspaceSolutions";
+import DesignYourIdealWorkNest from "@/app/components/home/DesignYourIdealWorkNest";
+import LifeAtSpringHouse from "@/app/components/home/LifeAtSpringHouse";
+import SolutionsDesktop from "@/app/components/home/SolutionsDesktop";
+import SolutionsMobile from "@/app/components/home/SolutionsMobile";
 import OtherLocations from "@/app/components/location/OtherLocations";
 import ContactForm from "@/app/components/home/ContactForm";
 import Footer from "@/app/components/home/Footer";
@@ -34,8 +36,10 @@ export default async function LocationPage({ params }) {
       <AboutLocation location={city} />
       <PropertiesList location={city} />
       <LocationAmenities location={city} />
-      <ManagedOfficeBanner location={city} />
-      <WorkspaceSolutions location={city} />
+      <DesignYourIdealWorkNest />
+      <LifeAtSpringHouse />
+      <SolutionsDesktop />
+      <SolutionsMobile />
       <OtherLocations location={city} />
       <ContactForm />
       <Footer />

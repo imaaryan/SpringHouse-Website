@@ -4,7 +4,8 @@ import PresenceCounter from "../components/home/PresenceCounter";
 import SolutionsDesktop from "../components/home/SolutionsDesktop";
 import SolutionsMobile from "../components/home/SolutionsMobile";
 import LocationCards from "../components/home/LocationCards";
-import DesignYourIdeal from "../components/home/DesignYourIdeal";
+import DesignYourIdealWorkNest from "../components/home/DesignYourIdealWorkNest";
+import LifeAtSpringHouse from "../components/home/LifeAtSpringHouse";
 import OurCommunity from "../components/home/OurCommunity";
 import Networking from "../components/home/Networking";
 import Testimonials from "../components/home/Testimonials";
@@ -20,7 +21,8 @@ export default function Home() {
       <HeroBanner />
       <PresenceCounter />
       <LocationCards />
-      <DesignYourIdeal />
+      <DesignYourIdealWorkNest />
+      <LifeAtSpringHouse />
       <SolutionsDesktop />
       <SolutionsMobile />
       <Networking />

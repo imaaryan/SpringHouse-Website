@@ -217,7 +217,7 @@ a:hover {
   letter-spacing: 3px;
   line-height: 100%;
   color: var(--theme-blackcolor);
-  padding-left: 30px;
+  padding-left: 2px;
 }
 .counter-number span {
   font-size: 70px;
