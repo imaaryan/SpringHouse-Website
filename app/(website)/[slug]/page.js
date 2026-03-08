@@ -1,8 +1,8 @@
 import React from "react";
 import Header from "@/app/components/home/Header";
-import LocationHero from "@/app/components/location/LocationHero";
+import GlobalBanner from "@/app/components/home/GlobalBanner";
 import AboutLocation from "@/app/components/location/AboutLocation";
-import PropertiesList from "@/app/components/location/PropertiesList";
+import AvailableProperties from "@/app/components/solutions/AvailableProperties";
 import LocationAmenities from "@/app/components/location/LocationAmenities";
 
 import LifeAtSpringHouse from "@/app/components/home/LifeAtSpringHouse";
@@ -11,6 +11,31 @@ import SolutionsMobile from "@/app/components/home/SolutionsMobile";
 import OtherLocations from "@/app/components/location/OtherLocations";
 import ContactForm from "@/app/components/home/ContactForm";
 import Footer from "@/app/components/home/Footer";
+
+// Temporary Mapping for testing UI logic reliably
+const DUMMY_PROPERTIES = [
+  {
+    _id: "prop1",
+    city: { slug: "new-delhi", name: "New Delhi" },
+    activeSolutions: [{ slug: "managed-office" }, { slug: "coworking" }],
+    name: "SpringHouse Naraina",
+    images: [
+      "/assets/locationdetail/banner/1747118432_gurugram.jpg",
+      "/assets/locationdetail/banner/1747307186_delhilocation.jpg",
+    ],
+    propertyCode: "SH-DEL-01",
+    fullAddress: "Arise Building, Naraina Vihar, New Delhi - 110028",
+  },
+  {
+    _id: "prop2",
+    city: { slug: "gurugram", name: "Gurugram" },
+    activeSolutions: [{ slug: "managed-office" }],
+    name: "SpringHouse Golf Course",
+    images: ["/assets/locationdetail/banner/1747119868_gurugram.jpg"],
+    propertyCode: "SH-GUR-01",
+    fullAddress: "Golf Course Extension Road, Sector 56, Gurugram",
+  },
+];
 
 export const metadata = {
   title: "Managed Workspaces and Coworking Spaces in Gurugram",
@@ -29,12 +54,19 @@ export default async function LocationPage({ params }) {
   // but for now, we'll let it render with the city name from the slug.
   const city = slug.replace("-coworking-space", "");
 
+  const cityProperties = DUMMY_PROPERTIES.filter(
+    (property) => property.city?.slug === city,
+  );
+
   return (
     <>
       <Header />
-      <LocationHero location={city} />
+      <GlobalBanner
+        title={city}
+        imageSrc={"/assets/locationdetail/banner/1747118432_gurugram.jpg"}
+      />
       <AboutLocation location={city} />
-      <PropertiesList location={city} />
+      <AvailableProperties properties={cityProperties} />
       <LocationAmenities location={city} />
 
       <LifeAtSpringHouse />

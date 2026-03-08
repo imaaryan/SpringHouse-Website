@@ -1,20 +1,21 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 
-export default function LocationHero({ location = "gurugram" }) {
-  // We can pass data as props later, hardcoding Gurgaon for now as requested
+export default function GlobalBanner({ title, imageSrc }) {
+  // Common fallback image or styling
+  const imageUrl = imageSrc?.startsWith("http")
+    ? imageSrc
+    : `/${imageSrc?.replace(/^\//, "")}`;
+
   return (
-    <div className="loctions specific-location" data-aos="fade-up">
+    <div className="loctions specific-location virtual" data-aos="fade-up">
       <div className="container-fluid">
         <div className="row pt30">
           <div className="col-lg-12 mb-4">
             <div className="locationscard relative">
               <div className="locations-image">
-                <img
-                  alt="co work spaces – SpringHouse coworking office view"
-                  src="/assets/locationdetail/banner/1747118432_gurugram.jpg"
-                />
+                <img alt={title || "SpringHouse Banner"} src={imageUrl} />
+
                 <div className="shape-bottom">
                   <div className="shape-left-top">
                     <svg
@@ -34,6 +35,7 @@ export default function LocationHero({ location = "gurugram" }) {
                       ></path>
                     </svg>
                   </div>
+
                   <div className="shape-right-bottom">
                     <svg
                       className="w-11 h-11"
@@ -55,10 +57,9 @@ export default function LocationHero({ location = "gurugram" }) {
                   </div>
                 </div>
               </div>
+
               <div className="location-content">
-                <h4 className="section-title">
-                  gurugram
-                </h4>
+                <h4 className="section-title">{title?.toLowerCase() || ""}</h4>
               </div>
             </div>
           </div>

@@ -1,5 +1,7 @@
 import connectDB from "@/utils/db";
 import { Solution } from "@/model/solution.model";
+import { Testimonial } from "@/model/testimonial.model";
+import { Property } from "@/model/property.model";
 import { NextResponse } from "next/server";
 import { uploadImage } from "@/utils/upload";
 
@@ -8,7 +10,6 @@ export async function GET() {
   try {
     const solutions = await Solution.find({})
       .populate("testimonials")
-      .populate("activeProperties")
       .sort({ createdAt: -1 });
     return NextResponse.json({ success: true, data: solutions });
   } catch (error) {
