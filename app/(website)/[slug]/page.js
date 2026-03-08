@@ -4,7 +4,7 @@ import LocationHero from "@/app/components/location/LocationHero";
 import AboutLocation from "@/app/components/location/AboutLocation";
 import PropertiesList from "@/app/components/location/PropertiesList";
 import LocationAmenities from "@/app/components/location/LocationAmenities";
-import DesignYourIdealWorkNest from "@/app/components/home/DesignYourIdealWorkNest";
+
 import LifeAtSpringHouse from "@/app/components/home/LifeAtSpringHouse";
 import SolutionsDesktop from "@/app/components/home/SolutionsDesktop";
 import SolutionsMobile from "@/app/components/home/SolutionsMobile";
@@ -36,7 +36,7 @@ export default async function LocationPage({ params }) {
       <AboutLocation location={city} />
       <PropertiesList location={city} />
       <LocationAmenities location={city} />
-      <DesignYourIdealWorkNest />
+
       <LifeAtSpringHouse />
       <SolutionsDesktop />
       <SolutionsMobile />

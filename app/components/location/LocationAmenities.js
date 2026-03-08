@@ -3,10 +3,10 @@ import Image from "next/image";
 
 export default function LocationAmenities() {
   return (
-    <section className="specfic-prop amenities pt60">
+    <section className=" amenities pt60">
       <div className="container-fluid">
         <div className="row">
-          <div className="col-lg-6">
+          <div className="col-lg-6 pb30">
             <span className="section-title-span">AMENITIES</span>
           </div>
         </div>
