@@ -103,7 +103,7 @@ export default async function Page({ params }) {
       )}
 
       {/* Properties Component */}
-      <AvailableProperties properties={solutionProperties} />
+      <AvailableProperties properties={solutionProperties} showTabs={true} />
 
       {slug === "coworking" && (
         <>

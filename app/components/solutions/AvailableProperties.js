@@ -3,7 +3,7 @@
 import { useState } from "react";
 import PropertyCardSlider from "./PropertyCardSlider";
 
-export default function AvailableProperties({ properties }) {
+export default function AvailableProperties({ properties, showTabs = false }) {
   if (!properties || properties.length === 0) return null;
 
   /* Group properties by city */
@@ -38,21 +38,23 @@ export default function AvailableProperties({ properties }) {
         <div className="row pe-3 ps-3">
           <div className="col-md-12 pt-3">
             {/* Tabs */}
-            <nav>
-              <div className="nav nav-tabs mb-3">
-                {cities.map((city) => (
-                  <button
-                    key={city.name}
-                    className={`nav-link ${
-                      activeCity === city.name ? "active" : ""
-                    }`}
-                    onClick={() => setActiveCity(city.name)}
-                  >
-                    {city.name}
-                  </button>
-                ))}
-              </div>
-            </nav>
+            {showTabs && (
+              <nav>
+                <div className="nav nav-tabs mb-3">
+                  {cities.map((city) => (
+                    <button
+                      key={city.name}
+                      className={`nav-link ${
+                        activeCity === city.name ? "active" : ""
+                      }`}
+                      onClick={() => setActiveCity(city.name)}
+                    >
+                      {city.name}
+                    </button>
+                  ))}
+                </div>
+              </nav>
+            )}
 
             {/* Properties */}
             <div className="row">
