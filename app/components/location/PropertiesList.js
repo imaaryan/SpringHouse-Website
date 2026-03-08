@@ -14,7 +14,7 @@ export default function PropertiesList() {
       // Check if slick gets loaded globally
       if (window.$ && typeof window.$.fn.slick === "function") {
         window.$(".image-slider1").not(".slick-initialized").slick({
-          dots: true,
+          dots: false,
           infinite: true,
           speed: 300,
           slidesToShow: 1,

@@ -1097,3 +1097,5 @@ https://nextjs.org/docs/messages/module-not-found
  GET /gurugram-coworking-space 200 in 125ms (compile: 8ms, render: 117ms)
  GET /gurugram-coworking-space 200 in 76ms (compile: 5ms, render: 71ms)
  GET /gurugram-coworking-space 200 in 93ms (compile: 9ms, render: 85ms)
+✓ Compiled in 234ms
+ GET /gurugram-coworking-space 200 in 93ms (compile: 9ms, render: 84ms)
