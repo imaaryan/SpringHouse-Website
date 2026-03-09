@@ -647,7 +647,7 @@ footer {
   background: var(--theme-primarycolor);
   z-index: 5;
   position: relative;
-  padding-top: 35px;
+  padding: 35px 0 35px 0;
 }
 /* .follow-social-link .insta:hover::Before {
     background-image: url(../img/insta-hover.png);
@@ -753,10 +753,17 @@ footer::before {
 .follow-social-link a:hover img.black-i {
   opacity: 0;
 }
+.follow-address {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 .follow-address a {
-  font-size: 14px;
+  font-size: 16px;
   color: var(--theme-whitecolor);
 }
+
+
 
 .networking-rightside {
   padding: 0px 40px;

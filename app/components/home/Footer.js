@@ -1,9 +1,15 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect } from "react";
+import connectDB from "@/utils/db";
+import FooterModel from "@/model/footer.model";
 
-export default function Footer() {
+export default async function Footer() {
+  await connectDB();
+  const footerData = (await FooterModel.findOne({})) || {};
+
+  const columns = footerData.columns || [];
+  const socialLinks = footerData.socialLinks || {};
+  const contactInfo = footerData.contactInfo || {};
+  const bottomBlocks = footerData.bottomBlocks || "";
   return (
     <>
       <footer className="relative">
@@ -11,122 +17,26 @@ export default function Footer() {
           <div className="row">
             <div className="col-lg-7 pe-5">
               <div className="row">
-                <div className="col-md-3 mb-lg-0 mb-md-0 mb-4">
-                  <div className="widgt">
-                    <h3>company</h3>
-                    <ul className="footer-link">
-                      <li>
-                        <Link href="#">Blogs</Link>
-                      </li>
-                      <li>
-                        <Link href="#">Policies</Link>
-                      </li>
-                      <li>
-                        <Link href="#">FAQ's</Link>
-                      </li>
-                      <li>
-                        <Link href="#">Careers</Link>
-                      </li>
-                    </ul>
+                {columns.map((col, idx) => (
+                  <div className="col-md-3 mb-lg-0 mb-md-0 mb-4" key={idx}>
+                    <div className="widgt">
+                      <h3>{col.title}</h3>
+                      <ul className="footer-link">
+                        {col.links?.map((link, lIdx) => (
+                          <li key={lIdx}>
+                            <Link href={link.url || "#"}>{link.label}</Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                </div>
-                <div className="col-md-3 mb-lg-0 mb-md-0 mb-4">
-                  <div className="widgt">
-                    <h3>locations</h3>
-                    <ul className="footer-link">
-                      <li>
-                        <Link href="#">Gurugram</Link>
-                      </li>
-                      <li>
-                        <Link href="#">Delhi</Link>
-                      </li>
-                      <li>
-                        <Link href="#">Noida</Link>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="col-md-3 mb-lg-0 mb-md-0">
-                  <div className="widgt">
-                    <h3>solutions</h3>
-                    <ul className="footer-link">
-                      <li>
-                        <Link href="#">Managed Office</Link>
-                      </li>
-                      <li>
-                        <Link href="#">Virtual Office</Link>
-                      </li>
-                      <li>
-                        <Link href="#">Coworking</Link>
-                      </li>
-                      <li>
-                        <Link href="#">Day Pass</Link>
-                      </li>
-                      <li>
-                        <Link href="#">Meeting Rooms</Link>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                ))}
 
                 <div className="col-lg-12">
-                  <div className="footer-content pt-5">
-                    <div className="footer-head">
-                      <p className="font12">Discover Coworking Space:</p>
-                    </div>
-                    <div className="footer-links">
-                      <Link href="#">co working</Link>
-                      <Link href="#">coworking space near me</Link>
-                      <Link href="#">coworking space in gurugram</Link>
-                      <Link href="#">coworking space in noida</Link>
-                      <Link href="#">coworking cafe</Link>
-                      <Link href="#">my workspace</Link>
-                      <Link href="#">working hubs</Link>
-                      <Link href="#">my workspace</Link>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-12">
-                  <div className="footer-content">
-                    <div className="footer-head">
-                      <p className="font12">
-                        Office Solutions & Flex Workspaces
-                      </p>
-                    </div>
-                    <div className="footer-links">
-                      <Link href="#">managed office</Link>
-                      <Link href="#">office space</Link>
-                      <Link href="#">office spaces near me</Link>
-                      <Link href="#">conference room</Link>
-                      <Link href="#">office space for rent</Link>
-                      <Link href="#">office space to let</Link>
-                      <Link href="#">virtual space</Link>
-                      <Link href="#">offices to rent near me</Link>
-                      <Link href="#">working space near me</Link>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-12">
-                  <div className="footer-content">
-                    <div className="footer-head">
-                      <p className="font12">Events & Meeting Spaces</p>
-                    </div>
-                    <div className="footer-links">
-                      <Link href="#">event space rental</Link>
-                      <Link href="#">event venues near me</Link>
-                      <Link href="#">event hall</Link>
-                      <Link href="#">event rooms</Link>
-                      <Link href="#">conference room rental</Link>
-                      <Link href="#">conference venues near me</Link>
-                      <Link href="#">conference hall</Link>
-                      <Link href="#">conference room on rent</Link>
-                      <Link href="#">conference hall near me</Link>
-                      <Link href="#">conference room meeting</Link>
-                      <Link href="#">conference meeting</Link>
-                      <Link href="#">company coworking</Link>
-                      <Link href="#">meeting room in office</Link>
-                    </div>
-                  </div>
+                  <div
+                    className="dynamic-footer-bottom pt-5"
+                    dangerouslySetInnerHTML={{ __html: bottomBlocks }}
+                  />
                 </div>
               </div>
             </div>
@@ -137,59 +47,65 @@ export default function Footer() {
                     <p className="font20">Follow us</p>
                   </div>
                   <div className="follow-social-link mt-3">
-                    <a
-                      href="https://www.instagram.com/springhouse.workspaces/"
-                      className="insta"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img
-                        className="actule"
-                        src="/frontend_assets/img/insta-hover.png"
-                        alt="working space – SpringHouse coworking office view"
-                      />
-                      <img
-                        className="black-i"
-                        src="/frontend_assets/img/Instagram.png"
-                        alt="rent a coworking space – SpringHouse coworking office view"
-                      />
-                    </a>
+                    {socialLinks.instagram && (
+                      <a
+                        href={socialLinks.instagram}
+                        className="insta"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          className="actule"
+                          src="/frontend_assets/img/insta-hover.png"
+                          alt="working space – SpringHouse coworking office view"
+                        />
+                        <img
+                          className="black-i"
+                          src="/frontend_assets/img/Instagram.png"
+                          alt="rent a coworking space – SpringHouse coworking office view"
+                        />
+                      </a>
+                    )}
 
-                    <a
-                      href="https://www.facebook.com/SpringhouseCoworking"
-                      className="face"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img
-                        className="actule"
-                        src="/frontend_assets/img/fb-hover.png"
-                        alt="working space – SpringHouse coworking office view"
-                      />
-                      <img
-                        className="black-i"
-                        src="/frontend_assets/img/Facebook.png"
-                        alt="working space – SpringHouse coworking office view"
-                      />
-                    </a>
+                    {socialLinks.facebook && (
+                      <a
+                        href={socialLinks.facebook}
+                        className="face"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          className="actule"
+                          src="/frontend_assets/img/fb-hover.png"
+                          alt="working space – SpringHouse coworking office view"
+                        />
+                        <img
+                          className="black-i"
+                          src="/frontend_assets/img/Facebook.png"
+                          alt="working space – SpringHouse coworking office view"
+                        />
+                      </a>
+                    )}
 
-                    <a
-                      href="https://www.linkedin.com/company/spring-house-coworking/"
-                      className="link"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img
-                        className="actule"
-                        src="/frontend_assets/img/linkedin-hover.png"
-                        alt="working space – SpringHouse coworking office view"
-                      />
-                      <img
-                        className="black-i"
-                        src="/frontend_assets/img/LinkedIn.png"
-                        alt="coworking spaces – SpringHouse coworking office view"
-                      />
-                    </a>
+                    {socialLinks.linkedin && (
+                      <a
+                        href={socialLinks.linkedin}
+                        className="link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          className="actule"
+                          src="/frontend_assets/img/linkedin-hover.png"
+                          alt="working space – SpringHouse coworking office view"
+                        />
+                        <img
+                          className="black-i"
+                          src="/frontend_assets/img/LinkedIn.png"
+                          alt="coworking spaces – SpringHouse coworking office view"
+                        />
+                      </a>
+                    )}
                   </div>
                 </div>
                 <div className="footer-box">
@@ -198,41 +114,47 @@ export default function Footer() {
                   </div>
                   <div className="follow-address">
                     <p className="text-white">
-                      LG 006, DLF Grand Mall, MG Rd, <br />
-                      Gurugram, Haryana 122001
+                      {contactInfo.address ||
+                        "LG 006, DLF Grand Mall, MG Rd, Gurugram, Haryana 122001"}
                     </p>
                   </div>
                 </div>
                 <div className="footer-box">
                   <div className="follow-head">
-                    <p className="font20">CONTACT US</p>
+                    <p className="font20 mb20">CONTACT US</p>
                   </div>
                   <div className="follow-address">
-                    <a href="tel:+919899936669">
-                      <p>
-                        <i
-                          className="fa fa-phone"
-                          style={{ fontFamily: "'FontAwesome'" }}
-                        ></i>{" "}
-                        +91-9899936669
-                      </p>
-                    </a>
-                    <a
-                      href="https://api.whatsapp.com/send?phone=917428573675"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <p>
-                        <i
-                          className="fa fa-whatsapp"
-                          style={{ fontFamily: "'FontAwesome'" }}
-                        ></i>{" "}
-                        +91 74285 73675
-                      </p>
-                    </a>
-                    <a href="mailto:springup@springhouse.in">
-                      <p>springup@springhouse.in</p>
-                    </a>
+                    {contactInfo.phone && (
+                      <a href={`tel:${contactInfo.phone}`}>
+                        <p>
+                          <i
+                            className="fa fa-phone"
+                            style={{ fontFamily: "'FontAwesome'" }}
+                          ></i>{" "}
+                          {contactInfo.phone}
+                        </p>
+                      </a>
+                    )}
+                    {contactInfo.whatsapp && (
+                      <a
+                        href={`https://api.whatsapp.com/send?phone=${contactInfo.whatsapp.replace(/[^0-9]/g, "")}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <p>
+                          <i
+                            className="fa fa-whatsapp"
+                            style={{ fontFamily: "'FontAwesome'" }}
+                          ></i>{" "}
+                          {contactInfo.whatsapp}
+                        </p>
+                      </a>
+                    )}
+                    {contactInfo.email && (
+                      <a href={`mailto:${contactInfo.email}`}>
+                        <p>{contactInfo.email}</p>
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
@@ -241,14 +163,16 @@ export default function Footer() {
         </div>
       </footer>
 
-      <a
-        href="https://api.whatsapp.com/send?phone=917428573675"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="whatsapp"
-      >
-        <i className="fab fa-whatsapp"></i>
-      </a>
+      {contactInfo.whatsapp && (
+        <a
+          href={`https://api.whatsapp.com/send?phone=${contactInfo.whatsapp.replace(/[^0-9]/g, "")}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="whatsapp"
+        >
+          <i className="fab fa-whatsapp"></i>
+        </a>
+      )}
 
       <style
         dangerouslySetInnerHTML={{
@@ -275,7 +199,20 @@ export default function Footer() {
         .whatsapp i {
             font-size: 35px;
         }
-        .footer-links a {
+            .dynamic-footer-bottom{ 
+max-width: 800px;
+            }
+        .dynamic-footer-bottom p {
+            margin-bottom: 5px;
+            font-size: 12px;
+            color: var(--theme-whitecolor);
+            font-family: var(--theme-mainpara);
+        }
+        .dynamic-footer-bottom p:empty {
+            min-height: 10px;
+            display: block;
+        }
+        .dynamic-footer-bottom a {
             font-size: 12px;
             color: var(--theme-whitecolor);
             font-family: var(--theme-mainpara);
@@ -285,13 +222,9 @@ export default function Footer() {
             text-wrap-mode: nowrap;
             white-space: nowrap;
             text-decoration: none;
+            display: inline-block;
         }
-        .footer-links {
-            display: flex;
-            flex-wrap: wrap;
-            row-gap: 8px;
-        }
-        .footer-links a::after {
+        .dynamic-footer-bottom a::after {
             content: "";
             position: absolute;
             right: 0px;
@@ -301,8 +234,8 @@ export default function Footer() {
             height: 53%;
             border-right: 1px solid var(--theme-whitecolor);
         }
-        .footer-links.pt30 {
-            margin-left: -8px;
+        .dynamic-footer-bottom a:last-child::after {
+            border-right: none;
         }
       `,
         }}
