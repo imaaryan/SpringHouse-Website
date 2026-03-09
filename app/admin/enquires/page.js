@@ -138,6 +138,8 @@ export default function EnquiresPage() {
           <div className="flex gap-2 text-xs text-gray-500">
             <span>{row.selectCity || "No City"}</span>
             <span>&bull;</span>
+            <span>{row.selectProperty || "No Property"}</span>
+            <span>&bull;</span>
             <span>
               {row.deskRequirement
                 ? `${row.deskRequirement} Desks`

@@ -744,6 +744,7 @@ footer::before {
   transition: var(--theme-transition);
   position: relative;
 }
+
 .follow-social-link a img {
   filter: grayscale(1);
 }
