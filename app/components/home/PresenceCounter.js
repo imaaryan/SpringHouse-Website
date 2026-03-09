@@ -4,21 +4,50 @@ import { useEffect } from "react";
 
 export default function PresenceCounter() {
   useEffect(() => {
-    let intervalId;
-    if (typeof window !== "undefined") {
-      intervalId = setInterval(() => {
-        if (window.$ && window.$.fn.countUp) {
-          if (!window.$(".counter").hasClass("counter-loaded")) {
-            window.$(".counter").countUp();
-            window.$(".counter").addClass("counter-loaded");
-          }
-          clearInterval(intervalId);
-        }
-      }, 100);
+    const counters = document.querySelectorAll(".counter");
 
-      // Cleanup
-      return () => clearInterval(intervalId);
-    }
+    const startCounting = (el) => {
+      const targetStr = el.innerText || el.textContent;
+      // Extract only numeric value, removing "K" or "+"
+      const targetNum = parseInt(targetStr.replace(/[^0-9]/g, "")) || 0;
+      let count = 0;
+      const duration = 2000; // 2 seconds
+      const increment = targetNum / (duration / 16); // 60fps
+
+      const updateCount = () => {
+        count += increment;
+        if (count < targetNum) {
+          el.innerText = Math.ceil(count);
+          requestAnimationFrame(updateCount);
+        } else {
+          el.innerText = targetNum;
+        }
+      };
+
+      updateCount();
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (!entry.target.classList.contains("counter-loaded")) {
+              entry.target.classList.add("counter-loaded");
+              startCounting(entry.target);
+            }
+          }
+        });
+      },
+      { threshold: 0.5 },
+    );
+
+    counters.forEach((counter) => {
+      observer.observe(counter);
+    });
+
+    return () => {
+      counters.forEach((counter) => observer.unobserve(counter));
+    };
   }, []);
 
   return (

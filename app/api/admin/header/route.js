@@ -43,10 +43,31 @@ export async function POST(request) {
     // Handle Logo Image Upload
     const logoFile = formData.get("logo");
     if (logoFile instanceof File) {
+      const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+      if (!allowedTypes.includes(logoFile.type)) {
+        return NextResponse.json(
+          {
+            success: false,
+            error:
+              "Invalid file type. Only JPG, PNG, and WEBP images are allowed.",
+          },
+          { status: 400 },
+        );
+      }
+
+      if (logoFile.size > 2 * 1024 * 1024) {
+        return NextResponse.json(
+          { success: false, error: "File size exceeds the 2MB limit." },
+          { status: 400 },
+        );
+      }
+
       const path = await uploadImage(logoFile, "header");
       if (path) body.logo = path;
     } else if (typeof logoFile === "string" && logoFile !== "null") {
       body.logo = logoFile;
+    } else if (logoFile === "null") {
+      body.logo = "";
     }
 
     // Upsert Singleton Document

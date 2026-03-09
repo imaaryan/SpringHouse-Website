@@ -169,3 +169,69 @@ export function ImageUploader({ label, images, onImageChange, onRemoveImage }) {
     </div>
   );
 }
+
+export function SingleImageUploader({
+  label,
+  image,
+  onImageChange,
+  onRemoveImage,
+  maxSizeMB = 2,
+  allowedTypes = ["image/jpeg", "image/png", "image/webp"],
+  helperText = "Upload a PNG, JPG, or WEBP image (max 2MB)",
+}) {
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!allowedTypes.includes(file.type)) {
+      alert(`Invalid file type. Allowed types are: PNG, JPG, WEBP.`);
+      e.target.value = "";
+      return;
+    }
+
+    if (file.size > maxSizeMB * 1024 * 1024) {
+      alert(`File size exceeds the ${maxSizeMB}MB limit.`);
+      e.target.value = "";
+      return;
+    }
+
+    if (onImageChange) onImageChange(e);
+  };
+
+  return (
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <h3 className="text-sm font-semibold text-gray-700 mb-3">{label}</h3>
+
+      <div className="flex gap-4 mb-4">
+        {image ? (
+          <div className="relative w-32 h-32 rounded-lg overflow-hidden border border-gray-200 group">
+            <img
+              src={image}
+              alt="Preview"
+              className="w-full h-full object-cover"
+            />
+            <button
+              type="button"
+              onClick={onRemoveImage}
+              className="absolute top-1 right-1 bg-white/80 p-1 rounded-full text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <X size={12} />
+            </button>
+          </div>
+        ) : (
+          <label className="flex flex-col items-center justify-center w-32 h-32 rounded-lg border-2 border-dashed border-brand-primary/30 bg-brand-primary/5 hover:bg-brand-primary/10 cursor-pointer transition-colors text-brand-primary">
+            <UploadCloud size={24} />
+            <span className="text-xs font-semibold mt-1">Add Logo</span>
+            <input
+              type="file"
+              accept={allowedTypes.join(",")}
+              onChange={handleFileChange}
+              className="hidden"
+            />
+          </label>
+        )}
+      </div>
+      <p className="text-xs text-gray-400">{helperText}</p>
+    </div>
+  );
+}

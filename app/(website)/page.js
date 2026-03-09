@@ -12,7 +12,6 @@ import Testimonials from "../components/home/Testimonials";
 import Blogs from "../components/home/Blogs";
 import ContactForm from "../components/home/ContactForm";
 import Footer from "../components/home/Footer";
-import ModalsAndScripts from "../components/home/ModalsAndScripts";
 
 export default function Home() {
   return (
@@ -31,7 +30,6 @@ export default function Home() {
       <Blogs />
       <ContactForm />
       <Footer />
-      <ModalsAndScripts />
     </>
   );
 }

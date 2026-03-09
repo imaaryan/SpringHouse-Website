@@ -1,5 +1,6 @@
 import AosInit from "../components/AosInit";
 import GlobalScripts from "../components/GlobalScripts";
+import ModalsAndScripts from "../components/home/ModalsAndScripts";
 
 // CSS files are loaded via <link> tags in the root app/layout.js
 
@@ -49,6 +50,7 @@ export default function WebsiteLayout({ children }) {
 
       <AosInit />
       {children}
+      <ModalsAndScripts />
       <GlobalScripts />
     </>
   );

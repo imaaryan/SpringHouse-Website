@@ -2,7 +2,10 @@
 import React, { useState, useEffect } from "react";
 import { Loader2, Save, Plus, Trash2, GripVertical } from "lucide-react";
 import PageHeader from "@/app/components/admin/PageHeader";
-import { FormInput, ImageUploader } from "@/app/components/admin/FormElements";
+import {
+  FormInput,
+  SingleImageUploader,
+} from "@/app/components/admin/FormElements";
 
 // Specialized Editor for the Header Menu (which includes a Root URL and Title)
 const MenuBlockEditor = ({
@@ -340,12 +343,11 @@ export default function HeaderAdminPage() {
               Upload the main logo that appears on the far left side of the
               global navbar.
             </p>
-            <ImageUploader
+            <SingleImageUploader
               label="Header Logo"
-              images={logoPreview}
+              image={logoPreview[0] || null}
               onImageChange={handleLogoChange}
               onRemoveImage={removeLogo}
-              maxUploads={1}
             />
           </div>
         </div>

@@ -248,6 +248,7 @@ header {
         overflow: visible;
         justify-content: end;
         width: 100%;
+        margin-right: 20px;
     }
     .nav__container {
         width: 90%;

@@ -1,14 +1,25 @@
-export default function Header() {
+import connectDB from "@/utils/db";
+import { Header as HeaderModel } from "@/model/header.model";
+
+export default async function Header() {
+  await connectDB();
+  const headerData = (await HeaderModel.findOne({})) || {};
+
+  const logoUrl = headerData?.logo || null;
+  const menuData = headerData?.menu || [];
+
   return (
     <header>
       <div className="nav__container">
         <div className="nav__mobile">
           <div className="nav__logo">
-            <a href="#">
-              <img
-                src="/frontend_assets/img/logo.png"
-                alt="working space – SpringHouse coworking office view"
-              />
+            <a href="/">
+              {logoUrl && (
+                <img
+                  src={logoUrl}
+                  alt="working space – SpringHouse coworking office view"
+                />
+              )}
             </a>
           </div>
           <div className="nav__btn">
@@ -21,59 +32,58 @@ export default function Header() {
         </div>
         <nav className="menu-toggle">
           <ul className="nav__menu">
-            <li>
-              <a href="#">About us</a>
-            </li>
-            <li className="dropdown">
-              <a href="#">Locations</a>
-              <ul>
-                <li>
-                  <a href="#">Gurugram</a>
-                </li>
-              </ul>
-            </li>
-            <li className="dropdown drop1">
-              <a className="arrow1" href="#">
-                Solutions
-              </a>
-              <a
-                className="nav-link dropdown-toggle dropdown-toggle-split"
-                href="#"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              ></a>
-              <ul className="">
-                <li>
-                  <a href="#">Managed Office</a>
-                </li>
-                <li>
-                  <a href="#">Virtual Office</a>
-                </li>
-                <li>
-                  <a href="#">Coworking</a>
-                </li>
-                <li>
-                  <a href="#">Day Pass</a>
-                </li>
-                <li>
-                  <a href="#">Meeting Rooms</a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a href="#" className="managed-office">
-                Managed Office
-              </a>
-            </li>
+            {menuData.map((item, index) => {
+              const hasSubMenu = item.links && item.links.length > 0;
+
+              if (hasSubMenu) {
+                return (
+                  <li
+                    className={
+                      item.title === "Solutions" ? "dropdown drop1" : "dropdown"
+                    }
+                    key={index}
+                  >
+                    <a
+                      className={item.title === "Solutions" ? "arrow1" : ""}
+                      href={item.url || "#"}
+                    >
+                      {item.title}
+                    </a>
+                    {item.title === "Solutions" && (
+                      <a
+                        className="nav-link dropdown-toggle dropdown-toggle-split"
+                        href="#"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      ></a>
+                    )}
+                    <ul>
+                      {item.links.map((subLink, subIndex) => (
+                        <li key={subIndex}>
+                          <a href={subLink.url || "#"}>{subLink.label}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                );
+              } else {
+                return (
+                  <li key={index}>
+                    <a
+                      href={item.url || "/"}
+                      className={
+                        item.title === "Managed Office" ? "managed-office" : ""
+                      }
+                    >
+                      {item.title}
+                    </a>
+                  </li>
+                );
+              }
+            })}
           </ul>
         </nav>
         <div className="navbar-btn-box">
-          <a
-            href="javascript:void(0)"
-            className="themebtn themebtn1 membership-login"
-          >
-            Membership Login
-          </a>
           <a
             href="#exampleModaltwo"
             data-bs-toggle="modal"
