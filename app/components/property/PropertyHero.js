@@ -7,7 +7,7 @@ export default function PropertyHero({ property }) {
   return (
     <div className="loctions pt-4">
       <div className="container-fluid">
-        <div className="row pt30">
+        <div className="row ">
           <div className="col-lg-12 mb-4 position-relative">
             <ImageSlider
               images={property.images}
