@@ -2,65 +2,6 @@
 import React, { useState } from "react";
 import "./faqs.css";
 
-// Helper function to format multiline text and basic bullets coming from API/JSON
-const formatAnswer = (answer) => {
-  if (!answer) return null;
-  const trimmed = answer.trim();
-
-  // Check for bullet points or dashes
-  if (/[•\-\*]\s+/.test(trimmed)) {
-    const parts = trimmed.split(/\n\s*[•\-\*]\s+/);
-    const intro = parts[0].trim();
-    const items = parts.slice(1).filter(Boolean);
-
-    return (
-      <div className="faq-answer-content">
-        {intro && <p className="mb-3">{intro}</p>}
-        <ul className="mb-0 faq-list">
-          {items.map((item, idx) => (
-            <li key={idx} className="mb-2">
-              {item.trim()}
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  }
-
-  // Check for multiple paragraphs (separated by double newlines)
-  const paragraphs = trimmed.split(/\n\s*\n+/).filter((p) => p.trim());
-
-  if (paragraphs.length > 1) {
-    return (
-      <div className="faq-answer-content">
-        {paragraphs.map((para, idx) => (
-          <p key={idx} className="mb-3">
-            {para.trim()}
-          </p>
-        ))}
-      </div>
-    );
-  }
-
-  // Single paragraph - handle line breaks within
-  const lines = trimmed.split("\n").filter((line) => line.trim());
-  if (lines.length > 1) {
-    return (
-      <p className="mb-0 faq-answer-content">
-        {lines.map((line, idx) => (
-          <span key={idx}>
-            {line.trim()}
-            {idx < lines.length - 1 && <br />}
-          </span>
-        ))}
-      </p>
-    );
-  }
-
-  // Simple text
-  return <p className="mb-0 faq-answer-content">{trimmed}</p>;
-};
-
 export default function FaqAccordion({ faqData }) {
   // Track which accordion item is currently open (null = all closed)
   const [activeQuestionId, setActiveQuestionId] = useState(null);
@@ -119,9 +60,10 @@ export default function FaqAccordion({ faqData }) {
                       className={`accordion-collapse collapse ${isExpanded ? "show" : ""}`}
                       aria-labelledby={`${itemId}-heading`}
                     >
-                      <div className="accordion-body">
-                        {formatAnswer(item.answer)}
-                      </div>
+                      <div
+                        className="accordion-body faq-answer-content"
+                        dangerouslySetInnerHTML={{ __html: item.answer }}
+                      />
                     </div>
                   </div>
                 );

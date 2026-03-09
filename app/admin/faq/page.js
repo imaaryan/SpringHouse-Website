@@ -4,6 +4,10 @@ import { Loader2, Save, Plus, Trash2, GripVertical } from "lucide-react";
 import PageHeader from "@/app/components/admin/PageHeader";
 import { FormInput } from "@/app/components/admin/FormElements";
 import SEOForm from "@/app/components/admin/SEOForm";
+import dynamic from "next/dynamic";
+import "react-quill-new/dist/quill.snow.css";
+
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 // This functional component handles an individual Section and its array of Questions
 const FaqSectionEditor = ({
@@ -77,15 +81,17 @@ const FaqSectionEditor = ({
                 className="w-full text-sm font-medium outline-none border-b border-transparent focus:border-brand-primary pb-1 transition-colors"
                 required
               />
-              <textarea
-                value={q.answer || ""}
-                onChange={(e) =>
-                  onUpdateQuestion(sectionIdx, qIdx, "answer", e.target.value)
-                }
-                placeholder="Answer..."
-                className="w-full text-sm outline-none border border-gray-100 focus:border-brand-primary p-2 rounded-md text-gray-600 transition-colors resize-y min-h-[60px]"
-                required
-              />
+              <div className="bg-white rounded-lg">
+                <ReactQuill
+                  theme="snow"
+                  value={q.answer || ""}
+                  onChange={(content) =>
+                    onUpdateQuestion(sectionIdx, qIdx, "answer", content)
+                  }
+                  placeholder="Answer..."
+                  className="bg-white"
+                />
+              </div>
             </div>
             <button
               type="button"
