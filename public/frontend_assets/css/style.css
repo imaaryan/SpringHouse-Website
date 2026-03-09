@@ -754,6 +754,7 @@ footer::before {
   opacity: 0;
 }
 .follow-address {
+  max-width: 300px;
   display: flex;
   flex-direction: column;
   gap: 10px;

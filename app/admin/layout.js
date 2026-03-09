@@ -37,7 +37,6 @@ export default function AdminLayout({ children }) {
     { name: "Enquires", href: "/admin/enquires" },
     { name: "Header", href: "/admin/header" },
     { name: "Footer", href: "/admin/footer" },
-    { name: "Settings", href: "/admin/settings" },
   ];
 
   return (
