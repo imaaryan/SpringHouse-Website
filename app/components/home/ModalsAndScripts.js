@@ -3,7 +3,12 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 
-export default function ModalsAndScripts() {
+export default function ModalsAndScripts({ phone, dropdownOptions }) {
+  const {
+    cities = [],
+    properties = [],
+    solutions = [],
+  } = dropdownOptions || {};
   const [deskCount, setDeskCount] = useState(1);
   const [formData, setFormData] = useState({
     full_name: "",
@@ -21,8 +26,18 @@ export default function ModalsAndScripts() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => {
+      const newData = { ...prev, [name]: value };
+      // If location changes, reset the property selection since the valid options will change
+      if (name === "location") newData.property = "";
+      return newData;
+    });
   };
+
+  // Filter properties based on the selected city (location)
+  const filteredProperties = formData.location
+    ? properties.filter((p) => p.city?.slug === formData.location)
+    : properties;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,33 +59,50 @@ export default function ModalsAndScripts() {
     }
 
     try {
-      Swal.fire({
-        title: "Success!",
-        text: "Your request has been submitted successfully.",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-      setFormData({
-        full_name: "",
-        company_name: "",
-        work_email: "",
-        contact_number: "",
-        location: "",
-        property: "",
-        solution: "",
-      });
-      setDeskCount(1);
+      fetch("/api/enquire", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, desk_required: deskCount }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            Swal.fire({
+              title: "Success!",
+              text: "Your request has been submitted successfully.",
+              icon: "success",
+              confirmButtonText: "OK",
+            });
+            setFormData({
+              full_name: "",
+              company_name: "",
+              work_email: "",
+              contact_number: "",
+              location: "",
+              property: "",
+              solution: "",
+            });
+            setDeskCount(1);
 
-      // Close modal using Bootstrap API if it's open
-      if (typeof window !== "undefined" && window.bootstrap) {
-        const modalEl = document.getElementById("exampleModaltwo");
-        if (modalEl) {
-          const modalInstance = window.bootstrap.Modal.getInstance(modalEl);
-          if (modalInstance) {
-            modalInstance.hide();
+            if (typeof window !== "undefined" && window.bootstrap) {
+              const modalEl = document.getElementById("exampleModaltwo");
+              if (modalEl) {
+                const modalInstance =
+                  window.bootstrap.Modal.getInstance(modalEl);
+                if (modalInstance) {
+                  modalInstance.hide();
+                }
+              }
+            }
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: "Something went wrong. Please try again later.",
+              icon: "error",
+              confirmButtonText: "OK",
+            });
           }
-        }
-      }
+        });
     } catch (error) {
       Swal.fire({
         title: "Error!",
@@ -110,7 +142,9 @@ export default function ModalsAndScripts() {
                         </div>
                       </div>
                       <div className="get-call-no">
-                        <a href="tel:+919899936669">+91 9899936669</a>
+                        <a href={`tel:${phone || "+919899936669"}`}>
+                          {phone || "+91 9899936669"}
+                        </a>
                       </div>
                     </div>
                     <div className="get-image-bottom mt20 relative">
@@ -241,9 +275,11 @@ export default function ModalsAndScripts() {
                                 required
                               >
                                 <option value="">Select Location</option>
-                                <option value="gurugram">Gurugram</option>
-                                <option value="delhi">Delhi</option>
-                                <option value="noida">Noida</option>
+                                {cities.map((city) => (
+                                  <option key={city._id} value={city.slug}>
+                                    {city.name}
+                                  </option>
+                                ))}
                               </select>
                             </div>
                           </div>
@@ -258,6 +294,11 @@ export default function ModalsAndScripts() {
                                 onChange={handleChange}
                               >
                                 <option value="">Select Property</option>
+                                {filteredProperties.map((prop) => (
+                                  <option key={prop._id} value={prop.slug}>
+                                    {prop.name}
+                                  </option>
+                                ))}
                               </select>
                             </div>
                           </div>
@@ -272,18 +313,11 @@ export default function ModalsAndScripts() {
                                 required
                               >
                                 <option value="">Select Solution</option>
-                                <option value="Managed Space">
-                                  Managed Space
-                                </option>
-                                <option value="Virtual Office">
-                                  Virtual Office
-                                </option>
-                                <option value="Co Working">Co Working</option>
-                                <option value="Day Pass">Day Pass</option>
-                                <option value="Meeting Room">
-                                  Meeting Room
-                                </option>
-                                <option value="Event Space">Event Space</option>
+                                {solutions.map((sol) => (
+                                  <option key={sol._id} value={sol.slug}>
+                                    {sol.name}
+                                  </option>
+                                ))}
                               </select>
                             </div>
                           </div>

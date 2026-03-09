@@ -12,8 +12,16 @@ import Testimonials from "../components/home/Testimonials";
 import Blogs from "../components/home/Blogs";
 import ContactForm from "../components/home/ContactForm";
 import Footer from "../components/home/Footer";
+import FooterModel from "@/model/footer.model";
+import connectDB from "@/utils/db";
+import { getDropdownOptions } from "@/utils/dropdowns";
 
-export default function Home() {
+export default async function Home() {
+  await connectDB();
+  const footerData = (await FooterModel.findOne({}).lean()) || {};
+  const phone = footerData?.contactInfo?.phone || "";
+  const dropdownOptions = await getDropdownOptions();
+
   return (
     <>
       <Header />
@@ -28,7 +36,7 @@ export default function Home() {
       <OurCommunity />
       <Testimonials />
       <Blogs />
-      <ContactForm />
+      <ContactForm phone={phone} dropdownOptions={dropdownOptions} />
       <Footer />
     </>
   );

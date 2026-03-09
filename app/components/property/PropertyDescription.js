@@ -2,7 +2,16 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 
-export default function PropertyDescription({ property }) {
+export default function PropertyDescription({
+  property,
+  phone,
+  dropdownOptions,
+}) {
+  const {
+    cities = [],
+    properties = [],
+    solutions = [],
+  } = dropdownOptions || {};
   const [deskCount, setDeskCount] = useState(1);
   const [formData, setFormData] = useState({
     full_name: "",
@@ -22,8 +31,16 @@ export default function PropertyDescription({ property }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => {
+      const newData = { ...prev, [name]: value };
+      if (name === "location") newData.property = "";
+      return newData;
+    });
   };
+
+  const filteredProperties = formData.location
+    ? properties.filter((p) => p.city?.slug === formData.location)
+    : properties;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,16 +61,45 @@ export default function PropertyDescription({ property }) {
       text: "Your request has been submitted successfully.",
       icon: "success",
     });
-    setFormData({
-      full_name: "",
-      company_name: "",
-      work_email: "",
-      contact_number: "",
-      location: "",
-      property: "",
-      solution: "",
-    });
-    setDeskCount(1);
+    try {
+      fetch("/api/enquire", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, desk_required: deskCount }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            Swal.fire({
+              title: "Success!",
+              text: "Your request has been submitted successfully.",
+              icon: "success",
+            });
+            setFormData({
+              full_name: "",
+              company_name: "",
+              work_email: "",
+              contact_number: "",
+              location: "",
+              property: "",
+              solution: "",
+            });
+            setDeskCount(1);
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: "Something went wrong. Please try again later.",
+              icon: "error",
+            });
+          }
+        });
+    } catch (error) {
+      Swal.fire({
+        title: "Error!",
+        text: "Something went wrong. Please try again later.",
+        icon: "error",
+      });
+    }
   };
 
   return (
@@ -97,7 +143,9 @@ export default function PropertyDescription({ property }) {
                   </div>
                 </div>
                 <div className="get-call-no">
-                  <a href="tel:+919899936669">+91 9899936669</a>
+                  <a href={`tel:${phone || "+919899936669"}`}>
+                    {phone || "+91 9899936669"}
+                  </a>
                 </div>
               </div>
               <div className="get-right-form-design mt20">
@@ -158,9 +206,11 @@ export default function PropertyDescription({ property }) {
                           onChange={handleChange}
                         >
                           <option value="">Location</option>
-                          <option value="gurugram">Gurugram</option>
-                          <option value="delhi">Delhi</option>
-                          <option value="noida">Noida</option>
+                          {cities.map((city) => (
+                            <option key={city._id} value={city.slug}>
+                              {city.name}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>
@@ -173,6 +223,11 @@ export default function PropertyDescription({ property }) {
                           onChange={handleChange}
                         >
                           <option value="">Property</option>
+                          {filteredProperties.map((prop) => (
+                            <option key={prop._id} value={prop.slug}>
+                              {prop.name}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>
@@ -185,12 +240,11 @@ export default function PropertyDescription({ property }) {
                           onChange={handleChange}
                         >
                           <option value="">Solution</option>
-                          <option value="Managed Space">Managed Space</option>
-                          <option value="Virtual Office">Virtual Office</option>
-                          <option value="Co Working">Co Working</option>
-                          <option value="Day Pass">Day Pass</option>
-                          <option value="Meeting Room">Meeting Room</option>
-                          <option value="Event Space">Event Space</option>
+                          {solutions.map((sol) => (
+                            <option key={sol._id} value={sol.slug}>
+                              {sol.name}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>

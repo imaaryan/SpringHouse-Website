@@ -1,10 +1,18 @@
 import AosInit from "../components/AosInit";
 import GlobalScripts from "../components/GlobalScripts";
 import ModalsAndScripts from "../components/home/ModalsAndScripts";
+import connectDB from "@/utils/db";
+import FooterModel from "@/model/footer.model";
+import { getDropdownOptions } from "@/utils/dropdowns";
 
 // CSS files are loaded via <link> tags in the root app/layout.js
 
-export default function WebsiteLayout({ children }) {
+export default async function WebsiteLayout({ children }) {
+  await connectDB();
+  const footerData = (await FooterModel.findOne({}).lean()) || {};
+  const phone = footerData?.contactInfo?.phone || "";
+  const dropdownOptions = await getDropdownOptions();
+
   return (
     <>
       <link
@@ -50,7 +58,7 @@ export default function WebsiteLayout({ children }) {
 
       <AosInit />
       {children}
-      <ModalsAndScripts />
+      <ModalsAndScripts phone={phone} dropdownOptions={dropdownOptions} />
       <GlobalScripts />
     </>
   );

@@ -9,6 +9,9 @@ import PropertyLocationMap from "@/app/components/property/PropertyLocationMap";
 import AvailableProperties from "@/app/components/solutions/AvailableProperties";
 import Link from "next/link";
 import React from "react";
+import connectDB from "@/utils/db";
+import FooterModel from "@/model/footer.model";
+import { getDropdownOptions } from "@/utils/dropdowns";
 
 // DUMMY DATA FOR SINGLE PROPERTY TESTING (Layout Architecture Verification before APIs)
 const DUMMY_SINGLE_PROPERTY = {
@@ -78,12 +81,21 @@ export default async function PropertyDetailPage({ params }) {
   const property = DUMMY_SINGLE_PROPERTY;
   const relatedProperties = DUMMY_RELATED_PROPERTIES;
 
+  await connectDB();
+  const footerData = (await FooterModel.findOne({}).lean()) || {};
+  const phone = footerData?.contactInfo?.phone || "";
+  const dropdownOptions = await getDropdownOptions();
+
   return (
     <>
       <Header />
 
       <PropertyHero property={property} />
-      <PropertyDescription property={property} />
+      <PropertyDescription
+        property={property}
+        phone={phone}
+        dropdownOptions={dropdownOptions}
+      />
       <PropertyAmenities amenities={property.amenities} />
       <PropertySolutions activeSolutions={property.activeSolutions} />
       <PropertyLocationMap locationOnMap={property.locationOnMap} />
