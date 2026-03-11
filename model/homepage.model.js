@@ -34,8 +34,6 @@ const homepageSchema = new mongoose.Schema(
     solutionsForEveryone: {
       content: String,
       image: String,
-      cta: String,
-      ctaLink: String,
     },
     networking: {
       title: String,

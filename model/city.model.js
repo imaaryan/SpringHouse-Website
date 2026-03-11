@@ -39,12 +39,6 @@ const citySchema = new mongoose.Schema(
       image: {
         type: String,
       },
-      cta: {
-        type: String,
-      },
-      ctaLink: {
-        type: String,
-      },
     },
     seo: {
       metaTitle: String,

@@ -328,22 +328,6 @@ export default function AddCityPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormInput
-                label="CTA Text"
-                name="solutionsForEveryone.cta"
-                value={formData.solutionsForEveryone.cta}
-                onChange={handleChange}
-                placeholder="naraina, arise building, delhi"
-              />
-              <FormInput
-                label="CTA Link"
-                name="solutionsForEveryone.ctaLink"
-                value={formData.solutionsForEveryone.ctaLink}
-                onChange={handleChange}
-                placeholder="naraina, arise building, delhi"
-              />
-            </div>
           </div>
 
           {/* Amenities & SEO */}

@@ -50,8 +50,6 @@ export async function PUT(request, { params }) {
 
     // Solutions For Everyone
     const solutionsContent = formData.get("solutionsForEveryone[content]");
-    const solutionsCta = formData.get("solutionsForEveryone[cta]");
-    const solutionsCtaLink = formData.get("solutionsForEveryone[ctaLink]");
 
     // Images
     const imageFile = formData.get("image");
@@ -82,9 +80,7 @@ export async function PUT(request, { params }) {
       amenities,
       image: imagePath,
       solutionsForEveryone: {
-        content: solutionsContent,
-        cta: solutionsCta,
-        ctaLink: solutionsCtaLink,
+        content: solutionsContent !== null ? solutionsContent : existingCity.solutionsForEveryone?.content,
         image: solutionImagePath,
       },
       seo: {

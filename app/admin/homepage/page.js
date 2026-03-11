@@ -622,22 +622,6 @@ export default function HomepageAdmin() {
                 heightClass="h-[72px]"
               />
             </div>
-            <div className="md:col-span-3 grid grid-cols-2 gap-6">
-              <FormInput
-                label="CTA Text"
-                name="solutionsForEveryone.cta"
-                value={formData.solutionsForEveryone.cta}
-                onChange={handleInputChange}
-                placeholder="Know More"
-              />
-              <FormInput
-                label="CTA Link"
-                name="solutionsForEveryone.ctaLink"
-                value={formData.solutionsForEveryone.ctaLink}
-                onChange={handleInputChange}
-                placeholder="/co-working"
-              />
-            </div>
           </div>
         </div>
       </section>

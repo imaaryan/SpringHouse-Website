@@ -47,14 +47,6 @@ export default function LifeAtSpringHouse({ data = {} }) {
                         little fun.
                       </p>
                     )}
-                    {data.ctaLink && (
-                      <a
-                        href={data.ctaLink}
-                        className="themebtn mt-4 d-inline-block"
-                      >
-                        {data.cta || "Know More"}
-                      </a>
-                    )}
                   </div>
                 </div>
               </div>

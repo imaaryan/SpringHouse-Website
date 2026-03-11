@@ -81,8 +81,6 @@ export async function PUT(request) {
 
     // Solutions For Everyone
     const solutionContent = formData.get("solutionsForEveryone[content]") || "";
-    const solutionCta = formData.get("solutionsForEveryone[cta]") || "";
-    const solutionCtaLink = formData.get("solutionsForEveryone[ctaLink]") || "";
     const solutionImageFile = formData.get("solutionsForEveryoneImage");
     let solutionImagePath = homepage.solutionsForEveryone?.image || "";
     if (
@@ -149,8 +147,6 @@ export async function PUT(request) {
     homepage.features = features;
     homepage.solutionsForEveryone = {
       content: solutionContent,
-      cta: solutionCta,
-      ctaLink: solutionCtaLink,
       image: solutionImagePath,
     };
     homepage.networking = {

@@ -2209,6 +2209,7 @@ form select.form-select {
         }
 */
 .spring-housebaner .spring-content {
+  max-width: 490px;
   top: auto;
   left: 40px;
   position: absolute;
