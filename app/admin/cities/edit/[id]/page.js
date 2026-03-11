@@ -13,6 +13,10 @@ import {
 } from "@/app/components/admin/FormElements";
 import slugify from "slugify";
 import SEOForm from "@/app/components/admin/SEOForm";
+import dynamic from "next/dynamic";
+import "react-quill-new/dist/quill.snow.css";
+
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 export default function EditCityPage({ params }) {
   const router = useRouter();
@@ -299,14 +303,17 @@ export default function EditCityPage({ params }) {
               onChange={handleChange}
               placeholder="url"
             />
-            <FormTextarea
-              label="Description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Write Short Description"
-              rows={4}
-            />
+            <div className="space-y-1">
+              <label className="block text-sm font-medium text-gray-700">
+                Description
+              </label>
+              <ReactQuill
+                theme="snow"
+                value={formData.description}
+                onChange={(content) => setFormData((prev) => ({ ...prev, description: content }))}
+                className="h-[200px] mb-12"
+              />
+            </div>
           </div>
 
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">

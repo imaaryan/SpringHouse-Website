@@ -1,8 +1,12 @@
 import React from "react";
+import connectDB from "@/utils/db";
+import { City } from "@/model/city.model";
+import { Solution } from "@/model/solution.model";
+import { Area } from "@/model/area.model";
+import { Property } from "@/model/property.model";
 import Header from "@/app/components/home/Header";
 import GlobalBanner from "@/app/components/home/GlobalBanner";
-import AboutLocation from "@/app/components/location/AboutLocation";
-import AvailableProperties from "@/app/components/solutions/AvailableProperties";
+import LocationContentWrapper from "@/app/components/location/LocationContentWrapper";
 import LocationAmenities from "@/app/components/location/LocationAmenities";
 
 import LifeAtSpringHouse from "@/app/components/home/LifeAtSpringHouse";
@@ -11,31 +15,6 @@ import SolutionsMobile from "@/app/components/home/SolutionsMobile";
 import OtherLocations from "@/app/components/location/OtherLocations";
 import ContactForm from "@/app/components/home/ContactForm";
 import Footer from "@/app/components/home/Footer";
-
-// Temporary Mapping for testing UI logic reliably
-const DUMMY_PROPERTIES = [
-  {
-    _id: "prop1",
-    city: { slug: "new-delhi", name: "New Delhi" },
-    activeSolutions: [{ slug: "managed-office" }, { slug: "coworking" }],
-    name: "SpringHouse Naraina",
-    images: [
-      "/assets/locationdetail/banner/1747118432_gurugram.jpg",
-      "/assets/locationdetail/banner/1747307186_delhilocation.jpg",
-    ],
-    propertyCode: "SH-DEL-01",
-    fullAddress: "Arise Building, Naraina Vihar, New Delhi - 110028",
-  },
-  {
-    _id: "prop2",
-    city: { slug: "gurugram", name: "Gurugram" },
-    activeSolutions: [{ slug: "managed-office" }],
-    name: "SpringHouse Golf Course",
-    images: ["/assets/locationdetail/banner/1747119868_gurugram.jpg"],
-    propertyCode: "SH-GUR-01",
-    fullAddress: "Golf Course Extension Road, Sector 56, Gurugram",
-  },
-];
 
 export const metadata = {
   title: "Managed Workspaces and Coworking Spaces in Gurugram",
@@ -54,19 +33,43 @@ export default async function LocationPage({ params }) {
   // but for now, we'll let it render with the city name from the slug.
   const city = slug.replace("-coworking-space", "");
 
-  const cityProperties = DUMMY_PROPERTIES.filter(
-    (property) => property.city?.slug === city,
-  );
+  // Fetch from DB
+  await connectDB();
+  let cityDataRaw = await City.findOne({ slug: city }).lean();
+  let activeSolutionsRaw = await Solution.find({ isActive: true }).lean();
+  
+  let areasRaw = [];
+  let propertiesRaw = [];
+
+  if (cityDataRaw && cityDataRaw._id) {
+    areasRaw = await Area.find({ city: cityDataRaw._id }).lean();
+    propertiesRaw = await Property.find({ city: cityDataRaw._id, isActive: true })
+      .populate("city", "slug name")
+      .populate("area", "slug name")
+      .populate("activeSolutions", "slug name")
+      .lean();
+  } 
+
+  // Convert Mongoose ObjectIds and Dates to simple POJOs for Client Components
+  // The easiest way is JSON serialize/deserialize, especially when using .lean()
+  const cityData = cityDataRaw ? JSON.parse(JSON.stringify(cityDataRaw)) : null;
+  const activeSolutions = activeSolutionsRaw ? JSON.parse(JSON.stringify(activeSolutionsRaw)) : [];
+  const areas = areasRaw.length > 0 ? JSON.parse(JSON.stringify(areasRaw)) : [];
+  const cityProperties = propertiesRaw.length > 0 ? JSON.parse(JSON.stringify(propertiesRaw)) : [];
 
   return (
     <>
       <Header />
       <GlobalBanner
-        title={city}
-        imageSrc={"/assets/locationdetail/banner/1747118432_gurugram.jpg"}
+        title={cityData ? cityData.name : city}
+        imageSrc={cityData?.image || "/assets/locationdetail/banner/1747118432_gurugram.jpg"}
       />
-      <AboutLocation location={city} />
-      <AvailableProperties properties={cityProperties} />
+      <LocationContentWrapper 
+        city={cityData || { name: city }} 
+        cityProperties={cityProperties} 
+        activeSolutions={activeSolutions} 
+        areas={areas}
+      />
       <LocationAmenities location={city} />
 
       <LifeAtSpringHouse />
