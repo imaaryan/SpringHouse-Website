@@ -251,6 +251,11 @@ a:hover {
   border-radius: 20px;
   width: 100%;
 }
+.springhouse-image img {
+  height: 750px;
+  border-radius: 20px;
+}
+
 .springhouse-image img,
 .locations-image img,
 .testimonial-client-img img,
@@ -764,8 +769,6 @@ footer::before {
   font-size: 16px;
   color: var(--theme-whitecolor);
 }
-
-
 
 .networking-rightside {
   padding: 0px 40px;
@@ -2496,8 +2499,8 @@ ul.footer-link li a:hover {
 }
 .spring-housebaner .shape-right-bottom {
   position: absolute;
-  right: -14px;
-  bottom: 0px;
+  right: -15px;
+  bottom: -4px;
   -webkit-transform: rotate(270deg);
   -ms-transform: rotate(270deg);
   transform: rotate(270deg);

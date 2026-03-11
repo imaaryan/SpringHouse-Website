@@ -1,25 +1,11 @@
 export default function HeroBanner({ dropdownOptions = {}, data = {} }) {
   const { cities = [], solutions = [] } = dropdownOptions;
-  const isVideo = data.mainBanner?.toLowerCase().endsWith(".mp4") || false;
 
   return (
     <div className="spring-housebaner relative">
       <div className="container-fluid p-lg-0 p-md-0 p-3 relative">
         <div className="springhouse-image ">
-          {isVideo ? (
-            <video
-              autoPlay
-              loop
-              playsInline
-              poster="/assets/bannerimage/1747035219_home-banner.jpg"
-              preload="metadata"
-              muted
-              className="banner-video w-100 object-cover"
-            >
-              <source src={data.mainBanner} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          ) : data.mainBanner ? (
+          {data.mainBanner ? (
             <img
               src={data.mainBanner}
               className="w-100 banner-video object-cover"
