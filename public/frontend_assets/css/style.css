@@ -316,6 +316,13 @@ header.sticky {
   text-decoration-style: wavy;
   color: var(--theme-blackcolor);
 }
+.about .locations-image img {
+  border-radius: 20px;
+}
+
+.about .location-content {
+max-width: 490px;
+}
 /* .locationscard,
 .locations-image{
     overflow: hidden;

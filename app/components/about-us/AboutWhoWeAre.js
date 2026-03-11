@@ -2,48 +2,42 @@ import React from "react";
 
 const DUMMY_WHO_WE_ARE_DATA = [
   {
-    id: 1,
     title: "Mission",
     description:
       "To build a workspace ecosystem where ambition meets opportunity, making it easier for entrepreneurs, freelancers, and businesses to grow.",
     frontImg: "/assets/aboutus/banner/1748348734_Mission 2.png",
     backImg: "/assets/aboutus/banner/1748348734_m1-1 (1).png",
-    imgAlt: "coworking spaces - SpringHouse coworking office view",
     isReverse: false,
   },
   {
-    id: 2,
     title: "Vision",
     description:
       "We envision a future where work isn’t confined to cubicles but fueled by connections, creativity, and convenience.",
     frontImg: "/assets/aboutus/banner/1748348943_Values 2.png",
     backImg: "/assets/aboutus/banner/1748348943_vv1-1.png",
-    imgAlt: "coworking spaces - SpringHouse coworking office view",
     isReverse: false,
   },
   {
-    id: 3,
     title: "Culture",
     description:
       "We’re a hub of thinkers and innovators who believe that success thrives in a space where you can be yourself.",
     frontImg: "/assets/aboutus/banner/1748348961_Culture 2.png",
     backImg: "/assets/aboutus/banner/1748348961_c1-1.png",
-    imgAlt: "working space - SpringHouse coworking office view",
     isReverse: true, // Swaps order classes
   },
   {
-    id: 4,
     title: "Values",
     description:
       "We champion innovation, flexibility, and a growth-first mindset—shaping workspaces that adapt, inspire, and empower.",
     frontImg: "/assets/aboutus/banner/1748348981_Vision 2.png",
     backImg: "/assets/aboutus/banner/1748348981_v1-2.png",
-    imgAlt: "SpringHouse coworking core values",
     isReverse: true,
   },
 ];
 
-export default function AboutWhoWeAre() {
+export default function AboutWhoWeAre({ data = [] }) {
+  const whoWeAreData = data?.length > 0 ? data : DUMMY_WHO_WE_ARE_DATA;
+
   return (
     <section className="hover-sec ptb30 pt-5">
       <div className="container-fluid">
@@ -53,12 +47,12 @@ export default function AboutWhoWeAre() {
           </div>
         </div>
         <div className="row">
-          {DUMMY_WHO_WE_ARE_DATA.map((item) => (
+          {whoWeAreData.map((item, index) => (
             <div
               className={`col-md-6 ${
                 item.isReverse ? "mb-lg-0 mb-md-0 mb-5" : "mb-lg-4 mb-md-4 mb-5"
               }`}
-              key={item.id}
+              key={item._id || index}
             >
               <div className="row hover-s align-items-center">
                 {/* Text Block - Render first if isReverse */}
@@ -114,12 +108,12 @@ export default function AboutWhoWeAre() {
                     <img
                       src={item.frontImg}
                       className="image image-front"
-                      alt={item.imgAlt}
+                      alt={item.title || "Who we are front image"}
                     />
                     <img
                       src={item.backImg}
                       className="image image-back"
-                      alt={item.imgAlt}
+                      alt={item.title || "Who we are back image"}
                     />
                   </div>
                 </div>

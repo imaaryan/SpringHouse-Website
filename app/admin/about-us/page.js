@@ -15,15 +15,14 @@ export default function AboutUsAdmin() {
   const [formData, setFormData] = useState({
     heading: "",
     subHeading: "",
-    presence: [
-      { number: "", title: "", beforeNumber: "", afterNumber: "" },
-      { number: "", title: "", beforeNumber: "", afterNumber: "" },
-      { number: "", title: "", beforeNumber: "", afterNumber: "" },
-      { number: "", title: "", beforeNumber: "", afterNumber: "" },
-    ],
     history: [],
     whyUs: ["", "", "", ""],
-    whoAreWe: ["", "", "", ""],
+    whoAreWe: [
+      { title: "", description: "", isReverse: false },
+      { title: "", description: "", isReverse: false },
+      { title: "", description: "", isReverse: false },
+      { title: "", description: "", isReverse: false },
+    ],
     seo: {
       metaTitle: "",
       metaDescription: "",
@@ -34,9 +33,13 @@ export default function AboutUsAdmin() {
   // Image states
   const [imageFile, setImageFile] = useState({
     mainBanner: null,
+    whoAreWeFront: [null, null, null, null],
+    whoAreWeBack: [null, null, null, null],
   });
   const [preview, setPreview] = useState({
     mainBanner: "",
+    whoAreWeFront: ["", "", "", ""],
+    whoAreWeBack: ["", "", "", ""],
   });
 
   // Fetch Initial Data
@@ -50,29 +53,46 @@ export default function AboutUsAdmin() {
           const data = json.data;
 
           // Process history
-          const historyArr =
-            data.history && data.history.length > 0
-              ? data.history
-              : [{ year: "", content: "" }];
+          const historyArr = Array.isArray(data.history) && data.history.length > 0
+            ? data.history.map(h => ({
+                year: h.year !== undefined && h.year !== null ? h.year : "",
+                content: h.content || "",
+              }))
+            : [{ year: "", content: "" }];
 
           // Process whyUs
           const whyUsArr = [...(data.whyUs || [])];
           while (whyUsArr.length < 4) whyUsArr.push("");
 
           // Process whoAreWe
-          const whoAreWeArr = [...(data.whoAreWe || [])];
-          while (whoAreWeArr.length < 4) whoAreWeArr.push("");
-
-          // Process presence
-          const presenceArr =
-            data.presence && data.presence.length === 4
-              ? data.presence
-              : formData.presence;
+          let whoAreWeArr = [];
+          if (Array.isArray(data.whoAreWe)) {
+            whoAreWeArr = data.whoAreWe.map(item => {
+              if (typeof item === 'string') {
+                return { title: item, description: "", isReverse: false, frontImg: "", backImg: "" };
+              }
+              return {
+                title: item?.title || "",
+                description: item?.description || "",
+                isReverse: item?.isReverse || false,
+                frontImg: item?.frontImg || "",
+                backImg: item?.backImg || "",
+              };
+            });
+          }
+          while (whoAreWeArr.length < 4) {
+            whoAreWeArr.push({
+              title: "",
+              description: "",
+              isReverse: false,
+              frontImg: "",
+              backImg: "",
+            });
+          }
 
           setFormData({
             heading: data.heading || "",
             subHeading: data.subHeading || "",
-            presence: presenceArr,
             history: historyArr,
             whyUs: whyUsArr.slice(0, 4),
             whoAreWe: whoAreWeArr.slice(0, 4),
@@ -85,6 +105,8 @@ export default function AboutUsAdmin() {
 
           setPreview({
             mainBanner: data.mainBanner || "",
+            whoAreWeFront: whoAreWeArr.slice(0, 4).map((w) => w.frontImg || ""),
+            whoAreWeBack: whoAreWeArr.slice(0, 4).map((w) => w.backImg || ""),
           });
         }
       } catch (error) {
@@ -102,12 +124,67 @@ export default function AboutUsAdmin() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handlePresenceChange = (index, field, value) => {
+  const handleWhoAreWeChange = (index, field, value) => {
     setFormData((prev) => {
-      const newArray = [...prev.presence];
+      const newArray = [...prev.whoAreWe];
       newArray[index] = { ...newArray[index], [field]: value };
-      return { ...prev, presence: newArray };
+      return { ...prev, whoAreWe: newArray };
     });
+  };
+
+  const handleWhoAreWeImage = (e, index, type) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (type === "front") {
+      setImageFile((prev) => {
+        const arr = [...prev.whoAreWeFront];
+        arr[index] = file;
+        return { ...prev, whoAreWeFront: arr };
+      });
+      setPreview((prev) => {
+        const arr = [...prev.whoAreWeFront];
+        arr[index] = URL.createObjectURL(file);
+        return { ...prev, whoAreWeFront: arr };
+      });
+    } else {
+      setImageFile((prev) => {
+        const arr = [...prev.whoAreWeBack];
+        arr[index] = file;
+        return { ...prev, whoAreWeBack: arr };
+      });
+      setPreview((prev) => {
+        const arr = [...prev.whoAreWeBack];
+        arr[index] = URL.createObjectURL(file);
+        return { ...prev, whoAreWeBack: arr };
+      });
+    }
+  };
+
+  const removeWhoAreWeImage = (index, type) => {
+    if (type === "front") {
+      setImageFile((prev) => {
+        const arr = [...prev.whoAreWeFront];
+        arr[index] = null;
+        return { ...prev, whoAreWeFront: arr };
+      });
+      setPreview((prev) => {
+        const arr = [...prev.whoAreWeFront];
+        arr[index] = "";
+        return { ...prev, whoAreWeFront: arr };
+      });
+    } else {
+      setImageFile((prev) => {
+        const arr = [...prev.whoAreWeBack];
+        arr[index] = null;
+        return { ...prev, whoAreWeBack: arr };
+      });
+      setPreview((prev) => {
+        const arr = [...prev.whoAreWeBack];
+        arr[index] = "";
+        return { ...prev, whoAreWeBack: arr };
+      });
+    }
   };
 
   const handleStringArrayChange = (index, arrayName, value) => {
@@ -166,13 +243,7 @@ export default function AboutUsAdmin() {
       data.append("heading", formData.heading);
       data.append("subHeading", formData.subHeading);
 
-      // Presence
-      formData.presence.forEach((p, i) => {
-        data.append(`presence[${i}][number]`, p.number || "");
-        data.append(`presence[${i}][title]`, p.title || "");
-        data.append(`presence[${i}][beforeNumber]`, p.beforeNumber || "");
-        data.append(`presence[${i}][afterNumber]`, p.afterNumber || "");
-      });
+
 
       // History
       formData.history.forEach((h, i) => {
@@ -186,8 +257,17 @@ export default function AboutUsAdmin() {
       });
 
       // Who Are We
-      formData.whoAreWe.forEach((text, i) => {
-        data.append(`whoAreWe[${i}]`, text || "");
+      formData.whoAreWe.forEach((w, i) => {
+        data.append(`whoAreWe[${i}][title]`, w.title || "");
+        data.append(`whoAreWe[${i}][description]`, w.description || "");
+        data.append(`whoAreWe[${i}][isReverse]`, w.isReverse ? "true" : "false");
+
+        if (imageFile.whoAreWeFront[i]) {
+          data.append(`whoAreWe[${i}][frontImg]`, imageFile.whoAreWeFront[i]);
+        }
+        if (imageFile.whoAreWeBack[i]) {
+          data.append(`whoAreWe[${i}][backImg]`, imageFile.whoAreWeBack[i]);
+        }
       });
 
       // Banner
@@ -353,54 +433,7 @@ export default function AboutUsAdmin() {
         </div>
       </section>
 
-      <hr className="border-gray-300" />
 
-      {/* Presence */}
-      <section className="space-y-4">
-        <h2 className="text-[15px] font-bold text-gray-800">Presence</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[0, 1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="space-y-4 bg-white border border-gray-100 p-5 rounded-xl shadow-sm"
-            >
-              <FormInput
-                label="Number"
-                type="number"
-                value={formData.presence[i].number}
-                onChange={(e) =>
-                  handlePresenceChange(i, "number", e.target.value)
-                }
-                placeholder="25"
-              />
-              <FormInput
-                label="Title"
-                value={formData.presence[i].title}
-                onChange={(e) =>
-                  handlePresenceChange(i, "title", e.target.value)
-                }
-                placeholder="Locations"
-              />
-              <FormInput
-                label="Before Number"
-                value={formData.presence[i].beforeNumber}
-                onChange={(e) =>
-                  handlePresenceChange(i, "beforeNumber", e.target.value)
-                }
-                placeholder=""
-              />
-              <FormInput
-                label="After Number"
-                value={formData.presence[i].afterNumber}
-                onChange={(e) =>
-                  handlePresenceChange(i, "afterNumber", e.target.value)
-                }
-                placeholder="+"
-              />
-            </div>
-          ))}
-        </div>
-      </section>
 
       <hr className="border-gray-300" />
 
@@ -431,7 +464,7 @@ export default function AboutUsAdmin() {
                 <FormInput
                   label="Year"
                   type="number"
-                  value={item.year}
+                  value={item.year !== undefined && item.year !== null ? item.year : ""}
                   onChange={(e) =>
                     handleHistoryChange(i, "year", e.target.value)
                   }
@@ -439,7 +472,7 @@ export default function AboutUsAdmin() {
                 />
                 <FormTextarea
                   label="Content"
-                  value={item.content}
+                  value={item.content || ""}
                   onChange={(e) =>
                     handleHistoryChange(i, "content", e.target.value)
                   }
@@ -485,7 +518,7 @@ export default function AboutUsAdmin() {
               <FormInput
                 key={i}
                 label={`${i + 1}`}
-                value={formData.whyUs[i]}
+                value={formData.whyUs[i] || ""}
                 onChange={(e) =>
                   handleStringArrayChange(i, "whyUs", e.target.value)
                 }
@@ -509,28 +542,74 @@ export default function AboutUsAdmin() {
       {/* Who Are We */}
       <section className="space-y-4">
         <h2 className="text-[15px] font-bold text-gray-800">Who Are We</h2>
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
-            {[0, 1, 2, 3].map((i) => (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {[0, 1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col gap-4"
+            >
+              <h3 className="text-sm font-semibold text-gray-700">Section {i + 1}</h3>
               <FormInput
-                key={i}
-                label={`${i + 1}`}
-                value={formData.whoAreWe[i]}
+                label="Title"
+                value={formData.whoAreWe[i]?.title || ""}
                 onChange={(e) =>
-                  handleStringArrayChange(i, "whoAreWe", e.target.value)
+                  handleWhoAreWeChange(i, "title", e.target.value)
                 }
                 placeholder={
-                  i === 0
-                    ? "Open Work Space"
-                    : i === 1
-                      ? "Client Lounge & Reception"
-                      : i === 2
-                        ? "Private Focus Pods"
-                        : "Leisure Zones"
+                  i === 0 ? "Mission" : i === 1 ? "Vision" : i === 2 ? "Culture" : "Values"
                 }
               />
-            ))}
-          </div>
+              <FormTextarea
+                label="Description"
+                value={formData.whoAreWe[i]?.description || ""}
+                onChange={(e) =>
+                  handleWhoAreWeChange(i, "description", e.target.value)
+                }
+                rows={3}
+                placeholder="Description..."
+              />
+
+              <div className="flex items-center gap-2 mt-2">
+                <input
+                  type="checkbox"
+                  id={`reverse-${i}`}
+                  checked={formData.whoAreWe[i]?.isReverse || false}
+                  onChange={(e) =>
+                    handleWhoAreWeChange(i, "isReverse", e.target.checked)
+                  }
+                  className="w-4 h-4 text-brand-primary border-gray-300 rounded focus:ring-brand-primary"
+                />
+                <label htmlFor={`reverse-${i}`} className="text-sm text-gray-700 font-medium cursor-pointer">
+                  Reverse Image Render Order (CSS Flip)
+                </label>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 mt-4 h-40">
+                <div className="flex flex-col h-full">
+                  <span className="block text-[13px] font-medium text-gray-700 mb-1">
+                    Front Image
+                  </span>
+                  <MiniUploader
+                    preview={preview.whoAreWeFront[i]}
+                    onUpload={(e) => handleWhoAreWeImage(e, i, "front")}
+                    onRemove={() => removeWhoAreWeImage(i, "front")}
+                    label="Upload Front Image"
+                  />
+                </div>
+                <div className="flex flex-col h-full">
+                  <span className="block text-[13px] font-medium text-gray-700 mb-1">
+                    Back Image
+                  </span>
+                  <MiniUploader
+                    preview={preview.whoAreWeBack[i]}
+                    onUpload={(e) => handleWhoAreWeImage(e, i, "back")}
+                    onRemove={() => removeWhoAreWeImage(i, "back")}
+                    label="Upload Back Image"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 

@@ -1,29 +1,13 @@
 import React from "react";
 
-const DUMMY_WHY_US_DATA = [
-  {
-    id: 1,
-    description:
+export default function AboutWhyUs({ data = [] }) {
+  const whyUsData = data?.length > 0 ? data : [
       "A Space for Every Professional – Whether you're a freelancer, startup, or enterprise, our tailored workspace solutions—from hot desks to private offices—cater to all.",
-  },
-  {
-    id: 2,
-    description:
       "Prime Locations, Maximum Convenience – Situated in city centers and business districts, our workspaces keep you close to clients, partners, and opportunities.",
-  },
-  {
-    id: 3,
-    description:
       "Collaboration at the Core – We foster a thriving community where networking isn’t forced—it happens naturally in an environment built for synergy.",
-  },
-  {
-    id: 4,
-    description:
       "Flexible Workspaces, Scalable Solutions – Choose from dedicated desks, private cabins, and virtual offices, designed to grow with your ambitions.",
-  },
-];
+  ];
 
-export default function AboutWhyUs() {
   return (
     <section className="why-us ptb30">
       <div className="container-fluid">
@@ -33,8 +17,8 @@ export default function AboutWhyUs() {
           </div>
         </div>
         <div className="row pe-3 ps-lg-3 ps-md-3 ps-0">
-          {DUMMY_WHY_US_DATA.map((item) => (
-            <div className="col-md-3" key={item.id}>
+          {whyUsData.map((text, index) => (
+            <div className="col-md-3" key={index}>
               <div className="get-image-bottom4 mt20 relative">
                 <div className="get-image">
                   <svg
@@ -65,7 +49,7 @@ export default function AboutWhyUs() {
                     />
                   </svg>
                   <div className="p-4 para-p">
-                    <p>{item.description}</p>
+                    <p>{text}</p>
                   </div>
                 </div>
               </div>

@@ -11,10 +11,10 @@ export default function AboutCta() {
                 Let’s continue the conversation
               </h2>
               <a
-                href="#exampleModal"
+                href="#exampleModaltwo"
                 className="themebtn themebtn1 d-block m-auto"
                 data-bs-toggle="modal"
-                data-bs-target="#exampleModal"
+                data-bs-target="#exampleModaltwo"
               >
                 Request A Callback
               </a>

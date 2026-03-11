@@ -1,6 +1,19 @@
 import React from "react";
 
-export default function AboutHero() {
+export default function AboutHero({ data = {} }) {
+  const { heading, subHeading, mainBanner } = data;
+
+  // Function to process headings containing \n safely
+  const renderHeading = (text, defaultValues) => {
+    if (!text) return defaultValues;
+    return text.split("\n").map((line, index) => (
+      <React.Fragment key={index}>
+        {line}
+        {index !== text.split("\n").length - 1 && <br />}
+      </React.Fragment>
+    ));
+  };
+
   return (
     <div className="loctionstimeline-nav about">
       <div className="container-fluid">
@@ -9,7 +22,7 @@ export default function AboutHero() {
             <div className="locationscard relative">
               <div className="locations-image">
                 <img
-                  src="/assets/aboutus/banner/1750683580_Hero Banner 2.png"
+                  src={mainBanner || "/assets/aboutus/banner/1750683580_Hero Banner 2.png"}
                   alt="coworking spaces - SpringHouse coworking office view"
                 />
                 <div className="shape-bottom">
@@ -54,10 +67,19 @@ export default function AboutHero() {
               </div>
               <div className="location-content">
                 <h4 className="section-title">
-                  A Space to Work.
-                  <br />
-                  Community to Grow.
+                  {renderHeading(heading, (
+                    <>
+                      A Space to Work.
+                      <br />
+                      Community to Grow.
+                    </>
+                  ))}
                 </h4>
+                {subHeading && (
+                  <p className="mt-2 text-white/90 text-[18px] uppercase tracking-wider font-medium">
+                    {subHeading}
+                  </p>
+                )}
               </div>
             </div>
           </div>

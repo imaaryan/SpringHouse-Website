@@ -24,14 +24,7 @@ const aboutUsSchema = new mongoose.Schema(
         content: String,
       },
     ],
-    presence: [
-      {
-        number: Number,
-        title: String,
-        beforeNumber: String,
-        afterNumber: String,
-      },
-    ],
+
     whyUs: [
       {
         type: String,
@@ -39,7 +32,11 @@ const aboutUsSchema = new mongoose.Schema(
     ],
     whoAreWe: [
       {
-        type: String,
+        title: String,
+        description: String,
+        frontImg: String,
+        backImg: String,
+        isReverse: { type: Boolean, default: false },
       },
     ],
     seo: {

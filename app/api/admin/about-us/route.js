@@ -42,16 +42,7 @@ export async function PUT(request) {
       mainBannerPath = await uploadImage(mainBannerFile, "about-us/hero");
     }
 
-    // Array - Presence (4 items)
-    const presence = [];
-    for (let i = 0; i < 4; i++) {
-      presence.push({
-        number: Number(formData.get(`presence[${i}][number]`)) || null,
-        title: formData.get(`presence[${i}][title]`) || "",
-        beforeNumber: formData.get(`presence[${i}][beforeNumber]`) || "",
-        afterNumber: formData.get(`presence[${i}][afterNumber]`) || "",
-      });
-    }
+
 
     // Array - History (dynamic)
     const history = [];
@@ -73,14 +64,32 @@ export async function PUT(request) {
     // Array - Who Are We (4 items)
     const whoAreWe = [];
     for (let k = 0; k < 4; k++) {
-      whoAreWe.push(formData.get(`whoAreWe[${k}]`) || "");
+      let frontImgPath = aboutUs.whoAreWe?.[k]?.frontImg || "";
+      let backImgPath = aboutUs.whoAreWe?.[k]?.backImg || "";
+      
+      const frontFile = formData.get(`whoAreWe[${k}][frontImg]`);
+      if (frontFile && typeof frontFile === "object" && frontFile.size > 0) {
+        frontImgPath = await uploadImage(frontFile, "about-us/who-are-we");
+      }
+      
+      const backFile = formData.get(`whoAreWe[${k}][backImg]`);
+      if (backFile && typeof backFile === "object" && backFile.size > 0) {
+        backImgPath = await uploadImage(backFile, "about-us/who-are-we");
+      }
+
+      whoAreWe.push({
+        title: formData.get(`whoAreWe[${k}][title]`) || "",
+        description: formData.get(`whoAreWe[${k}][description]`) || "",
+        isReverse: formData.get(`whoAreWe[${k}][isReverse]`) === "true",
+        frontImg: frontImgPath,
+        backImg: backImgPath,
+      });
     }
 
     // Update Payload
     aboutUs.heading = heading;
     aboutUs.subHeading = subHeading;
     aboutUs.mainBanner = mainBannerPath;
-    aboutUs.presence = presence;
     aboutUs.history = history;
     aboutUs.whyUs = whyUs;
     aboutUs.whoAreWe = whoAreWe;
@@ -100,7 +109,7 @@ export async function PUT(request) {
   } catch (error) {
     console.error("AboutUs Update Error:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to update about us" },
+      { success: false, error: error.message || "Failed to update about us" },
       { status: 500 },
     );
   }
