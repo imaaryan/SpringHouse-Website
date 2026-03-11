@@ -1,9 +1,13 @@
 import React from "react";
 import Image from "next/image";
 
-export default function LocationAmenities() {
+export default function LocationAmenities({ amenities }) {
+  if (!amenities || amenities.length === 0) {
+    return null;
+  }
+
   return (
-    <section className=" amenities pt60">
+    <section className=" amenities pt6">
       <div className="container-fluid">
         <div className="row">
           <div className="col-lg-6 pb30">
@@ -11,54 +15,28 @@ export default function LocationAmenities() {
           </div>
         </div>
         <div className="row line pe-3 ps-lg-3 ps-md-3 ps-0">
-          <div className="col-md-3 col-6 mb-5">
-            <div className="icon-amen text-center">
-              <img
-                src="/assets/amenities/wifi.png"
-                className="img-fluid mb-2"
-                alt="wifi"
-                width={80}
-                height={80}
-              />
-              <a href="#">High Speed Wifi</a>
-            </div>
-          </div>
-          <div className="col-md-3 col-6 mb-5">
-            <div className="icon-amen text-center">
-              <img
-                src="/assets/amenities/cafeteria.png"
-                className="img-fluid mb-2"
-                alt="coffee"
-                width={80}
-                height={80}
-              />
-              <a href="#">Tea & Coffee</a>
-            </div>
-          </div>
-          <div className="col-md-3 col-6 mb-5">
-            <div className="icon-amen text-center">
-              <img
-                src="/assets/amenities/printer.png"
-                className="img-fluid mb-2"
-                alt="print"
-                width={80}
-                height={80}
-              />
-              <a href="#">Printing Setup</a>
-            </div>
-          </div>
-          <div className="col-md-3 col-6 mb-5">
-            <div className="icon-amen text-center">
-              <img
-                src="/assets/amenities/Security.png"
-                className="img-fluid mb-2"
-                alt="security"
-                width={80}
-                height={80}
-              />
-              <a href="#">24x7 Security</a>
-            </div>
-          </div>
+          {amenities.map((amenity, index) => {
+             // Handle potential missing file paths gracefully
+             const imgSrc = amenity.featuredIcon?.startsWith("http") 
+               ? amenity.featuredIcon
+               : `/${amenity.featuredIcon?.replace(/^\//, '') || "assets/amenities/wifi.png"}`;
+
+             return (
+               <div key={amenity._id || index} className="col-md-3 col-6 mb-5">
+                 <div className="icon-amen text-center d-flex flex-column align-items-center">
+                   <div style={{ position: "relative", width: "80px", height: "80px", marginBottom: "8px" }}>
+                     <Image
+                       src={imgSrc}
+                       fill
+                       style={{ objectFit: "contain" }}
+                       alt={amenity.name}
+                     />
+                   </div>
+                   <a href="#" className="mt-2" style={{ textDecoration: 'none' }}>{amenity.name}</a>
+                 </div>
+               </div>
+             );
+          })}
         </div>
       </div>
     </section>

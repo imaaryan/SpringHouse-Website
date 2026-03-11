@@ -35,7 +35,7 @@ export default async function LocationPage({ params }) {
 
   // Fetch from DB
   await connectDB();
-  let cityDataRaw = await City.findOne({ slug: city }).lean();
+  let cityDataRaw = await City.findOne({ slug: city }).populate("amenities", "name featuredIcon").lean();
   let activeSolutionsRaw = await Solution.find({ isActive: true }).lean();
   
   let areasRaw = [];
@@ -57,6 +57,25 @@ export default async function LocationPage({ params }) {
   const areas = areasRaw.length > 0 ? JSON.parse(JSON.stringify(areasRaw)) : [];
   const cityProperties = propertiesRaw.length > 0 ? JSON.parse(JSON.stringify(propertiesRaw)) : [];
 
+  // Extract solutions from properties and remove duplicates by _id
+  const citySolutionsMap = new Map();
+  propertiesRaw.forEach(prop => {
+    if (prop.activeSolutions) {
+      prop.activeSolutions.forEach(sol => {
+        if (sol && sol._id && !citySolutionsMap.has(sol._id.toString())) {
+          // Find the full solution object from the activeSolutionsRaw table
+          // rather than just the populated stub, so we have the image & description
+          const fullSolution = activeSolutionsRaw.find(as => as._id.toString() === sol._id.toString());
+          if (fullSolution) {
+            citySolutionsMap.set(sol._id.toString(), fullSolution);
+          }
+        }
+      });
+    }
+  });
+  const citySpecificSolutionsRaw = Array.from(citySolutionsMap.values());
+  const citySpecificSolutions = citySpecificSolutionsRaw.length > 0 ? JSON.parse(JSON.stringify(citySpecificSolutionsRaw)) : [];
+
   return (
     <>
       <Header />
@@ -70,11 +89,11 @@ export default async function LocationPage({ params }) {
         activeSolutions={activeSolutions} 
         areas={areas}
       />
-      <LocationAmenities location={city} />
+      <LocationAmenities amenities={cityData?.amenities || []} />
 
       <LifeAtSpringHouse />
-      <SolutionsDesktop />
-      <SolutionsMobile />
+      <SolutionsDesktop data={citySpecificSolutions} />
+      <SolutionsMobile data={citySpecificSolutions} />
       <OtherLocations location={city} />
       <ContactForm />
       <Footer />

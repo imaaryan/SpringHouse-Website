@@ -107,7 +107,7 @@ export default function AvailableProperties({ properties, showTabs = false }) {
         <div className="row">
           <div className="col-md-12 pt-3">
             {Object.entries(groupedByArea).map(([areaName, areaProps]) => (
-              <div key={areaName} className="mb-5">
+              <div key={areaName} className="mb-3">
                 <p className="text-uppercase mb-4 mt-2" style={{ fontSize:'20px', fontWeight: '500', letterSpacing: '0.5px' }}>
                   {areaName}
                 </p>
