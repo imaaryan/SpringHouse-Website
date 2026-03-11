@@ -1,3 +1,10 @@
+import connectDB from "@/utils/db";
+import { Solution } from "@/model/solution.model";
+import { Property } from "@/model/property.model";
+import { City } from "@/model/city.model";
+import { Testimonial } from "@/model/testimonial.model";
+import { notFound } from "next/navigation";
+
 import Header from "@/app/components/home/Header";
 import Footer from "@/app/components/home/Footer";
 import ContactForm from "@/app/components/home/ContactForm";
@@ -10,73 +17,45 @@ import GlobalBanner from "@/app/components/home/GlobalBanner";
 import SolutionIntro from "@/app/components/solutions/SolutionIntro";
 import ManagedOfficeStatic from "@/app/components/solutions/ManagedOfficeStatic";
 
-// Static Testing Data for Layout Checking
-const DUMMY_SOLUTIONS = [
-  {
-    slug: "managed-office",
-    name: "Managed Office",
-    image: "/assets/locationdetail/banner/1747118432_gurugram.jpg", // Valid local image
-    description:
-      "MANAGED OFFICE - A Fully Serviced Office Without the Hassle\r\nSpringHouse transforms the way you work with our premium Managed Office solutions. Designed for growing startups, satellite teams, and established enterprises, our private offices offer the perfect blend of privacy, professionalism, and productivity. Get a dedicated workspace that reflects your brand identity, fully equipped with ergonomic furniture, high-speed internet, and enterprise-grade security.",
-    fourPoints: [
-      "Exclusive Office Space",
-      "Operational Support",
-      "Prime Locations across Delhi-NCR",
-      "Designed for Growth",
-    ],
-  },
-  {
-    slug: "coworking",
-    name: "Coworking",
-    image: "/assets/locationdetail/banner/1747118432_gurugram.jpg", // Valid local image
-    description:
-      "COWORKING - The ultimate ecosystem for creators and innovators\r\n...",
-    fourPoints: [
-      "Flexible Desks",
-      "Community events",
-      "Fast WiFi",
-      "Prime Location",
-    ],
-  },
-];
-
-const DUMMY_PROPERTIES = [
-  {
-    _id: "prop1",
-    city: { slug: "delhi", name: "Delhi" },
-    activeSolutions: [{ slug: "managed-office" }, { slug: "coworking" }],
-    name: "SpringHouse Naraina",
-    images: [
-      "/assets/locationdetail/banner/1747118432_gurugram.jpg",
-      "/assets/locationdetail/banner/1747307186_delhilocation.jpg",
-    ],
-    propertyCode: "SH-DEL-01",
-    fullAddress: "Arise Building, Naraina Vihar, New Delhi - 110028",
-  },
-  {
-    _id: "prop2",
-    city: { slug: "gurugram", name: "Gurugram" },
-    activeSolutions: [{ slug: "managed-office" }],
-    name: "SpringHouse Golf Course",
-    images: ["/assets/locationdetail/banner/1747119868_gurugram.jpg"],
-    propertyCode: "SH-GUR-01",
-    fullAddress: "Golf Course Extension Road, Sector 56, Gurugram",
-  },
-];
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  await connectDB();
+  const solution = await Solution.findOne({ slug, isActive: true }).lean();
+  
+  if (!solution) return {};
+  
+  return {
+    title: solution.seo?.metaTitle || `${solution.name} | SpringHouse`,
+    description: solution.seo?.metaDescription || solution.description,
+  };
+}
 
 export default async function Page({ params }) {
   const { slug } = await params;
+  await connectDB();
 
-  /* Using Static Testing Data Temporary */
-  const solution = DUMMY_SOLUTIONS.find((item) => item.slug === slug);
+  const rawSolution = await Solution.findOne({ slug, isActive: true })
+    .populate("testimonials")
+    .lean();
 
-  // Fallback to static props if slug is unknown simply for testing rendering
-  const activeSolution = solution || DUMMY_SOLUTIONS[0];
-  const description = activeSolution.description?.split("\r\n") || [];
+  if (!rawSolution) {
+    notFound();
+  }
+  
+  // Serialize to plain JavaScript object to avoid Next.js "Only plain objects can be passed to Client Components" error
+  const solution = JSON.parse(JSON.stringify(rawSolution));
 
-  const solutionProperties = DUMMY_PROPERTIES.filter((property) =>
-    property.activeSolutions?.some((sol) => sol.slug === slug),
-  );
+  const description = solution.description?.split("\r\n").filter(Boolean) || [];
+
+  // Fetch properties where this solution is active
+  const rawProperties = await Property.find({
+    activeSolutions: rawSolution._id,
+    isActive: true,
+  })
+    .populate("city")
+    .lean();
+    
+  const solutionProperties = JSON.parse(JSON.stringify(rawProperties));
 
   return (
     <>
@@ -84,32 +63,39 @@ export default async function Page({ params }) {
 
       {/* Banner Component */}
       <GlobalBanner
-        title={activeSolution.name}
-        imageSrc={activeSolution.image}
+        title={solution.name}
+        imageSrc={solution.image}
       />
 
       {/* Clean Intro Component */}
       <SolutionIntro
         description={description}
-        fourPoints={activeSolution.fourPoints}
+        fourPoints={solution.fourPoints}
       />
 
-      {/* Raw HTML 500 lines has been isolated */}
+      {/* Render testimonials dynamically */}
+      {solution.testimonials && solution.testimonials.length > 0 && (
+        <Testimonials data={solution.testimonials} />
+      )}
+
+      {/* Static Section for specific solutions if needed */}
       {slug === "managed-office" && (
-        <>
-          <Testimonials />
-          <ManagedOfficeStatic />
-        </>
+        <ManagedOfficeStatic />
       )}
 
       {/* Properties Component */}
-      <AvailableProperties properties={solutionProperties} showTabs={true} />
+      {solutionProperties && solutionProperties.length > 0 && (
+        <AvailableProperties properties={solutionProperties} showTabs={true} />
+      )}
 
-      {slug === "coworking" && (
-        <>
-          <OurCommunity />
-          <Networking />
-        </>
+      {/* Render Our Community dynamically */}
+      {solution.ourCommunity && solution.ourCommunity.length > 0 && (
+        <OurCommunity data={solution.ourCommunity} />
+      )}
+
+      {/* Render Networking dynamically */}
+      {solution.networking && (solution.networking.title || solution.networking.content) && (
+        <Networking data={solution.networking} />
       )}
 
       {/* Global Elements */}
