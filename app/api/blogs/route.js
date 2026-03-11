@@ -6,7 +6,7 @@ import { uploadImage } from "@/utils/upload"; // Verify path
 export async function GET() {
   await connectDB();
   try {
-    const blogs = await Blog.find({}).sort({ createdAt: -1 });
+    const blogs = await Blog.find({ isActive: true }).sort({ createdAt: -1 });
     return NextResponse.json({ success: true, data: blogs });
   } catch (error) {
     return NextResponse.json(

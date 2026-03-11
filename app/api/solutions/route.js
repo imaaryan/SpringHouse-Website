@@ -8,7 +8,7 @@ import { uploadImage } from "@/utils/upload";
 export async function GET() {
   await connectDB();
   try {
-    const solutions = await Solution.find({})
+    const solutions = await Solution.find({ isActive: true })
       .populate("testimonials")
       .sort({ createdAt: -1 });
     return NextResponse.json({ success: true, data: solutions });

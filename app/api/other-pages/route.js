@@ -5,7 +5,9 @@ import { NextResponse } from "next/server";
 export async function GET() {
   await connectDB();
   try {
-    const otherPages = await OtherPage.find({}).sort({ createdAt: -1 });
+    const otherPages = await OtherPage.find({ isActive: true }).sort({
+      createdAt: -1,
+    });
     return NextResponse.json({ success: true, data: otherPages });
   } catch (error) {
     return NextResponse.json(

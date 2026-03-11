@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   await connectDB();
   try {
-    const cities = await City.find({}).sort({ createdAt: -1 });
+    const cities = await City.find({ isActive: true }).sort({ createdAt: -1 });
     return NextResponse.json({ success: true, data: cities });
   } catch (error) {
     return NextResponse.json(

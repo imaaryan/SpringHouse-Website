@@ -5,11 +5,41 @@ import path from "path";
  * Uploads a file to the specified directory.
  * @param {File} file - The file object from request.formData()
  * @param {string} folderName - The subfolder within the base directory
- * @param {string} baseDir - The base directory (default: "public/assets")
+ * @param {object} options - Validation options (maxSizeMB, allowedTypes)
  * @returns {Promise<string>} - The path to the uploaded file (relative to public for assets, or absolute/relative for private)
  */
-export async function uploadImage(file, folderName, baseDir = "public/assets") {
+export async function uploadImage(
+  file,
+  folderName,
+  baseDir = "public/assets",
+  options = {},
+) {
   if (!file) return null;
+
+  const {
+    maxSizeMB = 2,
+    allowedTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/gif",
+      "image/svg+xml",
+    ],
+  } = options;
+
+  // Validate File Size
+  if (file.size > maxSizeMB * 1024 * 1024) {
+    throw new Error(`File size exceeds the ${maxSizeMB}MB limit.`);
+  }
+
+  // Validate File Type
+  if (allowedTypes && !allowedTypes.includes(file.type)) {
+    throw new Error(
+      `Invalid file type. Allowed types: ${allowedTypes
+        .map((t) => t.split("/")[1] || t)
+        .join(", ")}`,
+    );
+  }
 
   const buffer = Buffer.from(await file.arrayBuffer());
   const filename = Date.now() + "_" + file.name.replaceAll(" ", "_");
