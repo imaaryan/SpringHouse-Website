@@ -33,7 +33,9 @@ export default function EditSolutionPage() {
     isActive: false,
     fourPoints: ["", "", "", ""],
     testimonials: [],
-    networking: { title: "", content: "" },
+    testimonials: [],
+    networking: { title: "", content: "", tooltips: ["", "", ""] },
+    ourCommunity: [],
     ourCommunity: [],
     seo: {
       metaTitle: "",
@@ -107,6 +109,13 @@ export default function EditSolutionPage() {
               networking: {
                 title: s.networking.title || "",
                 content: s.networking.content || "",
+                tooltips: Array.isArray(s.networking.tooltips)
+                  ? [
+                      s.networking.tooltips[0] || "",
+                      s.networking.tooltips[1] || "",
+                      s.networking.tooltips[2] || ""
+                    ]
+                  : ["", "", ""]
               },
             }));
             if (s.networking.image) {
@@ -211,10 +220,23 @@ export default function EditSolutionPage() {
 
   const handleNetworkingTextChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      networking: { ...prev.networking, [name]: value },
-    }));
+    
+    setFormData((prev) => {
+      if (name.startsWith("tooltip")) {
+        const index = parseInt(name.replace("tooltip", ""), 10) - 1;
+        const newTooltips = [...(prev.networking.tooltips || ["", "", ""])];
+        newTooltips[index] = value;
+        return {
+          ...prev,
+          networking: { ...prev.networking, tooltips: newTooltips },
+        };
+      }
+      
+      return {
+        ...prev,
+        networking: { ...prev.networking, [name]: value },
+      };
+    });
   };
 
   const handleCommunityImagesChange = (e) => {
@@ -295,6 +317,13 @@ export default function EditSolutionPage() {
       // Networking
       data.append("networking[title]", formData.networking.title || "");
       data.append("networking[content]", formData.networking.content || "");
+      
+      if (formData.networking.tooltips) {
+        data.append("networking[tooltip1]", formData.networking.tooltips[0] || "");
+        data.append("networking[tooltip2]", formData.networking.tooltips[1] || "");
+        data.append("networking[tooltip3]", formData.networking.tooltips[2] || "");
+      }
+
       if (networkingImage) {
         data.append("networkingImage", networkingImage);
       } else if (networkingImagePreview) {
@@ -470,6 +499,29 @@ export default function EditSolutionPage() {
                   rows={3}
                   placeholder="Networking content..."
                 />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <FormInput
+                    label="Tooltip 1"
+                    name="tooltip1"
+                    value={formData.networking.tooltips?.[0] || ""}
+                    onChange={handleNetworkingTextChange}
+                    placeholder="Spring House Gurugram"
+                  />
+                  <FormInput
+                    label="Tooltip 2"
+                    name="tooltip2"
+                    value={formData.networking.tooltips?.[1] || ""}
+                    onChange={handleNetworkingTextChange}
+                    placeholder="Spring House Gurugram"
+                  />
+                  <FormInput
+                    label="Tooltip 3"
+                    name="tooltip3"
+                    value={formData.networking.tooltips?.[2] || ""}
+                    onChange={handleNetworkingTextChange}
+                    placeholder="Spring House Delhi"
+                  />
+                </div>
               </div>
             </div>
           </div>

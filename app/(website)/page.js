@@ -21,6 +21,7 @@ import { Solution } from "@/model/solution.model";
 import { Blog } from "@/model/blog.model";
 import connectDB from "@/utils/db";
 import { getDropdownOptions } from "@/utils/dropdowns";
+export const revalidate = 0;
 
 export default async function Home() {
   await connectDB();

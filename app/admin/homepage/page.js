@@ -44,6 +44,8 @@ export default function HomepageAdmin() {
     networking: {
       title: "",
       content: "",
+      image: "",
+      tooltips: ["", "", ""],
     },
     testimonials: [], // Array of ObjectIds
     seo: {
@@ -110,6 +112,13 @@ export default function HomepageAdmin() {
             networking: {
               title: hp.networking?.title || "",
               content: hp.networking?.content || "",
+              tooltips: Array.isArray(hp.networking?.tooltips)
+                ? [
+                    hp.networking.tooltips[0] || "",
+                    hp.networking.tooltips[1] || "",
+                    hp.networking.tooltips[2] || ""
+                  ]
+                : ["", "", ""],
             },
             testimonials: hp.testimonials || [],
             seo: {
@@ -148,10 +157,23 @@ export default function HomepageAdmin() {
     const { name, value } = e.target;
     if (name.includes(".")) {
       const [section, field] = name.split(".");
-      setFormData((prev) => ({
-        ...prev,
-        [section]: { ...prev[section], [field]: value },
-      }));
+      setFormData((prev) => {
+        // Handle tooltips specifically
+        if (section === "networking" && field.startsWith("tooltip")) {
+          const index = parseInt(field.replace("tooltip", ""), 10) - 1;
+          const newTooltips = [...(prev.networking.tooltips || ["", "", ""])];
+          newTooltips[index] = value;
+          return {
+            ...prev,
+            networking: { ...prev.networking, tooltips: newTooltips },
+          };
+        }
+
+        return {
+          ...prev,
+          [section]: { ...prev[section], [field]: value },
+        };
+      });
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -290,6 +312,12 @@ export default function HomepageAdmin() {
       // Networking
       data.append("networking[title]", formData.networking.title);
       data.append("networking[content]", formData.networking.content);
+      
+      if (formData.networking.tooltips) {
+        data.append("networking[tooltip1]", formData.networking.tooltips[0] || "");
+        data.append("networking[tooltip2]", formData.networking.tooltips[1] || "");
+        data.append("networking[tooltip3]", formData.networking.tooltips[2] || "");
+      }
       if (imageFiles.networking) {
         data.append("networkingImage", imageFiles.networking);
       }
@@ -656,6 +684,29 @@ export default function HomepageAdmin() {
                 onChange={handleInputChange}
                 placeholder="Alone we can do so little; together we can do so much..."
               />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <FormInput
+                  label="Tooltip 1"
+                  name="networking.tooltip1"
+                  value={formData.networking.tooltips?.[0] || ""}
+                  onChange={handleInputChange}
+                  placeholder="Spring House Gurugram"
+                />
+                <FormInput
+                  label="Tooltip 2"
+                  name="networking.tooltip2"
+                  value={formData.networking.tooltips?.[1] || ""}
+                  onChange={handleInputChange}
+                  placeholder="Spring House Gurugram"
+                />
+                <FormInput
+                  label="Tooltip 3"
+                  name="networking.tooltip3"
+                  value={formData.networking.tooltips?.[2] || ""}
+                  onChange={handleInputChange}
+                  placeholder="Spring House Delhi"
+                />
+              </div>
             </div>
           </div>
         </div>

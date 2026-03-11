@@ -50,9 +50,13 @@ const solutionSchema = new mongoose.Schema(
       },
     ],
     networking: {
-      title: String,
-      content: String,
-      image: String,
+      title: { type: String, default: "" },
+      content: { type: String, default: "" },
+      image: { type: String, default: "" },
+      tooltips: {
+        type: [String],
+        default: ["", "", ""],
+      },
     },
     isActive: {
       type: Boolean,
@@ -71,3 +75,10 @@ applySlugify(solutionSchema, "name");
 
 export const Solution =
   mongoose.models.Solution || mongoose.model("Solution", solutionSchema);
+
+// Force clear cache in development if schema changed
+if (process.env.NODE_ENV !== "production") {
+  delete mongoose.models.Solution;
+}
+
+export { Solution };

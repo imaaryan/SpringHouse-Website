@@ -97,6 +97,9 @@ export async function PUT(request) {
     // Networking
     const networkingTitle = formData.get("networking[title]") || "";
     const networkingContent = formData.get("networking[content]") || "";
+    const networkingTooltip1 = formData.get("networking[tooltip1]") || "";
+    const networkingTooltip2 = formData.get("networking[tooltip2]") || "";
+    const networkingTooltip3 = formData.get("networking[tooltip3]") || "";
     const networkingImageFile = formData.get("networkingImage");
     let networkingImagePath = homepage.networking?.image || "";
     if (
@@ -153,6 +156,11 @@ export async function PUT(request) {
       title: networkingTitle,
       content: networkingContent,
       image: networkingImagePath,
+      tooltips: [
+        networkingTooltip1 || "", 
+        networkingTooltip2 || "", 
+        networkingTooltip3 || ""
+      ],
     };
     homepage.ourCommunity = communityImagePaths;
     homepage.testimonials = testimonials;

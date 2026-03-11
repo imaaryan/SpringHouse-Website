@@ -39,6 +39,10 @@ const homepageSchema = new mongoose.Schema(
       title: String,
       content: String,
       image: String,
+      tooltips: {
+        type: [String],
+        default: ["", "", ""],
+      },
     },
     ourCommunity: [
       {
@@ -60,5 +64,12 @@ const homepageSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export const Homepage =
+const Homepage =
   mongoose.models.Homepage || mongoose.model("Homepage", homepageSchema);
+
+// Force clear cache in development if schema changed
+if (process.env.NODE_ENV !== "production") {
+  delete mongoose.models.Homepage;
+}
+
+export { Homepage };

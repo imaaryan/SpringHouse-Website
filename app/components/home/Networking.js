@@ -27,13 +27,15 @@ export default function Networking({ data = {} }) {
           <div className="col-lg-4">
             <div className="networking-rightside">
               <div className="networking-para">
-                <p className="font51">
-                  &quot;Alone we can do so little;{" "}
-                  <span>together we can do so much.</span> &quot;
-                </p>
+                <p 
+                  className="font51" 
+                  dangerouslySetInnerHTML={{ 
+                    __html: data?.content || `&quot;Alone we can do so little; <span>together we can do so much.</span> &quot;` 
+                  }} 
+                />
               </div>
               <div className="networking-name">
-                <p className="textright font24">~ Helen Keller</p>
+                <p className="textright font24">~ {data?.title || "Helen Keller"}</p>
               </div>
             </div>
           </div>
@@ -50,63 +52,69 @@ export default function Networking({ data = {} }) {
                 />
 
                 {/* Tooltip 1 */}
-                <div
-                  type="button"
-                  className="btn btn-secondary tool tooltip"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="bottom"
-                >
-                  <div className="image-box tooltiptext">
-                    <div className="spring">
-                      <img
-                        className="spring-img"
-                        src="/frontend_assets/img/spring1.svg"
-                        alt="spring"
-                      />
+                {data?.tooltips?.[0] && (
+                  <div
+                    type="button"
+                    className="btn btn-secondary tool tooltip"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                  >
+                    <div className="image-box tooltiptext">
+                      <div className="spring">
+                        <img
+                          className="spring-img"
+                          src="/frontend_assets/img/spring1.svg"
+                          alt="spring"
+                        />
+                      </div>
+                      <span>{data.tooltips[0]}</span>
                     </div>
-                    <span>Spring House Gurugram</span>
                   </div>
-                </div>
+                )}
 
                 {/* Tooltip 2 */}
-                <div
-                  type="button"
-                  className="btn btn-secondary tool tooltip1"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="bottom"
-                >
-                  <div className="image-box tooltiptext">
-                    <div className="spring">
-                      <img
-                        className="spring-img"
-                        src="/frontend_assets/img/spring1.svg"
-                        alt="spring"
-                      />
+                {data?.tooltips?.[1] && (
+                  <div
+                    type="button"
+                    className="btn btn-secondary tool tooltip1"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                  >
+                    <div className="image-box tooltiptext">
+                      <div className="spring">
+                        <img
+                          className="spring-img"
+                          src="/frontend_assets/img/spring1.svg"
+                          alt="spring"
+                        />
+                      </div>
+                      <span>{data.tooltips[1]}</span>
+                      <span></span>
                     </div>
-                    <span>Spring House Gurugram</span>
-                    <span></span>
                   </div>
-                </div>
+                )}
 
                 {/* Tooltip 3 */}
-                <div
-                  type="button"
-                  className="btn btn-secondary tool tooltip2"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="bottom"
-                >
-                  <div className="image-box tooltiptext">
-                    <div className="spring">
-                      <img
-                        className="spring-img"
-                        src="/frontend_assets/img/spring1.svg"
-                        alt="spring"
-                      />
+                {data?.tooltips?.[2] && (
+                  <div
+                    type="button"
+                    className="btn btn-secondary tool tooltip2"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                  >
+                    <div className="image-box tooltiptext">
+                      <div className="spring">
+                        <img
+                          className="spring-img"
+                          src="/frontend_assets/img/spring1.svg"
+                          alt="spring"
+                        />
+                      </div>
+                      <span>{data.tooltips[2]}</span>
+                      <span></span>
                     </div>
-                    <span>Spring House Delhi</span>
-                    <span></span>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>

@@ -126,9 +126,11 @@ export async function PUT(request, { params }) {
       i++;
     }
 
-    // Networking
     const networkingTitle = formData.get("networking[title]") || "";
     const networkingContent = formData.get("networking[content]") || "";
+    const networkingTooltip1 = formData.get("networking[tooltip1]") || "";
+    const networkingTooltip2 = formData.get("networking[tooltip2]") || "";
+    const networkingTooltip3 = formData.get("networking[tooltip3]") || "";
     const networkingImageFile = formData.get("networkingImage");
     let networkingImagePath = existingSolution.networking?.image || "";
     if (
@@ -168,9 +170,14 @@ export async function PUT(request, { params }) {
       featuredSpaces,
       ourCommunity: communityImages,
       networking: {
-        title: networkingTitle,
-        content: networkingContent,
+        title: networkingTitle !== "" ? networkingTitle : existingSolution.networking?.title,
+        content: networkingContent !== "" ? networkingContent : existingSolution.networking?.content,
         image: networkingImagePath,
+        tooltips: [
+          networkingTooltip1 !== "" ? networkingTooltip1 : existingSolution.networking?.tooltips?.[0] || "",
+          networkingTooltip2 !== "" ? networkingTooltip2 : existingSolution.networking?.tooltips?.[1] || "",
+          networkingTooltip3 !== "" ? networkingTooltip3 : existingSolution.networking?.tooltips?.[2] || ""
+        ],
       },
       isActive,
       seo: {
