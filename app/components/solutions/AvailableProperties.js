@@ -4,6 +4,8 @@ import { useState } from "react";
 import PropertyCardSlider from "./PropertyCardSlider";
 
 export default function AvailableProperties({ properties, showTabs = false }) {
+  const [activeCity, setActiveCity] = useState("");
+
   if (!properties || properties.length === 0) return null;
 
   /* Group properties by city */
@@ -23,8 +25,7 @@ export default function AvailableProperties({ properties, showTabs = false }) {
   }, {});
 
   const cities = Object.values(groupedProperties);
-
-  const [activeCity, setActiveCity] = useState(cities[0].name);
+  const displayCity = activeCity || cities[0]?.name;
 
   return (
     <section className="avail-prop ptb60 position-relative">
@@ -45,7 +46,7 @@ export default function AvailableProperties({ properties, showTabs = false }) {
                     <button
                       key={city.name}
                       className={`nav-link ${
-                        activeCity === city.name ? "active" : ""
+                        displayCity === city.name ? "active" : ""
                       }`}
                       onClick={() => setActiveCity(city.name)}
                     >
@@ -59,7 +60,7 @@ export default function AvailableProperties({ properties, showTabs = false }) {
             {/* Properties */}
             <div className="row">
               {cities
-                .find((city) => city.name === activeCity)
+                .find((city) => city.name === displayCity)
                 ?.properties.map((property) => (
                   <PropertyCardSlider key={property._id} property={property} />
                 ))}

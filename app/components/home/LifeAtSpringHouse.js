@@ -2,7 +2,7 @@
 
 import React from "react";
 
-export default function LifeAtSpringHouse() {
+export default function LifeAtSpringHouse({ data = {} }) {
   return (
     <div className="managed-office-section ptb60">
       <div className="container-fluid">
@@ -10,7 +10,7 @@ export default function LifeAtSpringHouse() {
           <div className="row">
             <div className="bb">
               <img
-                src="/assets/locationimage/1747049237_about.png"
+                src={data.image || "/assets/locationimage/1747049237_about.png"}
                 alt="rent a coworking space – SpringHouse coworking office view"
               />
             </div>
@@ -32,13 +32,29 @@ export default function LifeAtSpringHouse() {
 
                   <div className="svg-text">
                     <h3 className="section-title">Life at Spring House</h3>
-                    <p>
-                      Imagine work, but with better coffee, brighter spaces, and
-                      a vibe that makes Mondays bearable. Whether you're taking
-                      a client call in a quiet pod, grabbing lunch in the
-                      pantry, or catching a break in our chill-out zones—there's
-                      room for focus, flow, and a little fun.
-                    </p>
+                    {data.content ? (
+                      <div
+                        dangerouslySetInnerHTML={{ __html: data.content }}
+                        className="content-container mt-3"
+                      />
+                    ) : (
+                      <p>
+                        Imagine work, but with better coffee, brighter spaces,
+                        and a vibe that makes Mondays bearable. Whether
+                        you&apos;re taking a client call in a quiet pod,
+                        grabbing lunch in the pantry, or catching a break in our
+                        chill-out zones—there&apos;s room for focus, flow, and a
+                        little fun.
+                      </p>
+                    )}
+                    {data.ctaLink && (
+                      <a
+                        href={data.ctaLink}
+                        className="themebtn mt-4 d-inline-block"
+                      >
+                        {data.cta || "Know More"}
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>

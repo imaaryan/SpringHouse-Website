@@ -1,23 +1,38 @@
-export default function HeroBanner() {
+export default function HeroBanner({ dropdownOptions = {}, data = {} }) {
+  const { cities = [], solutions = [] } = dropdownOptions;
+  const isVideo = data.mainBanner?.toLowerCase().endsWith(".mp4") || false;
+
   return (
     <div className="spring-housebaner relative">
       <div className="container-fluid p-lg-0 p-md-0 p-3 relative">
         <div className="springhouse-image ">
-          <video
-            autoPlay
-            loop
-            playsInline
-            poster="/assets/bannerimage/1747035219_home-banner.jpg"
-            preload="metadata"
-            muted
-            className="banner-video"
-          >
-            <source
-              src="/frontend_assets/img/banner-video.mp4"
-              type="video/mp4"
+          {isVideo ? (
+            <video
+              autoPlay
+              loop
+              playsInline
+              poster="/assets/bannerimage/1747035219_home-banner.jpg"
+              preload="metadata"
+              muted
+              className="banner-video w-100 object-cover"
+            >
+              <source src={data.mainBanner} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          ) : data.mainBanner ? (
+            <img
+              src={data.mainBanner}
+              className="w-100 banner-video object-cover"
+              alt="SpringHouse Hero Banner"
             />
-            Your browser does not support the video tag.
-          </video>
+          ) : (
+            <img
+              src="/assets/bannerimage/1747035219_home-banner.jpg"
+              className="w-100 banner-video object-cover"
+              alt="SpringHouse Hero Banner Fallback"
+            />
+          )}
+
           <div className="shape-bottom">
             <div className="shape-left-top">
               <svg
@@ -52,17 +67,23 @@ export default function HeroBanner() {
         </div>
 
         <div className="spring-content" data-aos="fade-up">
-          <span className="section-span">CREATE. SIEZE. PROGRESS.</span>
-          <h2 className="section-title mt-4">
-            <p>
-              <span style={{ fontSize: "50px" }}>
-                <span style={{ fontFamily: "GoBold,Helvetica,sans-serif" }}>
-                  a space to work.
-                  <br />a community to grow.
+          {data.subHeading && (
+            <span className="section-span">{data.subHeading}</span>
+          )}
+          {data.heading && (
+            <h2 className="section-title mt-4">
+              <p>
+                <span style={{ fontSize: "50px" }}>
+                  <span
+                    style={{ fontFamily: "GoBold,Helvetica,sans-serif" }}
+                    dangerouslySetInnerHTML={{
+                      __html: data.heading.replace(/\n/g, "<br />"),
+                    }}
+                  />
                 </span>
-              </span>
-            </p>
-          </h2>
+              </p>
+            </h2>
+          )}
         </div>
         <div className="row1 b-lg-0 pb-5" data-aos="fade-up">
           <div className="col-md-7 offset-lg-5 offset-md-5 pe-lg-2 pe-0">
@@ -76,7 +97,11 @@ export default function HeroBanner() {
                     defaultValue=""
                   >
                     <option value="">Select A City</option>
-                    <option value="gurugram">Gurugram</option>
+                    {cities.map((city) => (
+                      <option key={city._id} value={city.slug}>
+                        {city.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="col-md-4">
@@ -86,9 +111,11 @@ export default function HeroBanner() {
                     defaultValue=""
                   >
                     <option value="">Select a Solution</option>
-                    <option value="1">Managed Office</option>
-                    <option value="2">Virtual Office</option>
-                    <option value="3">Coworking</option>
+                    {solutions.map((solution) => (
+                      <option key={solution._id} value={solution.slug}>
+                        {solution.title}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="col-md-3">

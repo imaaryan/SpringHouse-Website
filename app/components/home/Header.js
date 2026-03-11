@@ -1,5 +1,6 @@
 import connectDB from "@/utils/db";
 import { Header as HeaderModel } from "@/model/header.model";
+import Link from "next/link";
 
 export default async function Header() {
   await connectDB();
@@ -13,14 +14,14 @@ export default async function Header() {
       <div className="nav__container">
         <div className="nav__mobile">
           <div className="nav__logo">
-            <a href="/">
+            <Link href="/">
               {logoUrl && (
                 <img
                   src={logoUrl}
                   alt="working space – SpringHouse coworking office view"
                 />
               )}
-            </a>
+            </Link>
           </div>
           <div className="nav__btn">
             <a aria-label="Mobile menu" className="nav-toggle">
@@ -90,7 +91,7 @@ export default async function Header() {
             data-bs-target="#exampleModaltwo"
             className="themebtn themebtn2 lets-talk"
           >
-            Let's Talk!
+            Let&apos;s Talk!
           </a>
         </div>
       </div>

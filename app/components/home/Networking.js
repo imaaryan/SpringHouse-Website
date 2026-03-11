@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-export default function Networking() {
+export default function Networking({ data = {} }) {
   useEffect(() => {
     // Initialize Bootstrap tooltips if available
     if (typeof window !== "undefined" && window.bootstrap) {
@@ -16,7 +16,7 @@ export default function Networking() {
   }, []);
 
   return (
-    <div className="networking ptb60">
+    <div className="networking ptb60 position-relative pb-lg-5">
       <div className="container-fluid">
         <div className="row">
           <div className="col-lg-6">
@@ -28,8 +28,8 @@ export default function Networking() {
             <div className="networking-rightside">
               <div className="networking-para">
                 <p className="font51">
-                  "Alone we can do so little;{" "}
-                  <span>together we can do so much.</span> "
+                  &quot;Alone we can do so little;{" "}
+                  <span>together we can do so much.</span> &quot;
                 </p>
               </div>
               <div className="networking-name">
@@ -41,7 +41,10 @@ export default function Networking() {
             <div className="networking-rightside">
               <div className="networking-image-ss relative">
                 <img
-                  src="/assets/homenetworking/1747050387_network.png"
+                  src={
+                    data.image ||
+                    "/assets/homenetworking/1747050387_network.png"
+                  }
                   className="networking-img"
                   alt="rent a coworking space – SpringHouse coworking office view"
                 />

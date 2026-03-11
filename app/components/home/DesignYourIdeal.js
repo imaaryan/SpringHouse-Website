@@ -320,10 +320,11 @@ export default function DesignYourIdeal() {
                       <h3 className="section-title">Life at Spring House</h3>
                       <p>
                         Imagine work, but with better coffee, brighter spaces,
-                        and a vibe that makes Mondays bearable. Whether you're
-                        taking a client call in a quiet pod, grabbing lunch in
-                        the pantry, or catching a break in our chill-out
-                        zones—there's room for focus, flow, and a little fun.
+                        and a vibe that makes Mondays bearable. Whether
+                        you&apos;re taking a client call in a quiet pod,
+                        grabbing lunch in the pantry, or catching a break in our
+                        chill-out zones—there&apos;s room for focus, flow, and a
+                        little fun.
                       </p>
                     </div>
                   </div>

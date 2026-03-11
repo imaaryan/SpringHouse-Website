@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
+import Link from "next/link";
 
-export default function Blogs() {
+export default function Blogs({ data = [] }) {
   useEffect(() => {
     let intervalId;
     const initSlider = () => {
@@ -49,74 +50,41 @@ export default function Blogs() {
           </div>
         </div>
         <div className="owl-carousel blog-carousel owl-theme pt30">
-          <div className="item">
-            <div className="col-lg-12">
-              <a href="#">
-                <div className="blog-card">
-                  <div className="blog-image relative">
-                    <img src="/assets/blogs/1748253643_1.png" alt="" />
-                  </div>
-                  <div className="blog-content text-shape relative">
-                    <div className="blog-para">
-                      <p>
-                        How Spring House Can Help You Find the Ideal Coworking
-                        Space for Your Company
-                      </p>
+          {data.map((blog, idx) => (
+            <div className="item" key={idx}>
+              <div className="col-lg-12">
+                <Link href={`/${blog.slug || "#"}`}>
+                  <div className="blog-card">
+                    <div className="blog-image relative">
+                      <img
+                        src={blog.imageURL || "/assets/blogs/1748253643_1.png"}
+                        alt={blog.title}
+                      />
                     </div>
-                    <div className="blog-date textright">
-                      <span className="font17 textright">May 22, 2025</span>
+                    <div className="blog-content text-shape relative">
+                      <div className="blog-para">
+                        <p>{blog.title}</p>
+                      </div>
+                      <div className="blog-date textright">
+                        <span className="font17 textright">
+                          {blog.createdAt
+                            ? new Date(blog.createdAt).toLocaleDateString(
+                                "en-US",
+                                {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
+                                },
+                              )
+                            : ""}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </a>
+                </Link>
+              </div>
             </div>
-          </div>
-
-          <div className="item">
-            <div className="col-lg-12">
-              <a href="#">
-                <div className="blog-card">
-                  <div className="blog-image relative">
-                    <img src="/assets/blogs/1748254055_2.png" alt="" />
-                  </div>
-                  <div className="blog-content text-shape relative">
-                    <div className="blog-para">
-                      <p>
-                        How Coworking Spaces Are Shaping the Future of Work
-                        Culture
-                      </p>
-                    </div>
-                    <div className="blog-date textright">
-                      <span className="font17 textright">May 22, 2025</span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
-
-          <div className="item">
-            <div className="col-lg-12">
-              <a href="#">
-                <div className="blog-card">
-                  <div className="blog-image relative">
-                    <img src="/assets/blogs/1748254622_3.png" alt="" />
-                  </div>
-                  <div className="blog-content text-shape relative">
-                    <div className="blog-para">
-                      <p>
-                        Best Budget-Friendly Offices in Gurgaon, Delhi, and
-                        Noida
-                      </p>
-                    </div>
-                    <div className="blog-date textright">
-                      <span className="font17 textright">May 22, 2025</span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 

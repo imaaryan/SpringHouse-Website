@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-export default function Testimonials() {
+export default function Testimonials({ data = [] }) {
   const sliderRef = useRef(null);
 
   useEffect(() => {
@@ -39,247 +39,70 @@ export default function Testimonials() {
           </div>
         </div>
         <div className="testimonial-slider-init pt30">
-          <div>
-            <div className="testimonial-card">
-              <div className="row d-flex align-items-center justify-content-center">
-                <div className="col-lg-3">
-                  <div className="testimonial-img relative">
-                    <div className="testimonial-client-img">
-                      <img
-                        src="/assets/ourtestimonials/1750408067_SalarySe (2).png"
-                        alt="rent a coworking space – SpringHouse coworking office view"
-                      />
-                    </div>
-                    <div className="testimonial-spring absolute">
-                      <img
-                        src="/frontend_assets/img/spring.png"
-                        alt="rent a coworking space – SpringHouse coworking office view"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-9">
-                  <div className="testimonial-content relative">
-                    <div className="testimonial-quote absolute">
-                      <img
-                        src="/frontend_assets/img/quote.png"
-                        alt="working space – SpringHouse coworking office view"
-                      />
-                    </div>
-                    <div className="testimonial-para pe-lg-5 pe-0">
-                      <div className="font32">
-                        <p>
-                          Spring House has been a constant. It's become such a
-                          seamless part of our operations that we rarely have to
-                          think about it. That's what Spring House has been for
-                          us.
-                        </p>
+          {data && data.length > 0 ? (
+            data.map((testimonial) => (
+              <div key={testimonial._id}>
+                <div className="testimonial-card">
+                  <div className="row d-flex align-items-center justify-content-center">
+                    <div className="col-lg-3">
+                      <div className="testimonial-img relative">
+                        <div className="testimonial-client-img">
+                          <img
+                            src={
+                              testimonial.featuredImage ||
+                              "/frontend_assets/img/placeholder.png"
+                            }
+                            alt={testimonial.clientName}
+                          />
+                        </div>
+                        <div className="testimonial-spring absolute">
+                          <img
+                            src="/frontend_assets/img/spring.png"
+                            alt="SpringHouse"
+                          />
+                        </div>
                       </div>
                     </div>
-                    <div className="testimonial-name">
-                      <p className="font19 textright">
-                        ~ Saumeet Nanda <br />
-                        Co-Founder, SalarySe
-                      </p>
+                    <div className="col-lg-9">
+                      <div className="testimonial-content relative">
+                        <div className="testimonial-quote absolute">
+                          <img
+                            src="/frontend_assets/img/quote.png"
+                            alt="Quote"
+                          />
+                        </div>
+                        <div className="testimonial-para pe-lg-5 pe-0">
+                          <div className="font32">
+                            <p
+                              dangerouslySetInnerHTML={{
+                                __html: testimonial.review,
+                              }}
+                            ></p>
+                          </div>
+                        </div>
+                        <div className="testimonial-name">
+                          <p className="font19 textright">
+                            ~ {testimonial.clientName} <br />
+                            {testimonial.companyName}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div>
-            <div className="testimonial-card">
-              <div className="row d-flex align-items-center justify-content-center">
-                <div className="col-lg-3">
-                  <div className="testimonial-img relative">
-                    <div className="testimonial-client-img">
-                      <img
-                        src="/assets/ourtestimonials/1750407970_RapidShyp.png"
-                        alt="rent a coworking space – SpringHouse coworking office view"
-                      />
-                    </div>
-                    <div className="testimonial-spring absolute">
-                      <img
-                        src="/frontend_assets/img/spring.png"
-                        alt="rent a coworking space – SpringHouse coworking office view"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-9">
-                  <div className="testimonial-content relative">
-                    <div className="testimonial-quote absolute">
-                      <img
-                        src="/frontend_assets/img/quote.png"
-                        alt="working space – SpringHouse coworking office view"
-                      />
-                    </div>
-                    <div className="testimonial-para pe-lg-5 pe-0">
-                      <div className="font32">
-                        <p>
-                          From facility and pantry management to cleanliness and
-                          daily operations, the Spring House team ensures we can
-                          focus entirely on our work. It's a smooth,
-                          plug-and-play experience—no operational headaches.
-                        </p>
-                      </div>
-                    </div>
-                    <div className="testimonial-name">
-                      <p className="font19 textright">
-                        ~ Parul Rao <br />
-                        Senior Manager HR - Rapidshyp
-                      </p>
-                    </div>
+            ))
+          ) : (
+            <div>
+              <div className="testimonial-card">
+                <div className="row d-flex align-items-center justify-content-center">
+                  <div className="col-lg-12 text-center">
+                    <p>No testimonials available at this time.</p>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-
-          <div>
-            <div className="testimonial-card">
-              <div className="row d-flex align-items-center justify-content-center">
-                <div className="col-lg-3">
-                  <div className="testimonial-img relative">
-                    <div className="testimonial-client-img">
-                      <img
-                        src="/assets/ourtestimonials/1750674961_Uunique.png"
-                        alt="rent a coworking space – SpringHouse coworking office view"
-                      />
-                    </div>
-                    <div className="testimonial-spring absolute">
-                      <img
-                        src="/frontend_assets/img/spring.png"
-                        alt="rent a coworking space – SpringHouse coworking office view"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-9">
-                  <div className="testimonial-content relative">
-                    <div className="testimonial-quote absolute">
-                      <img
-                        src="/frontend_assets/img/quote.png"
-                        alt="working space – SpringHouse coworking office view"
-                      />
-                    </div>
-                    <div className="testimonial-para pe-lg-5 pe-0">
-                      <div className="font32">
-                        <p>
-                          I needed a space that would speak to my brand's ethos
-                          and make a strong impression on our Japanese clients.
-                          Spring House solved that challenge completely.
-                          Everything was handled—all under one roof with a
-                          single invoice.
-                        </p>
-                      </div>
-                    </div>
-                    <div className="testimonial-name">
-                      <p className="font19 textright">
-                        ~ Kailash Singh <br />
-                        Co-Founder, Uunique Consulting
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div className="testimonial-card">
-              <div className="row d-flex align-items-center justify-content-center">
-                <div className="col-lg-3">
-                  <div className="testimonial-img relative">
-                    <div className="testimonial-client-img">
-                      <img
-                        src="/assets/ourtestimonials/1750674810_AdYogi.png"
-                        alt="rent a coworking space – SpringHouse coworking office view"
-                      />
-                    </div>
-                    <div className="testimonial-spring absolute">
-                      <img
-                        src="/frontend_assets/img/spring.png"
-                        alt="rent a coworking space – SpringHouse coworking office view"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-9">
-                  <div className="testimonial-content relative">
-                    <div className="testimonial-quote absolute">
-                      <img
-                        src="/frontend_assets/img/quote.png"
-                        alt="working space – SpringHouse coworking office view"
-                      />
-                    </div>
-                    <div className="testimonial-para pe-lg-5 pe-0">
-                      <div className="font32">
-                        <p>
-                          As far as enhancing work-life balance goes, Spring
-                          House has always made it easier for us.
-                        </p>
-                      </div>
-                    </div>
-                    <div className="testimonial-name">
-                      <p className="font19 textright">
-                        ~ Swati Abrol <br />
-                        HRBP, AdYogi
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div className="testimonial-card">
-              <div className="row d-flex align-items-center justify-content-center">
-                <div className="col-lg-3">
-                  <div className="testimonial-img relative">
-                    <div className="testimonial-client-img">
-                      <img
-                        src="/assets/ourtestimonials/1750675039_Cars24.png"
-                        alt="rent a coworking space – SpringHouse coworking office view"
-                      />
-                    </div>
-                    <div className="testimonial-spring absolute">
-                      <img
-                        src="/frontend_assets/img/spring.png"
-                        alt="rent a coworking space – SpringHouse coworking office view"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-9">
-                  <div className="testimonial-content relative">
-                    <div className="testimonial-quote absolute">
-                      <img
-                        src="/frontend_assets/img/quote.png"
-                        alt="working space – SpringHouse coworking office view"
-                      />
-                    </div>
-                    <div className="testimonial-para pe-lg-5 pe-0">
-                      <div className="font32">
-                        <p>
-                          Ideas are coming from everywhere , so that's very
-                          fascinating to see.
-                        </p>
-                      </div>
-                    </div>
-                    <div className="testimonial-name">
-                      <p className="font19 textright">
-                        ~ Arindam Mandal <br />
-                        Senior Program Manager, Cars24
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </div>
 

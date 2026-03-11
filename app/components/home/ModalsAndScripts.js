@@ -379,7 +379,7 @@ export default function ModalsAndScripts({ phone, dropdownOptions }) {
           data-bs-target="#exampleModaltwo"
           className="themebtn2"
         >
-          <img src="/frontend_assets/img/call.png" alt="" /> Let's Talk!
+          <img src="/frontend_assets/img/call.png" alt="" /> Let&apos;s Talk!
         </a>
       </div>
     </>

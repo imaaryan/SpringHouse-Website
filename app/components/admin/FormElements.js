@@ -204,11 +204,11 @@ export function SingleImageUploader({
 
       <div className="flex gap-4 mb-4">
         {image ? (
-          <div className="relative w-32 h-32 rounded-lg overflow-hidden border border-gray-200 group">
+          <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-200 group">
             <img
               src={image}
               alt="Preview"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
             <button
               type="button"
