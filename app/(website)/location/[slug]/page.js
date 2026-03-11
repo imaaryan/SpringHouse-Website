@@ -51,11 +51,15 @@ export default async function LocationPage({ params }) {
   } 
 
   // Convert Mongoose ObjectIds and Dates to simple POJOs for Client Components
-  // The easiest way is JSON serialize/deserialize, especially when using .lean()
   const cityData = cityDataRaw ? JSON.parse(JSON.stringify(cityDataRaw)) : null;
   const activeSolutions = activeSolutionsRaw ? JSON.parse(JSON.stringify(activeSolutionsRaw)) : [];
   const areas = areasRaw.length > 0 ? JSON.parse(JSON.stringify(areasRaw)) : [];
   const cityProperties = propertiesRaw.length > 0 ? JSON.parse(JSON.stringify(propertiesRaw)) : [];
+
+  const otherCitiesRaw = await City.find({ slug: { $ne: city }, isActive: true })
+    .select("name slug")
+    .lean();
+  const otherCities = otherCitiesRaw.length > 0 ? JSON.parse(JSON.stringify(otherCitiesRaw)) : [];
 
   // Extract solutions from properties and remove duplicates by _id
   const citySolutionsMap = new Map();
@@ -94,7 +98,7 @@ export default async function LocationPage({ params }) {
       <LifeAtSpringHouse />
       <SolutionsDesktop data={citySpecificSolutions} />
       <SolutionsMobile data={citySpecificSolutions} />
-      <OtherLocations location={city} />
+      <OtherLocations cities={otherCities} />
       <ContactForm />
       <Footer />
     </>

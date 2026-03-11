@@ -1,7 +1,9 @@
 import React from "react";
 import Link from "next/link";
 
-export default function OtherLocations() {
+export default function OtherLocations({ cities = [] }) {
+  if (!cities || cities.length === 0) return null;
+
   return (
     <section className=" pt60">
       <div className="container-fluid">
@@ -11,16 +13,13 @@ export default function OtherLocations() {
           </div>
         </div>
         <div className="row pt30">
-          <div className="col-md-6 col-6">
-            <div className="box-loc mb-lg-0 mb-md-0 mb-3">
-              <Link href="/noida-coworking-space">Noida</Link>
+          {cities.map((cityObj) => (
+            <div className="col-md-6 col-6" key={cityObj._id || cityObj.slug}>
+              <div className="box-loc mb-lg-0 mb-md-0 mb-3">
+                <Link href={`/location/${cityObj.slug}`}>{cityObj.name}</Link>
+              </div>
             </div>
-          </div>
-          <div className="col-md-6 col-6">
-            <div className="box-loc mb-lg-0 mb-md-0 mb-3">
-              <Link href="/delhi-coworking-space">Delhi</Link>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
