@@ -66,6 +66,9 @@ export default function PropertyHero({ property }) {
                   color: "#000",
                   padding: "15px 25px 5px 15px",
                   borderTopRightRadius: "20px",
+                  position: "relative",
+                  zIndex: 20,
+                  display: "block"
                 }}
               >
                 <span

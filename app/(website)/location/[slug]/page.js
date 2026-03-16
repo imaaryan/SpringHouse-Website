@@ -4,6 +4,7 @@ import { City } from "@/model/city.model";
 import { Solution } from "@/model/solution.model";
 import { Area } from "@/model/area.model";
 import { Property } from "@/model/property.model";
+import { Amenity } from "@/model/amenity.model";
 import Header from "@/app/components/home/Header";
 import GlobalBanner from "@/app/components/home/GlobalBanner";
 import LocationContentWrapper from "@/app/components/location/LocationContentWrapper";
@@ -35,8 +36,8 @@ export default async function LocationPage({ params }) {
 
   // Fetch from DB
   await connectDB();
-  let cityDataRaw = await City.findOne({ slug: city }).populate("amenities", "name featuredIcon").lean();
-  let activeSolutionsRaw = await Solution.find({ isActive: true }).lean();
+  const cityDataRaw = await City.findOne({ slug: city }).populate("amenities", "name featuredIcon").lean();
+  const activeSolutionsRaw = await Solution.find({ isActive: true }).lean();
   
   let areasRaw = [];
   let propertiesRaw = [];
@@ -50,15 +51,15 @@ export default async function LocationPage({ params }) {
       .lean();
   } 
 
+  const otherCitiesRaw = await City.find({ slug: { $ne: city }, isActive: true })
+    .select("name slug")
+    .lean();
+
   // Convert Mongoose ObjectIds and Dates to simple POJOs for Client Components
   const cityData = cityDataRaw ? JSON.parse(JSON.stringify(cityDataRaw)) : null;
   const activeSolutions = activeSolutionsRaw ? JSON.parse(JSON.stringify(activeSolutionsRaw)) : [];
   const areas = areasRaw.length > 0 ? JSON.parse(JSON.stringify(areasRaw)) : [];
   const cityProperties = propertiesRaw.length > 0 ? JSON.parse(JSON.stringify(propertiesRaw)) : [];
-
-  const otherCitiesRaw = await City.find({ slug: { $ne: city }, isActive: true })
-    .select("name slug")
-    .lean();
   const otherCities = otherCitiesRaw.length > 0 ? JSON.parse(JSON.stringify(otherCitiesRaw)) : [];
 
   // Extract solutions from properties and remove duplicates by _id
