@@ -5,6 +5,9 @@ const homepageSchema = new mongoose.Schema(
     mainBanner: {
       type: String,
     },
+    heroVideo: {
+      type: String,
+    },
     subHeading: {
       type: String,
     },

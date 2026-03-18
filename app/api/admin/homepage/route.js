@@ -124,6 +124,17 @@ export async function PUT(request) {
       mainBannerPath = await uploadImage(mainBannerFile, "homepage/hero");
     }
 
+    // Hero Video
+    const heroVideoFile = formData.get("heroVideo");
+    let heroVideoPath = homepage.heroVideo || "";
+    if (
+      heroVideoFile &&
+      typeof heroVideoFile === "object" &&
+      heroVideoFile.size > 0
+    ) {
+      heroVideoPath = await uploadImage(heroVideoFile, "homepage/hero");
+    }
+
     // Our Community Images (Array of new images + existing ones)
     // The frontend will pass new files as "communityImages"
     // and might pass a list of retained existing images as "existingCommunityImages"
@@ -145,6 +156,7 @@ export async function PUT(request) {
     homepage.heading = heading;
     homepage.subHeading = subHeading;
     homepage.mainBanner = mainBannerPath;
+    homepage.heroVideo = heroVideoPath;
     homepage.presence = presence;
     homepage.activeCities = activeCities;
     homepage.features = features;

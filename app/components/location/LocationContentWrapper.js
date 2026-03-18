@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import AboutLocation from "./AboutLocation";
 import AvailableProperties from "../solutions/AvailableProperties";
 
@@ -9,8 +10,16 @@ export default function LocationContentWrapper({
   activeSolutions,
   areas 
 }) {
+  const searchParams = useSearchParams();
   const [selectedSolution, setSelectedSolution] = useState("");
   const [selectedArea, setSelectedArea] = useState(""); // "" means 'All Areas'
+
+  useEffect(() => {
+    const sol = searchParams.get("solution");
+    if (sol) {
+      setSelectedSolution(sol);
+    }
+  }, [searchParams]);
 
   // Filter properties based on selected solution AND selected area
   const filteredProperties = cityProperties.filter((property) => {

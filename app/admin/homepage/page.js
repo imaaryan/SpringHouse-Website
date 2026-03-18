@@ -55,9 +55,10 @@ export default function HomepageAdmin() {
     },
   });
 
-  // Image states (Files and Previews)
+  // Form State
   const [imageFiles, setImageFiles] = useState({
     mainBanner: null,
+    heroVideo: null,
     features: [null, null, null, null],
     solution: null,
     networking: null,
@@ -66,6 +67,7 @@ export default function HomepageAdmin() {
 
   const [previews, setPreviews] = useState({
     mainBanner: "",
+    heroVideo: "",
     features: ["", "", "", ""],
     solution: "",
     networking: "",
@@ -132,6 +134,7 @@ export default function HomepageAdmin() {
 
           setPreviews({
             mainBanner: hp.mainBanner || "",
+            heroVideo: hp.heroVideo || "",
             features: hp.features?.map((f) => f.image || "") || [
               "",
               "",
@@ -326,6 +329,10 @@ export default function HomepageAdmin() {
       if (imageFiles.mainBanner) {
         data.append("mainBanner", imageFiles.mainBanner);
       }
+      
+      if (imageFiles.heroVideo) {
+        data.append("heroVideo", imageFiles.heroVideo);
+      }
 
       // Community Images
       for (let i = 0; i < imageFiles.ourCommunity.length; i++) {
@@ -383,17 +390,29 @@ export default function HomepageAdmin() {
     onRemove,
     label = "Upload Image",
     heightClass = "min-h-[140px]",
+    accept = "image/*",
+    isVideo = false,
   }) => (
     <div
       className={`bg-[#D0E6E4] rounded-lg p-4 flex flex-col items-center justify-center relative w-full ${heightClass}`}
     >
       {preview ? (
         <>
-          <img
-            src={preview}
-            alt="Preview"
-            className="w-full h-full object-cover rounded-md absolute inset-0"
-          />
+          {isVideo ? (
+            <video
+              src={preview}
+              className="w-full h-full object-cover rounded-md absolute inset-0"
+              autoPlay
+              muted
+              loop
+            />
+          ) : (
+            <img
+              src={preview}
+              alt="Preview"
+              className="w-full h-full object-cover rounded-md absolute inset-0"
+            />
+          )}
           <button
             type="button"
             onClick={onRemove}
@@ -440,7 +459,7 @@ export default function HomepageAdmin() {
           <input
             type="file"
             className="hidden"
-            accept="image/*"
+            accept={accept}
             onChange={onUpload}
           />
         </label>
@@ -475,7 +494,7 @@ export default function HomepageAdmin() {
       <section className="space-y-4">
         <h2 className="text-[15px] font-bold text-gray-800">Hero Section</h2>
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-2 space-y-4">
               <FormInput
                 label="Heading"
@@ -492,16 +511,30 @@ export default function HomepageAdmin() {
                 placeholder="CREATE. SIEZE. PROGRESS."
               />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col lg:col-span-1">
               <span className="block text-[13px] font-medium text-gray-700 mb-1">
-                Main Banner
+                Main Banner (Fallback Image)
               </span>
               <MiniUploader
                 preview={previews.mainBanner}
                 onUpload={(e) => handleImageChange(e, "mainBanner")}
                 onRemove={() => removeImage("mainBanner")}
-                label="Upload / Drag and Drop the Image"
+                label="Upload Banner Image"
                 heightClass="h-full min-h-[140px]"
+              />
+            </div>
+            <div className="flex flex-col lg:col-span-1">
+              <span className="block text-[13px] font-medium text-gray-700 mb-1">
+                Hero Video (Primary)
+              </span>
+              <MiniUploader
+                preview={previews.heroVideo}
+                onUpload={(e) => handleImageChange(e, "heroVideo")}
+                onRemove={() => removeImage("heroVideo")}
+                label="Upload Banner Video"
+                heightClass="h-full min-h-[140px]"
+                accept="video/*"
+                isVideo={true}
               />
             </div>
           </div>

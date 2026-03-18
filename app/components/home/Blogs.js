@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
+import "../blogs/blogs.css";
 
 export default function Blogs({ data = [] }) {
   useEffect(() => {
@@ -53,7 +54,7 @@ export default function Blogs({ data = [] }) {
           {data.map((blog, idx) => (
             <div className="item" key={idx}>
               <div className="col-lg-12">
-                <Link href={`/${blog.slug || "#"}`}>
+                <Link href={`/blogs/${blog.slug || "#"}`}>
                   <div className="blog-card">
                     <div className="blog-image relative">
                       <img
@@ -87,37 +88,6 @@ export default function Blogs({ data = [] }) {
           ))}
         </div>
       </div>
-
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-        .blog-card .shape-bottom {
-            position: absolute;
-            bottom: -20px;
-            left: 0;
-            background: var(--theme-whitecolor);
-            width: 200px;
-            height: 97px;
-            border-radius: 0 20px 0 0;
-        }
-
-        .blog-card .shape-right-bottom {
-            position: absolute;
-            right: -14px;
-            bottom: 16px;
-        }
-
-        .blog-image img {
-            border-bottom-right-radius: 10px;
-        }
-
-        .blog-date.textright {
-            margin-top: 25px;
-            color: #575757;
-        }
-      `,
-        }}
-      />
     </div>
   );
 }

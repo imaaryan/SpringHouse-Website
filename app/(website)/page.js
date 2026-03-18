@@ -80,6 +80,7 @@ export default async function Home() {
         dropdownOptions={dropdownOptions}
         data={{
           mainBanner: safeData.mainBanner,
+          heroVideo: safeData.heroVideo,
           heading: safeData.heading,
           subHeading: safeData.subHeading,
         }}
