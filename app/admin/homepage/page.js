@@ -569,7 +569,7 @@ export default function HomepageAdmin() {
                 }
                 placeholder="Locations"
               />
-              <FormInput
+              {/* <FormInput
                 label="Before Number"
                 value={formData.presence[i].beforeNumber}
                 onChange={(e) =>
@@ -581,7 +581,7 @@ export default function HomepageAdmin() {
                   )
                 }
                 placeholder=""
-              />
+              /> */}
               <FormInput
                 label="After Number"
                 value={formData.presence[i].afterNumber}
