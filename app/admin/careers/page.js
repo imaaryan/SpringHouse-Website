@@ -1,8 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import React, { useState, useEffect } from "react";
-import { Trash2, Download, CheckCircle2, Circle } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Trash2,
+  Download,
+  CheckCircle2,
+  Circle,
+  ChevronDown,
+  X,
+} from "lucide-react";
 import * as XLSX from "xlsx";
 import PageHeader from "@/app/components/admin/PageHeader";
 import DataTable from "@/app/components/admin/DataTable";
@@ -10,15 +17,22 @@ import DataTable from "@/app/components/admin/DataTable";
 export default function CareersPage() {
   const [careers, setCareers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [exportLoading, setExportLoading] = useState(false);
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
     total: 0,
     totalPages: 0,
   });
-
-  // Selection state
   const [selectedItems, setSelectedItems] = useState([]);
+
+  // Dropdown & modal state
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const [dateModalOpen, setDateModalOpen] = useState(false);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [dateError, setDateError] = useState("");
 
   const fetchCareers = async (page = 1) => {
     setLoading(true);
@@ -43,7 +57,17 @@ export default function CareersPage() {
     fetchCareers(pagination.page);
   }, [pagination.page]);
 
-  // Read toggle logic
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
   const handleToggleRead = async (id, currentStatus) => {
     try {
       const res = await fetch(`/api/admin/careers`, {
@@ -52,31 +76,21 @@ export default function CareersPage() {
         body: JSON.stringify({ id, isRead: !currentStatus }),
       });
       const data = await res.json();
-      if (data.success) {
-        fetchCareers(pagination.page);
-      } else {
-        alert("Failed to update status");
-      }
-    } catch (error) {
+      if (data.success) fetchCareers(pagination.page);
+      else alert("Failed to update status");
+    } catch {
       alert("Error updating status");
     }
   };
 
-  // Selection Logic
   const handleSelectAll = (e) => {
-    if (e.target.checked) {
-      setSelectedItems(careers.map((c) => c._id));
-    } else {
-      setSelectedItems([]);
-    }
+    setSelectedItems(e.target.checked ? careers.map((c) => c._id) : []);
   };
 
   const handleSelectItem = (id) => {
-    if (selectedItems.includes(id)) {
-      setSelectedItems(selectedItems.filter((item) => item !== id));
-    } else {
-      setSelectedItems([...selectedItems, id]);
-    }
+    setSelectedItems((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
+    );
   };
 
   const handleBulkDelete = async () => {
@@ -86,7 +100,6 @@ export default function CareersPage() {
       )
     )
       return;
-
     try {
       const res = await fetch(`/api/admin/careers`, {
         method: "DELETE",
@@ -97,10 +110,8 @@ export default function CareersPage() {
       if (data.success) {
         fetchCareers(pagination.page);
         setSelectedItems([]);
-      } else {
-        alert("Failed to delete applicants");
-      }
-    } catch (error) {
+      } else alert("Failed to delete applicants");
+    } catch {
       alert("Error deleting applicants");
     }
   };
@@ -113,31 +124,83 @@ export default function CareersPage() {
     window.open(resumeUrl, "_blank");
   };
 
-  const handleExportExcel = async () => {
-    try {
-      const res = await fetch("/api/admin/careers?all=true");
-      const data = await res.json();
-      if (data.success && data.data) {
-        // Format data for Excel
-        const excelData = data.data.map((item) => ({
-          "Full Name": item.fullName,
-          "Email": item.email,
-          "Contact Number": item.contactNumber || "N/A",
-          "Applying For": item.applyingFor || "N/A",
-          "Cover Letter": item.coverLetter || "N/A",
-          "Resume URL": item.resume || "N/A",
-          "Status": item.isRead ? "Viewed" : "New",
-          "Date Applied": new Date(item.createdAt).toLocaleDateString("en-GB"),
-        }));
+  // --- Excel Export Helpers ---
+  const formatForExcel = (rows) =>
+    rows.map((row) => ({
+      "Full Name": row.fullName || "",
+      Email: row.email || "",
+      "Contact Number": row.contactNumber || "",
+      "Applying For": row.applyingFor || "",
+      "Resume URL": row.resume || "",
+      Status: row.isRead ? "Viewed" : "New",
+      "Date Applied": new Date(row.createdAt).toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      }),
+    }));
 
-        const worksheet = XLSX.utils.json_to_sheet(excelData);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Careers");
-        XLSX.writeFile(workbook, `Careers_Applicants_${new Date().getTime()}.xlsx`);
-      }
-    } catch (error) {
-      console.error("Error exporting to Excel:", error);
-      alert("Failed to export data to Excel");
+  const downloadExcel = (rows, filename) => {
+    const ws = XLSX.utils.json_to_sheet(formatForExcel(rows));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Applicants");
+    XLSX.writeFile(wb, filename);
+  };
+
+  const handleDownloadAll = async () => {
+    setDropdownOpen(false);
+    setExportLoading(true);
+    try {
+      const res = await fetch(`/api/admin/careers?export=true`);
+      const data = await res.json();
+      if (data.success) downloadExcel(data.data, "all_applicants.xlsx");
+      else alert("Failed to fetch all applicants");
+    } catch {
+      alert("Error exporting applicants");
+    } finally {
+      setExportLoading(false);
+    }
+  };
+
+  const handleDownloadSelected = () => {
+    const selectedData = careers.filter((c) => selectedItems.includes(c._id));
+    downloadExcel(selectedData, "selected_applicants.xlsx");
+  };
+
+  const handleDateExport = async () => {
+    setDateError("");
+    if (!startDate || !endDate) {
+      setDateError("Please select both start and end dates.");
+      return;
+    }
+    if (new Date(startDate) > new Date(endDate)) {
+      setDateError("Start date cannot be after end date.");
+      return;
+    }
+    setExportLoading(true);
+    setDateModalOpen(false);
+    setDropdownOpen(false);
+    try {
+      const res = await fetch(
+        `/api/admin/careers?export=true&startDate=${startDate}&endDate=${endDate}`,
+      );
+      const data = await res.json();
+      if (data.success) {
+        if (data.data.length === 0) {
+          alert("No applicants found for the selected date range.");
+        } else {
+          downloadExcel(
+            data.data,
+            `applicants_${startDate}_to_${endDate}.xlsx`,
+          );
+        }
+      } else alert("Failed to fetch applicants for date range");
+    } catch {
+      alert("Error exporting applicants");
+    } finally {
+      setExportLoading(false);
+      setStartDate("");
+      setEndDate("");
     }
   };
 
@@ -236,23 +299,64 @@ export default function CareersPage() {
       <PageHeader
         title="Careers Submissions"
         actions={
-          <div className="flex gap-3">
-            <button
-              onClick={handleExportExcel}
-              className="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-green-700 transition shadow-sm uppercase"
-            >
-              <Download size={16} />
-              Export
-            </button>
+          <div className="flex items-center gap-2">
             {selectedItems.length > 0 && (
-              <button
-                onClick={handleBulkDelete}
-                className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-100 transition shadow-sm uppercase"
-              >
-                <Trash2 size={16} />
-                Delete ({selectedItems.length})
-              </button>
+              <>
+                <button
+                  onClick={handleDownloadSelected}
+                  className="flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-4 py-2.5 text-sm font-medium text-green-700 hover:bg-green-100 transition shadow-sm uppercase"
+                >
+                  <Download size={16} />
+                  Export Selected ({selectedItems.length})
+                </button>
+                <button
+                  onClick={handleBulkDelete}
+                  className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-100 transition shadow-sm uppercase"
+                >
+                  <Trash2 size={16} />
+                  Delete ({selectedItems.length})
+                </button>
+              </>
             )}
+
+            {/* Export dropdown */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setDropdownOpen((prev) => !prev)}
+                disabled={exportLoading}
+                className="flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2.5 text-sm font-medium text-blue-700 hover:bg-blue-100 transition shadow-sm uppercase disabled:opacity-60"
+              >
+                <Download size={16} />
+                {exportLoading ? "Exporting..." : "Export"}
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform ${dropdownOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-52 bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden">
+                  <button
+                    onClick={handleDownloadAll}
+                    className="w-full flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition"
+                  >
+                    <Download size={14} />
+                    Export All Applicants
+                  </button>
+                  <div className="border-t border-gray-100" />
+                  <button
+                    onClick={() => {
+                      setDateModalOpen(true);
+                      setDropdownOpen(false);
+                    }}
+                    className="w-full flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition"
+                  >
+                    <Download size={14} />
+                    Export by Date Range
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         }
       />
@@ -271,6 +375,76 @@ export default function CareersPage() {
           onSelectItem: handleSelectItem,
         }}
       />
+
+      {/* Date Range Modal */}
+      {dateModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 p-6 space-y-5">
+            <div className="flex items-center justify-between">
+              <h2 className="text-base font-bold text-gray-900">
+                Export by Date Range
+              </h2>
+              <button
+                onClick={() => {
+                  setDateModalOpen(false);
+                  setDateError("");
+                  setStartDate("");
+                  setEndDate("");
+                }}
+                className="text-gray-400 hover:text-gray-600 transition"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1">
+                  Start Date
+                </label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1">
+                  End Date
+                </label>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                />
+              </div>
+              {dateError && <p className="text-xs text-red-500">{dateError}</p>}
+            </div>
+
+            <div className="flex gap-2 pt-1">
+              <button
+                onClick={() => {
+                  setDateModalOpen(false);
+                  setDateError("");
+                  setStartDate("");
+                  setEndDate("");
+                }}
+                className="flex-1 rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDateExport}
+                className="flex-1 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition"
+              >
+                Download
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

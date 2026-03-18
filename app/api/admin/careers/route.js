@@ -7,14 +7,26 @@ export async function GET(request) {
     await connectDB();
 
     const { searchParams } = new URL(request.url);
-    const fetchAll = searchParams.get("all") === "true";
+    const isExport = searchParams.get("export") === "true";
 
-    if (fetchAll) {
-      const allCareers = await Career.find({}).sort({ createdAt: -1 }).lean();
-      return NextResponse.json({
-        success: true,
-        data: allCareers,
-      });
+    if (isExport) {
+      // Build optional date filter
+      const filter = {};
+      const startDate = searchParams.get("startDate");
+      const endDate = searchParams.get("endDate");
+
+      if (startDate && endDate) {
+        filter.createdAt = {
+          $gte: new Date(startDate),
+          $lte: new Date(new Date(endDate).setHours(23, 59, 59, 999)),
+        };
+      }
+
+      const allCareers = await Career.find(filter)
+        .sort({ createdAt: -1 })
+        .lean();
+
+      return NextResponse.json({ success: true, data: allCareers });
     }
 
     const page = parseInt(searchParams.get("page")) || 1;
