@@ -191,7 +191,7 @@ export default function HeroBanner({ dropdownOptions = {}, data = {} }) {
                 ></path>
               </svg>
             </div>
-            <div className="shape-right-bottom">
+            <div className="shape-right-bottom-home">
               <svg
                 viewBox="0 0 11 11"
                 fill="none"
@@ -239,7 +239,7 @@ export default function HeroBanner({ dropdownOptions = {}, data = {} }) {
           )}
         </div>
 
-        <div className="row1 b-lg-0 pb-5" data-aos="fade-up">
+        <div className="row1 b-lg-0 " data-aos="fade-up">
           <div className="col-md-7 offset-lg-5 offset-md-5 pe-lg-2 pe-0">
             <form id="filterForm" className="form-p" onSubmit={handleSubmit} style={{ display: "block" }}>
               <div className="row" style={{ justifyContent: "center" }}>
