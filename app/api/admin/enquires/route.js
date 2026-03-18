@@ -7,6 +7,16 @@ export async function GET(request) {
     await connectDB();
 
     const { searchParams } = new URL(request.url);
+    const fetchAll = searchParams.get("all") === "true";
+
+    if (fetchAll) {
+      const allEnquiries = await Enquiry.find({}).sort({ createdAt: -1 }).lean();
+      return NextResponse.json({
+        success: true,
+        data: allEnquiries,
+      });
+    }
+
     const page = parseInt(searchParams.get("page")) || 1;
     const limit = parseInt(searchParams.get("limit")) || 10;
     const skip = (page - 1) * limit;

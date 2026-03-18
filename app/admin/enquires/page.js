@@ -2,7 +2,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useState, useEffect } from "react";
-import { Trash2, CheckCircle2, Circle } from "lucide-react";
+import { Trash2, CheckCircle2, Circle, Download } from "lucide-react";
+import * as XLSX from "xlsx";
 import PageHeader from "@/app/components/admin/PageHeader";
 import DataTable from "@/app/components/admin/DataTable";
 
@@ -104,6 +105,37 @@ export default function EnquiresPage() {
     }
   };
 
+  const handleExportExcel = async () => {
+    try {
+      const res = await fetch("/api/admin/enquires?all=true");
+      const data = await res.json();
+      if (data.success && data.data) {
+        // Format data for Excel
+        const excelData = data.data.map((item) => ({
+          "Full Name": item.fullName,
+          "Email": item.email,
+          "Phone Number": item.phoneNumber,
+          "Company Name": item.companyName || "N/A",
+          "Requirement": item.selectSolution || "General",
+          "Selected City": item.selectCity || "N/A",
+          "Selected Property": item.selectProperty || "N/A",
+          "Desks": item.deskRequirement || "N/A",
+          "Message": item.message || "N/A",
+          "Status": item.isRead ? "Viewed" : "New",
+          "Date Received": new Date(item.createdAt).toLocaleDateString("en-GB"),
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(excelData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Enquiries");
+        XLSX.writeFile(workbook, `Enquiries_${new Date().getTime()}.xlsx`);
+      }
+    } catch (error) {
+      console.error("Error exporting to Excel:", error);
+      alert("Failed to export data to Excel");
+    }
+  };
+
   const columns = [
     {
       header: "Lead Info",
@@ -194,15 +226,24 @@ export default function EnquiresPage() {
       <PageHeader
         title="Enquiries"
         actions={
-          selectedItems.length > 0 && (
+          <div className="flex gap-3">
             <button
-              onClick={handleBulkDelete}
-              className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-100 transition shadow-sm uppercase"
+              onClick={handleExportExcel}
+              className="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-green-700 transition shadow-sm uppercase"
             >
-              <Trash2 size={16} />
-              Delete ({selectedItems.length})
+              <Download size={16} />
+              Export
             </button>
-          )
+            {selectedItems.length > 0 && (
+              <button
+                onClick={handleBulkDelete}
+                className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-100 transition shadow-sm uppercase"
+              >
+                <Trash2 size={16} />
+                Delete ({selectedItems.length})
+              </button>
+            )}
+          </div>
         }
       />
 
