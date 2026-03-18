@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectDB from "@/utils/db";
 import { Homepage } from "@/model/homepage.model";
 import { City } from "@/model/city.model";
+import { Solution } from "@/model/solution.model";
 import { Testimonial } from "@/model/testimonial.model";
 import { uploadImage } from "@/utils/upload";
 import mongoose from "mongoose";
@@ -59,6 +60,9 @@ export async function PUT(request) {
 
     // Active Cities
     const activeCities = formData.getAll("activeCities");
+
+    // Active Solutions
+    const activeSolutions = formData.getAll("activeSolutions");
 
     // Features (4 items)
     const features = [];
@@ -159,6 +163,7 @@ export async function PUT(request) {
     homepage.heroVideo = heroVideoPath;
     homepage.presence = presence;
     homepage.activeCities = activeCities;
+    homepage.activeSolutions = activeSolutions;
     homepage.features = features;
     homepage.solutionsForEveryone = {
       content: solutionContent,

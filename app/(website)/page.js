@@ -28,7 +28,6 @@ export default async function Home() {
   const footerData = (await FooterModel.findOne({}).lean()) || {};
   const phone = footerData?.contactInfo?.phone || "";
   const dropdownOptions = await getDropdownOptions();
-  const solutionsData = await Solution.find({ isActive: true }).lean();
   const blogsData = await Blog.find({ isActive: true })
     .sort({ publishDate: -1, createdAt: -1 })
     .limit(4)
@@ -40,6 +39,10 @@ export default async function Home() {
       .populate({
         path: "activeCities",
         model: City,
+      })
+      .populate({
+        path: "activeSolutions",
+        model: Solution,
       })
       .populate({
         path: "testimonials",
@@ -70,7 +73,7 @@ export default async function Home() {
   }
 
   const safeData = JSON.parse(JSON.stringify(homepageData));
-  const safeSolutions = JSON.parse(JSON.stringify(solutionsData));
+  const safeSolutions = JSON.parse(JSON.stringify(homepageData.activeSolutions || []));
   const safeBlogs = JSON.parse(JSON.stringify(blogsData));
 
   return (

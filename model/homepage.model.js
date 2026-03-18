@@ -28,6 +28,12 @@ const homepageSchema = new mongoose.Schema(
         ref: "City",
       },
     ],
+    activeSolutions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Solution",
+      },
+    ],
     features: [
       {
         content: String,

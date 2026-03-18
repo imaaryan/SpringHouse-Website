@@ -17,6 +17,7 @@ export default function HomepageAdmin() {
 
   // Dependencies for checkboxes
   const [cities, setCities] = useState([]);
+  const [solutions, setSolutions] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
 
   // Form State
@@ -30,6 +31,7 @@ export default function HomepageAdmin() {
       { number: "", title: "", beforeNumber: "", afterNumber: "" },
     ],
     activeCities: [], // Array of ObjectIds
+    activeSolutions: [], // Array of ObjectIds
     features: [
       { content: "" },
       { content: "" },
@@ -78,17 +80,20 @@ export default function HomepageAdmin() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [homepageRes, citiesRes, testimonialsRes] = await Promise.all([
+        const [homepageRes, citiesRes, solutionsRes, testimonialsRes] = await Promise.all([
           fetch("/api/admin/homepage"),
           fetch("/api/admin/cities?limit=100"),
+          fetch("/api/admin/solutions?limit=100"),
           fetch("/api/admin/testimonials?limit=100"),
         ]);
 
         const hData = await homepageRes.json();
         const cData = await citiesRes.json();
+        const sData = await solutionsRes.json();
         const tData = await testimonialsRes.json();
 
         if (cData.success) setCities(cData.data);
+        if (sData.success) setSolutions(sData.data);
         if (tData.success) setTestimonials(tData.data);
 
         if (hData.success && hData.data) {
@@ -102,6 +107,7 @@ export default function HomepageAdmin() {
                 ? hp.presence
                 : formData.presence,
             activeCities: hp.activeCities || [],
+            activeSolutions: hp.activeSolutions || [],
             features:
               hp.features && hp.features.length === 4
                 ? hp.features
@@ -286,6 +292,9 @@ export default function HomepageAdmin() {
 
       // Cities
       formData.activeCities.forEach((id) => data.append("activeCities", id));
+
+      // Solutions
+      formData.activeSolutions.forEach((id) => data.append("activeSolutions", id));
 
       // Features
       formData.features.forEach((f, i) => {
@@ -617,6 +626,23 @@ export default function HomepageAdmin() {
           name="activeCities"
           options={cities.map((c) => ({ value: c._id, label: c.name }))}
           selectedValues={formData.activeCities}
+          onChange={handleCheckboxChange}
+        />
+      </section>
+
+      <hr className="border-gray-300" />
+
+      {/* Active Solutions */}
+      <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <FormCheckboxGrid
+          label={
+            <span className="text-[15px] font-bold text-gray-800">
+              Active Solutions
+            </span>
+          }
+          name="activeSolutions"
+          options={solutions.map((s) => ({ value: s._id, label: s.name || s.title || s.slug }))}
+          selectedValues={formData.activeSolutions}
           onChange={handleCheckboxChange}
         />
       </section>
