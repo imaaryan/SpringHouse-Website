@@ -45,7 +45,7 @@ export default async function SingleBlogPage({ params }) {
                   {blog.title}
                 </h1>
                 <p className="text-muted" style={{ color: "#575757", fontSize: "1.1rem" }}>
-                    Published on {blog.createdAt ? new Date(blog.createdAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : ""}
+                    Published on {(blog.publishDate || blog.createdAt) ? new Date(blog.publishDate || blog.createdAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : ""}
                 </p>
               </div>
 

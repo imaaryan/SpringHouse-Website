@@ -463,12 +463,11 @@ export default function AboutUsAdmin() {
               >
                 <FormInput
                   label="Year"
-                  type="number"
                   value={item.year !== undefined && item.year !== null ? item.year : ""}
                   onChange={(e) =>
                     handleHistoryChange(i, "year", e.target.value)
                   }
-                  placeholder="2015"
+                  placeholder="2015-16"
                 />
                 <FormTextarea
                   label="Content"

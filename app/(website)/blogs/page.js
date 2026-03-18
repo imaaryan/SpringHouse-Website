@@ -13,7 +13,7 @@ export const metadata = {
 export default async function BlogsArchivePage() {
   await connectDB();
   
-  const rawBlogs = await Blog.find({ isActive: true }).sort({ createdAt: -1 }).lean();
+  const rawBlogs = await Blog.find({ isActive: true }).sort({ publishDate: -1, createdAt: -1 }).lean();
   const blogs = JSON.parse(JSON.stringify(rawBlogs));
 
   return (
@@ -51,8 +51,8 @@ export default async function BlogsArchivePage() {
                         </div>
                         <div className="blog-date textright">
                           <span className="font17 textright" style={{ display: "block" }}>
-                            {blog.createdAt
-                              ? new Date(blog.createdAt).toLocaleDateString(
+                            {(blog.publishDate || blog.createdAt)
+                              ? new Date(blog.publishDate || blog.createdAt).toLocaleDateString(
                                   "en-US",
                                   {
                                     month: "short",

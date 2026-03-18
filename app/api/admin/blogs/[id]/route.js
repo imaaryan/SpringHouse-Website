@@ -40,11 +40,13 @@ export async function PUT(request, { params }) {
     const slug = formData.get("slug");
     const content = formData.get("content");
     const isActive = formData.get("isActive") === "true";
+    const publishDate = formData.get("publishDate");
 
     const updateData = {
       title,
       content,
       isActive,
+      ...(publishDate && { publishDate }),
       seo: {
         metaTitle: formData.get("seo[metaTitle]") || "",
         metaDescription: formData.get("seo[metaDescription]") || "",

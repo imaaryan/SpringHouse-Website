@@ -49,7 +49,7 @@ export async function PUT(request) {
     let i = 0;
     while (formData.has(`history[${i}][year]`)) {
       history.push({
-        year: Number(formData.get(`history[${i}][year]`)) || null,
+        year: formData.get(`history[${i}][year]`) || "",
         content: formData.get(`history[${i}][content]`) || "",
       });
       i++;

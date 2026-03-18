@@ -25,6 +25,10 @@ const blogSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    publishDate: {
+      type: Date,
+      default: Date.now,
+    },
     seo: {
       metaTitle: String,
       metaDescription: String,

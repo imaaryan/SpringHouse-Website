@@ -335,7 +335,11 @@ export default function HomepageAdmin() {
       }
 
       // Community Images
-      for (let i = 0; i < imageFiles.ourCommunity.length; i++) {
+      const communityMaxLen = Math.max(
+        imageFiles.ourCommunity.length,
+        previews.ourCommunity.length
+      );
+      for (let i = 0; i < communityMaxLen; i++) {
         if (imageFiles.ourCommunity[i]) {
           data.append("communityImages", imageFiles.ourCommunity[i]);
         } else if (

@@ -20,7 +20,7 @@ const aboutUsSchema = new mongoose.Schema(
     },
     history: [
       {
-        year: Number,
+        year: String,
         content: String,
       },
     ],

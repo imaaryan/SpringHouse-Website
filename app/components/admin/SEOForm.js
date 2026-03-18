@@ -21,10 +21,9 @@ export default function SEOForm({ values, onChange }) {
             value={values?.metaTitle || ""}
             onChange={handleChange}
             className="w-full rounded-lg border border-gray-200 px-4 py-2 text-sm focus:border-brand-primary focus:ring-brand-primary"
-            maxLength={60}
           />
           <p className="mt-1 text-xs text-gray-500">
-            {values?.metaTitle?.length || 0}/60 characters
+            {values?.metaTitle?.length || 0} characters (60 recommended)
           </p>
         </div>
 
@@ -38,10 +37,9 @@ export default function SEOForm({ values, onChange }) {
             value={values?.metaDescription || ""}
             onChange={handleChange}
             className="w-full rounded-lg border border-gray-200 px-4 py-2 text-sm focus:border-brand-primary focus:ring-brand-primary h-24 resize-none"
-            maxLength={160}
           />
           <p className="mt-1 text-xs text-gray-500">
-            {values?.metaDescription?.length || 0}/160 characters
+            {values?.metaDescription?.length || 0} characters (160 recommended)
           </p>
         </div>
 

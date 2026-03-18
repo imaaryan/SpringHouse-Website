@@ -68,11 +68,6 @@ export default function EditOtherPage() {
         ...prev,
         [name]: type === "checkbox" ? checked : value,
       };
-
-      if (name === "name") {
-        newData.slug = slugify(value, { lower: true });
-      }
-
       return newData;
     });
   };

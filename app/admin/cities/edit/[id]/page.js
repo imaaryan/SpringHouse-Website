@@ -122,15 +122,7 @@ export default function EditCityPage({ params }) {
         },
       }));
     } else {
-      setFormData((prev) => {
-        const newData = { ...prev, [name]: value };
-        // Auto-generate slug if name changes? Maybe usually better to not auto-change slug on edit unless explicit
-        if (name === "name" && !prev.slug) {
-          // Only auto-gen if slug is empty
-          newData.slug = slugify(value, { lower: true });
-        }
-        return newData;
-      });
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 

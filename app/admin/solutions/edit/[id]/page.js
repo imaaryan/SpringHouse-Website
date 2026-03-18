@@ -161,11 +161,6 @@ export default function EditSolutionPage() {
         ...prev,
         [name]: type === "checkbox" ? checked : value,
       };
-      if (name === "name" && !prev.slug) {
-        // Only auto-slug if slug is empty, to avoid overwriting existing manual slugs
-        // preventing unwanted url changes on edit
-        newData.slug = slugify(value, { lower: true });
-      }
       return newData;
     });
   };

@@ -122,9 +122,6 @@ export default function EditPropertyPage() {
         ...prev,
         [name]: type === "checkbox" ? checked : value,
       };
-      if (name === "name" && !prev.slug) {
-        newData.slug = slugify(value, { lower: true });
-      }
       return newData;
     });
   };

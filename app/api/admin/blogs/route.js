@@ -13,6 +13,7 @@ export async function POST(request) {
     const slug = formData.get("slug");
     const content = formData.get("content");
     const isActive = formData.get("isActive") === "true";
+    const publishDate = formData.get("publishDate") || new Date();
 
     // Handle Image Upload
     const imageFile = formData.get("image");
@@ -26,6 +27,7 @@ export async function POST(request) {
       title,
       content,
       isActive,
+      publishDate,
       seo: {
         metaTitle: formData.get("seo[metaTitle]") || "",
         metaDescription: formData.get("seo[metaDescription]") || "",
@@ -89,7 +91,7 @@ export async function GET(request) {
     const skip = (page - 1) * limit;
 
     const [blogs, total] = await Promise.all([
-      Blog.find({}).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+      Blog.find({}).sort({ publishDate: -1, createdAt: -1 }).skip(skip).limit(limit).lean(),
       Blog.countDocuments({}),
     ]);
 

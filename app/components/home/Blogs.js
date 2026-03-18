@@ -68,8 +68,8 @@ export default function Blogs({ data = [] }) {
                       </div>
                       <div className="blog-date textright">
                         <span className="font17 textright">
-                          {blog.createdAt
-                            ? new Date(blog.createdAt).toLocaleDateString(
+                          {(blog.publishDate || blog.createdAt)
+                            ? new Date(blog.publishDate || blog.createdAt).toLocaleDateString(
                                 "en-US",
                                 {
                                   month: "short",

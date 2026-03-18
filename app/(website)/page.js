@@ -30,7 +30,7 @@ export default async function Home() {
   const dropdownOptions = await getDropdownOptions();
   const solutionsData = await Solution.find({ isActive: true }).lean();
   const blogsData = await Blog.find({ isActive: true })
-    .sort({ createdAt: -1 })
+    .sort({ publishDate: -1, createdAt: -1 })
     .limit(4)
     .lean();
 

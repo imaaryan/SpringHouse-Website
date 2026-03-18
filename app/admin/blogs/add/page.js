@@ -24,6 +24,7 @@ export default function AddBlogPage() {
     slug: "",
     content: "",
     isActive: true, // Published
+    publishDate: new Date().toISOString().split("T")[0],
     seo: {
       metaTitle: "",
       metaDescription: "",
@@ -208,6 +209,16 @@ export default function AddBlogPage() {
                 { value: "true", label: "Published" },
               ]}
             />
+            <div className="mt-4">
+              <FormInput
+                label="Publish Date"
+                type="date"
+                name="publishDate"
+                value={formData.publishDate}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
 
           {/* Thumbnail Uploader */}

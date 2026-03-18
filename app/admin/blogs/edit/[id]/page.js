@@ -26,6 +26,7 @@ export default function EditBlogPage() {
     slug: "",
     content: "",
     isActive: true,
+    publishDate: "",
     seo: {
       metaTitle: "",
       metaDescription: "",
@@ -50,6 +51,9 @@ export default function EditBlogPage() {
             slug: blog.slug || "",
             content: blog.content || "",
             isActive: blog.isActive !== false,
+            publishDate: blog.publishDate 
+              ? new Date(blog.publishDate).toISOString().split("T")[0]
+              : new Date(blog.createdAt || Date.now()).toISOString().split("T")[0],
             seo: {
               metaTitle: blog.seo?.metaTitle || "",
               metaDescription: blog.seo?.metaDescription || "",
@@ -79,11 +83,6 @@ export default function EditBlogPage() {
         ...prev,
         [name]: type === "checkbox" ? checked : value,
       };
-
-      if (name === "title") {
-        newData.slug = slugify(value, { lower: true });
-      }
-
       return newData;
     });
   };
@@ -251,6 +250,16 @@ export default function EditBlogPage() {
                 { value: "true", label: "Published" },
               ]}
             />
+            <div className="mt-4">
+              <FormInput
+                label="Publish Date"
+                type="date"
+                name="publishDate"
+                value={formData.publishDate}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
 
           {/* Thumbnail Uploader */}
