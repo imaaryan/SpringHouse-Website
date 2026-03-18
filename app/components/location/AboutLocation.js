@@ -29,25 +29,28 @@ export default function AboutLocation({
           </div>
           <div className="col-md-8 col-12 mt-4">
             <div className="loaction-tab flex gap-2 flex-wrap">
-              <a 
-                href="#filterForm" 
-                onClick={(e) => { e.preventDefault(); onAreaChange?.(""); }}
-                className={!selectedArea ? "active" : ""}
-                style={{ cursor: "pointer", ...(!selectedArea ? { color: "#fff", background: "#0e0f11" } : {}) }}
-              >
-                All Areas
-              </a>
-              {areas?.map((area) => (
-                <a 
-                  key={area._id || area.slug}
-                  href="#filterForm" 
-                  onClick={(e) => { e.preventDefault(); onAreaChange?.(area.slug || area._id || area.name); }}
-                  className={selectedArea === (area.slug || area._id || area.name) ? "active" : ""}
-                  style={{ cursor: "pointer", ...(selectedArea === (area.slug || area._id || area.name) ? { color: "#fff", background: "#0e0f11" } : {}) }}
-                >
-                  {area.name}
-                </a>
-              ))}
+              {areas?.map((area) => {
+                const areaIdentity = area.slug || area._id || area.name;
+                return (
+                  <a 
+                    key={areaIdentity}
+                    href={`#area-${areaIdentity}`} 
+                    onClick={(e) => { 
+                      e.preventDefault(); 
+                      onAreaChange?.(areaIdentity); 
+                      const targetId = `area-${areaIdentity}`;
+                      const element = document.getElementById(targetId);
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    }}
+                    className={selectedArea === areaIdentity ? "active" : ""}
+                    style={{ cursor: "pointer", ...(selectedArea === areaIdentity ? { color: "#fff", background: "#0e0f11" } : {}) }}
+                  >
+                    {area.name}
+                  </a>
+                );
+              })}
             </div>
           </div>
           <div className="col-md-4 mt-4">

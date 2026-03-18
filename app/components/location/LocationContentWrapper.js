@@ -21,7 +21,7 @@ export default function LocationContentWrapper({
     }
   }, [searchParams]);
 
-  // Filter properties based on selected solution AND selected area
+  // Filter properties based on selected solution ONLY
   const filteredProperties = cityProperties.filter((property) => {
     // Check Solution filter
     let matchSolution = true;
@@ -30,17 +30,17 @@ export default function LocationContentWrapper({
         (sol) => sol.slug === selectedSolution || sol._id === selectedSolution
       );
     }
-
-    // Check Area filter
-    let matchArea = true;
-    if (selectedArea) {
-      // Assuming property.area is populated with slug or _id, or just id string
-      // Depends on how dummy data / real data structures 'area' on a 'property'
-      matchArea = property.area?.slug === selectedArea || property.area?._id === selectedArea || property.area === selectedArea;
-    }
-
-    return matchSolution && matchArea;
+    return matchSolution;
   });
+
+  // Calculate available areas based on filtered properties
+  const availableAreas = areas?.filter((area) => {
+    return filteredProperties.some((prop) => {
+      const propAreaIdentity = prop.area?.slug || prop.area?._id || prop.area;
+      const areaIdentity = area.slug || area._id;
+      return propAreaIdentity === areaIdentity || prop.area?.name === area.name;
+    });
+  }) || [];
 
   return (
     <>
@@ -49,7 +49,7 @@ export default function LocationContentWrapper({
         activeSolutions={activeSolutions}
         selectedSolution={selectedSolution}
         onSolutionChange={setSelectedSolution}
-        areas={areas}
+        areas={availableAreas}
         selectedArea={selectedArea}
         onAreaChange={setSelectedArea}
       />

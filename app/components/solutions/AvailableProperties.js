@@ -106,18 +106,20 @@ export default function AvailableProperties({ properties, showTabs = false }) {
 
         <div className="row">
           <div className="col-md-12 pt-3">
-            {Object.entries(groupedByArea).map(([areaName, areaProps]) => (
-              <div key={areaName} className="mb-3">
-                <p className="text-uppercase mb-4 mt-2" style={{ fontSize:'20px', fontWeight: '500', letterSpacing: '0.5px' }}>
-                  {areaName}
-                </p>
+            {Object.entries(groupedByArea).map(([areaName, areaProps]) => {
+              const areaIdentity = areaProps[0]?.area?.slug || areaProps[0]?.area?._id || areaProps[0]?.area?.name || areaName;
+              return (
+                <div key={areaName} id={`area-${areaIdentity}`} className="mb-3 mt-4 pt-2">
+                  <p className="text-uppercase mb-4 mt-2" style={{ fontSize:'20px', fontWeight: '500', letterSpacing: '0.5px' }}>
+                    {areaName}
+                  </p>
                 <div className="row">
                   {areaProps.map((property) => (
                     <PropertyCardSlider key={property._id} property={property} />
                   ))}
                 </div>
               </div>
-            ))}
+            );})}
           </div>
         </div>
       </div>
