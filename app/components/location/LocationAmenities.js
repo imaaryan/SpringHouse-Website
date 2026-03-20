@@ -14,7 +14,7 @@ export default function LocationAmenities({ amenities }) {
             <span className="section-title-span">AMENITIES</span>
           </div>
         </div>
-        <div className="row line pe-3 ps-lg-3 ps-md-3 ps-0">
+        <div className="row line pe-3 ps-lg-3 ps-md-3 ps-0 ">
           {amenities.map((amenity, index) => {
              // Handle potential missing file paths gracefully
              const imgSrc = amenity.featuredIcon?.startsWith("http") 

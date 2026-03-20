@@ -61,7 +61,7 @@ export default function PropertyCardSlider({ property }) {
 
           <div className="bottom-right">
             <a
-              href={`/property/${property.slug}`}
+              href={`/coworking-space/${property.city?.slug}/${property.slug}`}
               className="details-link detail"
             >
               DETAILS

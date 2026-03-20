@@ -6,7 +6,7 @@ export default function SolutionsDesktop({ data = [] }) {
     <div className="service-section d-lg-block d-none d-md-block">
       <div className="container-fluid">
         <div className="row">
-          <div className="col-lg-12 pb-4">
+          <div className="col-lg-12 pb-4 pt-4 ">
             <span className="section-title-span" style={{ paddingLeft: 0 }}>
               Solutions
             </span>
