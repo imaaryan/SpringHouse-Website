@@ -133,7 +133,7 @@ export default function HeroBanner({ dropdownOptions = {}, data = {} }) {
       }
     }
 
-    let redirectUrl = `/location/${selectedCityObj.slug}`;
+    let redirectUrl = `/coworking-space/${selectedCityObj.slug}`;
     
     if (solutionSlug) {
       redirectUrl += `?solution=${solutionSlug}`;

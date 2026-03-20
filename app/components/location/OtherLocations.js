@@ -16,7 +16,7 @@ export default function OtherLocations({ cities = [] }) {
           {cities.map((cityObj) => (
             <div className="col-md-6 col-6" key={cityObj._id || cityObj.slug}>
               <div className="box-loc mb-lg-0 mb-md-0 mb-3">
-                <Link href={`/location/${cityObj.slug}`}>{cityObj.name}</Link>
+                <Link href={`/coworking-space/${cityObj.slug}`}>{cityObj.name}</Link>
               </div>
             </div>
           ))}

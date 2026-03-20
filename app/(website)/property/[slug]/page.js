@@ -106,7 +106,7 @@ export default async function PropertyDetailPage({ params }) {
             {otherCities.map((city) => (
               <div key={city.slug} className="col-md-6 col-6">
                 <div className="box-loc mb-lg-0 mb-md-0 mb-3">
-                  <Link href={`/location/${city.slug}`}>{city.name}</Link>
+                  <Link href={`/coworking-space/${city.slug}`}>{city.name}</Link>
                 </div>
               </div>
             ))}

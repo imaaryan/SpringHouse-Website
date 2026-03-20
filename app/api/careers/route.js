@@ -29,7 +29,13 @@ export async function POST(request) {
 
     const resume = formData.get("resume");
     if (resume instanceof File) {
-      const path = await uploadImage(resume, "resumes", "private_uploads");
+      const path = await uploadImage(resume, "resumes", "private_uploads", {
+        allowedTypes: [
+          "application/pdf",
+          "application/msword",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ],
+      });
       if (path) body.resume = path;
     } else if (typeof resume === "string") {
       body.resume = resume;

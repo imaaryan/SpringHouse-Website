@@ -43,7 +43,7 @@ export default function LocationCards({ data = [] }) {
           <div className="row pt30 location-home-box1 pb-lg-4 mb-md-4">
             <div className="col-lg-12 pb-3 pb-lg-0 pb-md-0">
               <Link
-                href={`/location/${firstCity.slug}`}
+                href={`/coworking-space/${firstCity.slug}`}
                 className="locationscard relative"
               >
                 <div className="locations-image">
@@ -110,7 +110,7 @@ export default function LocationCards({ data = [] }) {
             {remainingCities.map((city, index) => (
               <div className="col-lg-6 pb-lg-5 pb-3" key={city._id || index}>
                 <Link
-                  href={`/location/${city.slug}`}
+                  href={`/coworking-space/${city.slug}`}
                   className="locationscard relative"
                 >
                   <div className="locations-image location-img1">
