@@ -16,10 +16,10 @@ export default function PropertyCardSlider({ property }) {
     <div className="col-md-6 col-12 back pe-4 mb-4">
       <div className="row card-bg-colour">
         {/* Slider */}
-        <div className="col-lg-4 col-md-4 col-12 position-relative p-0 ">
+        <div className="col-lg-5 col-md-4 col-12 position-relative p-0 ">
           <Slider {...settings} className="image-slider1">
             {property.images?.map((img, index) => (
-              <div key={index}>
+              <div className="extra-bottom-space" key={index}>
                 <img
                   src={
                     img.startsWith("http") ? img : `/${img.replace(/^\//, "")}`
@@ -48,7 +48,7 @@ export default function PropertyCardSlider({ property }) {
         </div>
 
         {/* Content */}
-        <div className="col-md-8 position-relative padding-b pt-3 pb-md-0 pb-lg-0 ps-lg-4 ps-md-4 ps-3 pb-3 d-flex flex-column justify-content-start">
+        <div className="col-md-7 position-relative padding-b pt-3 pb-md-0 pb-lg-0 ps-lg-4 ps-md-4 ps-3 pb-3 d-flex flex-column justify-content-start">
           <div className="ps-lg-4 ps-md-4 ps-0">
             <div className="text-small mb-lg-3 mb-md-3 mb-1">
               {property.propertyCode}

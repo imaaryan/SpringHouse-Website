@@ -17,3 +17,7 @@
 .card-bg-colour {
   background-color: #f6f4f4;
 }
+
+.extra-bottom-space {
+  margin-bottom: -5px;
+}
