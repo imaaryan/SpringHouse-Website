@@ -233,30 +233,7 @@ export default function EditSolutionPage() {
       // Company Images
       companyImages.forEach((img) => data.append("companyImages", img));
 
-      // Networking
-      data.append("networking[title]", formData.networking.title || "");
-      data.append("networking[content]", formData.networking.content || "");
-      
-      if (formData.networking.tooltips) {
-        data.append("networking[tooltip1]", formData.networking.tooltips[0] || "");
-        data.append("networking[tooltip2]", formData.networking.tooltips[1] || "");
-        data.append("networking[tooltip3]", formData.networking.tooltips[2] || "");
-      }
-
-      if (networkingImage) {
-        data.append("networkingImage", networkingImage);
-      } else if (networkingImagePreview) {
-        // Optional: Send indicator to retain existing if needed, but our API handles missing field by retaining
-      }
-
-      // Community Images
-      communityImages.forEach((img) => {
-        if (typeof img === "string") {
-          data.append("existingCommunityImages", img);
-        } else {
-          data.append("communityImages", img);
-        }
-      });
+      // Community Images and Networking were moved globally
 
       // Featured Spaces
       featuredSpaces.forEach((space, index) => {
