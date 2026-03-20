@@ -35,6 +35,10 @@ export default async function FAQRoutePage() {
   // Fetch active FAQs sorted by creation date
   const rawFaqs = await FAQ.find({}).sort({ createdAt: 1 }).lean();
 
+  // Get SEO codeSnippet from the first FAQ document that has it
+  const faqWithSnippet = rawFaqs.find((f) => f.seo?.codeSnippet);
+  const seoCodeSnippet = faqWithSnippet?.seo?.codeSnippet || "";
+
   // Safely serialize Mongoose ObjectIDs for Next.js Client Component props
   const serializedFaqs = rawFaqs.map((section) => ({
     ...section,
@@ -52,6 +56,9 @@ export default async function FAQRoutePage() {
       <FaqHero />
       <FaqAccordion faqData={serializedFaqs} />
 
+      {seoCodeSnippet && (
+        <div dangerouslySetInnerHTML={{ __html: seoCodeSnippet }} />
+      )}
       <Footer />
     </>
   );

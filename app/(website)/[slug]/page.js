@@ -112,6 +112,9 @@ export default async function DynamicPage({ params }) {
           phone={footerData?.contactInfo?.phone} 
           contactFormImage={footerData?.formImages?.contactFormImage} 
         />
+        {solution.seo?.codeSnippet && (
+          <div dangerouslySetInnerHTML={{ __html: solution.seo.codeSnippet }} />
+        )}
         <Footer />
       </>
     );

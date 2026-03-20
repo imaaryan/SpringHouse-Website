@@ -49,6 +49,9 @@ export default async function AboutUsPage() {
       <AboutWhoWeAre data={safeData.whoAreWe} />
       <AboutCta />
 
+      {safeData.seo?.codeSnippet && (
+        <div dangerouslySetInnerHTML={{ __html: safeData.seo.codeSnippet }} />
+      )}
       <Footer />
     </>
   );

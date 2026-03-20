@@ -23,6 +23,15 @@ import connectDB from "@/utils/db";
 import { getDropdownOptions } from "@/utils/dropdowns";
 export const revalidate = 0;
 
+export async function generateMetadata() {
+  await connectDB();
+  const homepage = await Homepage.findOne({}).lean();
+  return {
+    title: homepage?.seo?.metaTitle || "SpringHouse Coworking | Managed Office Spaces",
+    description: homepage?.seo?.metaDescription || "Find premium managed office and coworking spaces with SpringHouse.",
+  };
+}
+
 export default async function Home() {
   await connectDB();
   const footerData = (await FooterModel.findOne({}).lean()) || {};
@@ -75,6 +84,7 @@ export default async function Home() {
   const safeData = JSON.parse(JSON.stringify(homepageData));
   const safeSolutions = JSON.parse(JSON.stringify(homepageData.activeSolutions || []));
   const safeBlogs = JSON.parse(JSON.stringify(blogsData));
+  const seoCodeSnippet = homepageData?.seo?.codeSnippet || "";
 
   return (
     <>
@@ -99,6 +109,9 @@ export default async function Home() {
       <Testimonials data={safeData.testimonials} />
       <Blogs data={safeBlogs} />
       <ContactForm phone={phone} dropdownOptions={dropdownOptions} contactFormImage={footerData?.formImages?.contactFormImage || ""} />
+      {seoCodeSnippet && (
+        <div dangerouslySetInnerHTML={{ __html: seoCodeSnippet }} />
+      )}
       <Footer />
     </>
   );

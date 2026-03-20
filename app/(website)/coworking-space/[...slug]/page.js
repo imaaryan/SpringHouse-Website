@@ -39,8 +39,8 @@ export async function generateMetadata({ params }) {
     const city = await City.findOne({ slug: citySlug, isActive: true }).lean();
     if (!city) return { title: "Coworking Space" };
     return {
-      title: `Managed Workspaces and Coworking Spaces in ${city.name}`,
-      description: `Find the perfect managed office or coworking space in ${city.name}. Spring House offers flexible workspace solutions.`,
+      title: city.seo?.metaTitle || `Managed Workspaces and Coworking Spaces in ${city.name}`,
+      description: city.seo?.metaDescription || `Find the perfect managed office or coworking space in ${city.name}. Spring House offers flexible workspace solutions.`,
     };
   } else if (slug.length === 2) {
     const propertySlug = slug[1];
@@ -103,6 +103,9 @@ export default async function CoworkingSpaceCatchAll({ params }) {
         <SolutionsMobile data={citySpecificSolutions} />
         <OtherLocations cities={otherCities} />
         <ContactForm />
+        {cityData.seo?.codeSnippet && (
+          <div dangerouslySetInnerHTML={{ __html: cityData.seo.codeSnippet }} />
+        )}
         <Footer />
       </>
     );
@@ -187,6 +190,9 @@ export default async function CoworkingSpaceCatchAll({ params }) {
             </div>
           </div>
         </section>
+        {property.seo?.codeSnippet && (
+          <div dangerouslySetInnerHTML={{ __html: property.seo.codeSnippet }} />
+        )}
         <Footer />
       </>
     );
