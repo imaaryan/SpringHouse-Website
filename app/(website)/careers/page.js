@@ -12,6 +12,8 @@ export const metadata = {
     "Explore career opportunities at Spring House. Join our team and be a part of creating exceptional coworking and managed workspace experiences.",
 };
 
+export const revalidate = 0;
+
 export default async function CareersPage() {
   await connectDB();
   const footerData = (await FooterModel.findOne({}).lean()) || {};
