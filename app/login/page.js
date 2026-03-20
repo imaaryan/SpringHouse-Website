@@ -45,7 +45,7 @@ export default function LoginPage() {
       <div
         className="hidden w-1/2 flex-col justify-center bg-cover bg-center  text-white lg:flex"
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 170, 166, 0.8), rgba(0, 170, 166, 0.8)), url('/assets/images/auth-one-bg.jpg')`,
+          backgroundImage: `linear-gradient(rgba(0, 170, 166, 0.8), rgba(0, 170, 166, 0.8)), url('/assets/auth-one-bg.webp')`,
         }}
       >
         <div className="relative z-10 max-w-md flex flex-col justify-center items-center">
