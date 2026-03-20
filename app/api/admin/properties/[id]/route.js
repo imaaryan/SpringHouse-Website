@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/utils/db";
 import { Property } from "@/model/property.model";
+import { Amenity } from "@/model/amenity.model";
+import { Area } from "@/model/area.model";
+import { City } from "@/model/city.model";
+import { Solution } from "@/model/solution.model";
 import { uploadImage } from "@/utils/upload";
 import { applySlugify } from "@/utils/slugMiddleware";
 

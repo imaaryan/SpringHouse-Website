@@ -1,5 +1,7 @@
 import connectDB from "@/utils/db";
 import { Homepage } from "@/model/homepage.model";
+import { City } from "@/model/city.model";
+import { Testimonial } from "@/model/testimonial.model";
 import { NextResponse } from "next/server";
 import { uploadImage } from "@/utils/upload";
 

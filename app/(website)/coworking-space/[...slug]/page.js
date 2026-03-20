@@ -3,6 +3,7 @@ import { City } from "@/model/city.model";
 import { Property } from "@/model/property.model";
 import { Solution } from "@/model/solution.model";
 import { Area } from "@/model/area.model";
+import { Amenity } from "@/model/amenity.model";
 import Header from "@/app/components/home/Header";
 import Footer from "@/app/components/home/Footer";
 import GlobalBanner from "@/app/components/home/GlobalBanner";
@@ -126,9 +127,32 @@ export default async function CoworkingSpaceCatchAll({ params }) {
       notFound();
     }
 
-    const rawRelatedProperties = await Property.find({ city: rawProperty.city._id, _id: { $ne: rawProperty._id }, isActive: true })
-      .populate("city", "name slug").populate("area", "name slug").populate("activeSolutions", "name slug").lean();
-    
+    // Fetch same-area properties first (excluding current property)
+    const sameAreaProps = rawProperty.area
+      ? await Property.find({ area: rawProperty.area._id, _id: { $ne: rawProperty._id }, isActive: true })
+          .populate("city", "name slug").populate("area", "name slug").populate("activeSolutions", "name slug").limit(4).lean()
+      : [];
+
+    let limitedRelated = [...sameAreaProps];
+
+    // If fewer than 4, fill from same city (different area)
+    if (limitedRelated.length < 4) {
+      const excludeIds = [rawProperty._id, ...limitedRelated.map(p => p._id)];
+      const remaining = 4 - limitedRelated.length;
+      const sameCityProps = await Property.find({
+        city: rawProperty.city._id,
+        _id: { $nin: excludeIds },
+        isActive: true,
+      })
+        .populate("city", "name slug").populate("area", "name slug").populate("activeSolutions", "name slug")
+        .limit(remaining).lean();
+      limitedRelated = [...limitedRelated, ...sameCityProps];
+    }
+
+    // Build "See More" link to city page's area section
+    const areaSlug = rawProperty.area?.slug || rawProperty.area?._id || "";
+    const seeMoreLink = `/coworking-space/${rawProperty.city.slug}-coworking-space#area-${areaSlug}`;
+
     const rawOtherCities = await City.find({ _id: { $ne: rawProperty.city._id }, isActive: true }).select("name slug").lean();
     
     const footerData = (await FooterModel.findOne({}).lean()) || {};
@@ -136,7 +160,7 @@ export default async function CoworkingSpaceCatchAll({ params }) {
     const dropdownOptions = await getDropdownOptions();
 
     const property = JSON.parse(JSON.stringify(rawProperty));
-    const relatedProperties = JSON.parse(JSON.stringify(rawRelatedProperties));
+    const relatedProperties = JSON.parse(JSON.stringify(limitedRelated));
     const otherCities = JSON.parse(JSON.stringify(rawOtherCities));
 
     return (
@@ -147,7 +171,7 @@ export default async function CoworkingSpaceCatchAll({ params }) {
         <PropertyAmenities amenities={property.amenities} />
         <PropertySolutions activeSolutions={property.activeSolutions} />
         <PropertyLocationMap locationOnMap={property.locationOnMap} />
-        <AvailableProperties properties={relatedProperties} />
+        <AvailableProperties properties={relatedProperties} maxCards={4} seeMoreLink={seeMoreLink} />
         
         <section className="specfic-prop amenities pt60 pb60">
           <div className="container-fluid">

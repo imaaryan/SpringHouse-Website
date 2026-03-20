@@ -3,6 +3,8 @@ import connectDB from "@/utils/db";
 import { Property } from "@/model/property.model";
 import { City } from "@/model/city.model";
 import { Area } from "@/model/area.model";
+import { Amenity } from "@/model/amenity.model";
+import { Solution } from "@/model/solution.model";
 import { uploadImage } from "@/utils/upload";
 import { applySlugify } from "@/utils/slugMiddleware";
 

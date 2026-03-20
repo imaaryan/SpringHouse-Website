@@ -41,7 +41,7 @@ export default function PropertyHero({ property }) {
                     />
                   </svg>
                 </div>
-                <div className="shape-right-bottom">
+                <div className="shape-right-bottom-property">
                   <svg
                     viewBox="0 0 11 11"
                     fill="none"

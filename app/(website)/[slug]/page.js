@@ -2,6 +2,8 @@ import React from "react";
 import { notFound } from "next/navigation";
 import connectDB from "@/utils/db";
 import { Solution } from "@/model/solution.model";
+import { Testimonial } from "@/model/testimonial.model";
+import { City } from "@/model/city.model";
 import { OtherPage } from "@/model/otherPage.model";
 import { Property } from "@/model/property.model";
 import { Homepage } from "@/model/homepage.model";

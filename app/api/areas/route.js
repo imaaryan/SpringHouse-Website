@@ -1,5 +1,6 @@
 import connectDB from "@/utils/db";
 import { Area } from "@/model/area.model";
+import { City } from "@/model/city.model";
 import { NextResponse } from "next/server";
 
 export async function GET() {

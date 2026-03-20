@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/utils/db";
 import { Solution } from "@/model/solution.model";
+import { Testimonial } from "@/model/testimonial.model";
 import { uploadImage } from "@/utils/upload";
 
 export async function GET(request, { params }) {
