@@ -32,6 +32,12 @@ const citySchema = new mongoose.Schema(
         ref: "Amenity",
       },
     ],
+    activeSolutions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Solution",
+      },
+    ],
     solutionsForEveryone: {
       content: {
         type: String,

@@ -24,6 +24,7 @@ export default function AddCityPage() {
   const [loading, setLoading] = useState(false);
   const [dependencies, setDependencies] = useState({
     amenities: [],
+    solutions: [],
   });
 
   const [formData, setFormData] = useState({
@@ -33,6 +34,7 @@ export default function AddCityPage() {
     isActive: true, // Published/Draft
     image: "", // Featured Image
     amenities: [],
+    activeSolutions: [],
     solutionsForEveryone: {
       content: "",
       image: "",
@@ -55,10 +57,24 @@ export default function AddCityPage() {
   useEffect(() => {
     const fetchDependencies = async () => {
       try {
-        const res = await fetch("/api/admin/amenities?limit=100"); // Fetch all amenities
-        const data = await res.json();
-        if (data.success) {
-          setDependencies({ amenities: data.data });
+        const [amenitiesRes, solutionsRes] = await Promise.all([
+          fetch("/api/admin/amenities?limit=100"),
+          fetch("/api/admin/solutions?limit=100"),
+        ]);
+        const amenitiesData = await amenitiesRes.json();
+        const solutionsData = await solutionsRes.json();
+
+        if (amenitiesData.success) {
+          setDependencies((prev) => ({
+            ...prev,
+            amenities: amenitiesData.data,
+          }));
+        }
+        if (solutionsData.success) {
+          setDependencies((prev) => ({
+            ...prev,
+            solutions: solutionsData.data,
+          }));
         }
       } catch (error) {
         console.error("Failed to fetch dependencies", error);
@@ -150,6 +166,8 @@ export default function AddCityPage() {
 
       // Amenities
       formData.amenities.forEach((id) => data.append("amenities", id));
+      // Solutions
+      formData.activeSolutions.forEach((id) => data.append("activeSolutions", id));
 
       // Solutions For Everyone
       data.append(
@@ -347,6 +365,17 @@ export default function AddCityPage() {
                 label: a.name,
               }))}
               selectedValues={formData.amenities}
+              onChange={handleCheckboxChange}
+            />
+
+            <FormCheckboxGrid
+              label="Active Solutions"
+              name="activeSolutions"
+              options={dependencies.solutions.map((s) => ({
+                value: s._id,
+                label: s.name || s.title || s.slug,
+              }))}
+              selectedValues={formData.activeSolutions}
               onChange={handleCheckboxChange}
             />
 

@@ -27,6 +27,7 @@ export default function EditCityPage({ params }) {
   const [saving, setSaving] = useState(false);
   const [dependencies, setDependencies] = useState({
     amenities: [],
+    solutions: [],
   });
 
   const [formData, setFormData] = useState({
@@ -36,6 +37,7 @@ export default function EditCityPage({ params }) {
     isActive: false,
     image: "", // Featured Image
     amenities: [],
+    activeSolutions: [],
     solutionsForEveryone: {
       content: "",
       image: "",
@@ -58,16 +60,28 @@ export default function EditCityPage({ params }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [cityRes, amenitiesRes] = await Promise.all([
+        const [cityRes, amenitiesRes, solutionsRes] = await Promise.all([
           fetch(`/api/admin/cities/${id}`),
           fetch("/api/admin/amenities?limit=100"),
+          fetch("/api/admin/solutions?limit=100"),
         ]);
 
         const cityData = await cityRes.json();
         const amenitiesData = await amenitiesRes.json();
+        const solutionsData = await solutionsRes.json();
 
         if (amenitiesData.success) {
-          setDependencies({ amenities: amenitiesData.data });
+          setDependencies((prev) => ({
+            ...prev,
+            amenities: amenitiesData.data,
+          }));
+        }
+
+        if (solutionsData.success) {
+          setDependencies((prev) => ({
+            ...prev,
+            solutions: solutionsData.data,
+          }));
         }
 
         if (cityData.success) {
@@ -79,6 +93,7 @@ export default function EditCityPage({ params }) {
             isActive: city.isActive ?? false,
             image: city.image || "",
             amenities: city.amenities || [],
+            activeSolutions: city.activeSolutions || [],
             solutionsForEveryone: {
               content: city.solutionsForEveryone?.content || "",
               image: city.solutionsForEveryone?.image || "",
@@ -189,6 +204,7 @@ export default function EditCityPage({ params }) {
       data.append("isActive", formData.isActive);
 
       formData.amenities.forEach((id) => data.append("amenities", id));
+      formData.activeSolutions.forEach((id) => data.append("activeSolutions", id));
 
       data.append(
         "solutionsForEveryone[content]",
@@ -388,6 +404,17 @@ export default function EditCityPage({ params }) {
                 label: a.name,
               }))}
               selectedValues={formData.amenities}
+              onChange={handleCheckboxChange}
+            />
+
+            <FormCheckboxGrid
+              label="Active Solutions"
+              name="activeSolutions"
+              options={dependencies.solutions.map((s) => ({
+                value: s._id,
+                label: s.name || s.title || s.slug,
+              }))}
+              selectedValues={formData.activeSolutions}
               onChange={handleCheckboxChange}
             />
 

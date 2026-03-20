@@ -48,6 +48,9 @@ export async function PUT(request, { params }) {
     // Amenities
     const amenities = formData.getAll("amenities");
 
+    // Active Solutions
+    const activeSolutions = formData.getAll("activeSolutions");
+
     // Solutions For Everyone
     const solutionsContent = formData.get("solutionsForEveryone[content]");
 
@@ -78,6 +81,7 @@ export async function PUT(request, { params }) {
       description,
       isActive,
       amenities,
+      activeSolutions,
       image: imagePath,
       solutionsForEveryone: {
         content: solutionsContent !== null ? solutionsContent : existingCity.solutionsForEveryone?.content,

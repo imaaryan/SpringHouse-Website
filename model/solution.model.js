@@ -75,3 +75,4 @@ applySlugify(solutionSchema, "name");
 
 export const Solution =
   mongoose.models.Solution || mongoose.model("Solution", solutionSchema);
+

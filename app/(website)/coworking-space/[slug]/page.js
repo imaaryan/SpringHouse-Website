@@ -17,6 +17,8 @@ import OtherLocations from "@/app/components/location/OtherLocations";
 import ContactForm from "@/app/components/home/ContactForm";
 import Footer from "@/app/components/home/Footer";
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: "Managed Workspaces and Coworking Spaces in Gurugram",
   description:
@@ -36,7 +38,10 @@ export default async function LocationPage({ params }) {
 
   // Fetch from DB
   await connectDB();
-  const cityDataRaw = await City.findOne({ slug: city }).populate("amenities", "name featuredIcon").lean();
+  const cityDataRaw = await City.findOne({ slug: city })
+    .populate("amenities", "name featuredIcon")
+    .populate("activeSolutions")
+    .lean();
   const activeSolutionsRaw = await Solution.find({ isActive: true }).lean();
   
   let areasRaw = [];
@@ -62,24 +67,8 @@ export default async function LocationPage({ params }) {
   const cityProperties = propertiesRaw.length > 0 ? JSON.parse(JSON.stringify(propertiesRaw)) : [];
   const otherCities = otherCitiesRaw.length > 0 ? JSON.parse(JSON.stringify(otherCitiesRaw)) : [];
 
-  // Extract solutions from properties and remove duplicates by _id
-  const citySolutionsMap = new Map();
-  propertiesRaw.forEach(prop => {
-    if (prop.activeSolutions) {
-      prop.activeSolutions.forEach(sol => {
-        if (sol && sol._id && !citySolutionsMap.has(sol._id.toString())) {
-          // Find the full solution object from the activeSolutionsRaw table
-          // rather than just the populated stub, so we have the image & description
-          const fullSolution = activeSolutionsRaw.find(as => as._id.toString() === sol._id.toString());
-          if (fullSolution) {
-            citySolutionsMap.set(sol._id.toString(), fullSolution);
-          }
-        }
-      });
-    }
-  });
-  const citySpecificSolutionsRaw = Array.from(citySolutionsMap.values());
-  const citySpecificSolutions = citySpecificSolutionsRaw.length > 0 ? JSON.parse(JSON.stringify(citySpecificSolutionsRaw)) : [];
+  // Use manually selected solutions from City model
+  const citySpecificSolutions = cityData?.activeSolutions || [];
 
   return (
     <>
