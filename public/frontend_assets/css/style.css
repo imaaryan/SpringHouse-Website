@@ -323,9 +323,9 @@ header.sticky {
 .about .location-content {
 max-width: 490px;
 }
-.locationscard {
+.home-l .locationscard {
   overflow: hidden;
-  border-radius: 20px; /* Match existing border radius if any */
+  border-radius: 20px;
 }
 
 .locationscard:hover .locations-image img {
@@ -834,7 +834,6 @@ footer::before {
 .about .locations-image,
 .virtual .locations-image {
   overflow: hidden;
-}
 }
 .about .locations-image .shape-bottom {
   height: 160px;
