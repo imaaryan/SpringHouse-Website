@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/utils/db";
 import Footer from "@/model/footer.model";
+import { uploadImage } from "@/utils/upload";
 
 export async function GET() {
   try {
@@ -19,7 +20,24 @@ export async function GET() {
 export async function PUT(request) {
   try {
     await connectDB();
-    const body = await request.json();
+
+    const contentType = request.headers.get("content-type") || "";
+    let body;
+    let contactFormImageFile = null;
+    let careerFormImageFile = null;
+
+    if (contentType.includes("multipart/form-data")) {
+      const formData = await request.formData();
+      body = JSON.parse(formData.get("data") || "{}");
+
+      const contactImg = formData.get("contactFormImage");
+      if (contactImg instanceof File) contactFormImageFile = contactImg;
+
+      const careerImg = formData.get("careerFormImage");
+      if (careerImg instanceof File) careerFormImageFile = careerImg;
+    } else {
+      body = await request.json();
+    }
 
     const updateData = {
       columns: body.columns || [],
@@ -35,7 +53,21 @@ export async function PUT(request) {
         whatsapp: "",
         email: "",
       },
+      formImages: body.formImages || {
+        contactFormImage: "",
+        careerFormImage: "",
+      },
     };
+
+    // Handle image uploads
+    if (contactFormImageFile) {
+      const path = await uploadImage(contactFormImageFile, "formimages");
+      if (path) updateData.formImages.contactFormImage = path;
+    }
+    if (careerFormImageFile) {
+      const path = await uploadImage(careerFormImageFile, "formimages");
+      if (path) updateData.formImages.careerFormImage = path;
+    }
 
     let footerData = await Footer.findOne();
 

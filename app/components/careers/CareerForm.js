@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 
-export default function CareerForm() {
+export default function CareerForm({ careerFormImage }) {
   const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -106,7 +106,7 @@ export default function CareerForm() {
                 <div className="get-left-touch relative">
                   <div className="get-image-bottom mt20 relative">
                     <div className="get-image">
-                      <img src="/frontend_assets/img/get-touch.png" alt="Join Spring House Team" />
+                      <img src={careerFormImage || "/frontend_assets/img/get-touch.png"} alt="Join Spring House Team" />
                     </div>
                     <div className="circle-arrow">
                       <div className="arrow">

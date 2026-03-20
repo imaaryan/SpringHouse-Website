@@ -4,7 +4,7 @@ import { useState } from "react";
 // Import SweetAlert2 if used globally, or install it: npm install sweetalert2
 import Swal from "sweetalert2";
 
-export default function ContactForm({ phone, dropdownOptions }) {
+export default function ContactForm({ phone, dropdownOptions, contactFormImage }) {
   const {
     cities = [],
     properties = [],
@@ -120,7 +120,7 @@ export default function ContactForm({ phone, dropdownOptions }) {
                   </div>
                   <div className="get-image-bottom mt20 relative">
                     <div className="get-image">
-                      <img src="/frontend_assets/img/get-touch.png" alt="" />
+                      <img src={contactFormImage || "/frontend_assets/img/get-touch.png"} alt="" />
                     </div>
                     <div className="circle-arrow">
                       <div className="arrow">

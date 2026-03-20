@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Loader2, Save, Plus, Trash2, GripVertical } from "lucide-react";
 import PageHeader from "@/app/components/admin/PageHeader";
-import { FormInput } from "@/app/components/admin/FormElements";
+import { FormInput, SingleImageUploader } from "@/app/components/admin/FormElements";
 import dynamic from "next/dynamic";
 import "react-quill-new/dist/quill.snow.css";
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
@@ -157,6 +157,11 @@ export default function FooterAdminPage() {
     bottomBlocks: "",
     socialLinks: { instagram: "", facebook: "", linkedin: "" },
     contactInfo: { address: "", phone: "", whatsapp: "", email: "" },
+    formImages: { contactFormImage: "", careerFormImage: "" },
+  });
+  const [newImageFiles, setNewImageFiles] = useState({
+    contactFormImage: null,
+    careerFormImage: null,
   });
 
   useEffect(() => {
@@ -179,6 +184,10 @@ export default function FooterAdminPage() {
               phone: "",
               whatsapp: "",
               email: "",
+            },
+            formImages: d.formImages || {
+              contactFormImage: "",
+              careerFormImage: "",
             },
           });
         }
@@ -249,18 +258,56 @@ export default function FooterAdminPage() {
     });
   };
 
+  // Image handlers for form images
+  const handleFormImageChange = (field) => (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setNewImageFiles((prev) => ({ ...prev, [field]: file }));
+    // Show preview
+    const previewUrl = URL.createObjectURL(file);
+    setFormData((prev) => ({
+      ...prev,
+      formImages: { ...prev.formImages, [field]: previewUrl },
+    }));
+  };
+
+  const handleRemoveFormImage = (field) => () => {
+    setNewImageFiles((prev) => ({ ...prev, [field]: null }));
+    setFormData((prev) => ({
+      ...prev,
+      formImages: { ...prev.formImages, [field]: "" },
+    }));
+  };
+
   // Submit Handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
     try {
+      const submitData = new FormData();
+      submitData.append("data", JSON.stringify(formData));
+
+      if (newImageFiles.contactFormImage) {
+        submitData.append("contactFormImage", newImageFiles.contactFormImage);
+      }
+      if (newImageFiles.careerFormImage) {
+        submitData.append("careerFormImage", newImageFiles.careerFormImage);
+      }
+
       const res = await fetch("/api/admin/footer", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: submitData,
       });
       const result = await res.json();
       if (result.success) {
+        // Update state with saved data from server
+        if (result.data?.formImages) {
+          setFormData((prev) => ({
+            ...prev,
+            formImages: result.data.formImages,
+          }));
+        }
+        setNewImageFiles({ contactFormImage: null, careerFormImage: null });
         alert("Footer configurations saved successfully!");
       } else {
         alert(result.error || "Failed to save footer configurations");
@@ -415,6 +462,31 @@ export default function FooterAdminPage() {
                   handleObjectChange("socialLinks", "linkedin", e.target.value)
                 }
                 placeholder="https://linkedin.com/..."
+              />
+            </div>
+          </section>
+
+          <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <h3 className="text-base font-bold text-gray-800 mb-4">
+              Form Images
+            </h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Upload sidebar images for the Contact Form and Career Form.
+            </p>
+            <div className="space-y-4">
+              <SingleImageUploader
+                label="Contact Form Image"
+                image={formData.formImages.contactFormImage}
+                onImageChange={handleFormImageChange("contactFormImage")}
+                onRemoveImage={handleRemoveFormImage("contactFormImage")}
+                helperText="Image shown beside the Contact / Lead form"
+              />
+              <SingleImageUploader
+                label="Career Form Image"
+                image={formData.formImages.careerFormImage}
+                onImageChange={handleFormImageChange("careerFormImage")}
+                onRemoveImage={handleRemoveFormImage("careerFormImage")}
+                helperText="Image shown beside the Career application form"
               />
             </div>
           </section>

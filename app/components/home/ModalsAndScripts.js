@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 
-export default function ModalsAndScripts({ phone, dropdownOptions }) {
+export default function ModalsAndScripts({ phone, dropdownOptions, formImages = {} }) {
   const {
     cities = [],
     properties = [],
@@ -150,7 +150,7 @@ export default function ModalsAndScripts({ phone, dropdownOptions }) {
                     <div className="get-image-bottom mt20 relative">
                       <div className="get-image">
                         <img
-                          src="/frontend_assets/img/get-touch.png"
+                          src={formImages.contactFormImage || "/frontend_assets/img/get-touch.png"}
                           alt="rent a coworking space – SpringHouse coworking office view"
                         />
                       </div>

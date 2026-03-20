@@ -32,6 +32,12 @@ const footerSchema = new mongoose.Schema(
       whatsapp: { type: String, default: "" },
       email: { type: String, default: "" },
     },
+
+    // 5. Form Images (Contact & Career form sidebar images)
+    formImages: {
+      contactFormImage: { type: String, default: "" },
+      careerFormImage: { type: String, default: "" },
+    },
   },
   { timestamps: true },
 );

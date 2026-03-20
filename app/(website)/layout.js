@@ -11,6 +11,9 @@ export default async function WebsiteLayout({ children }) {
   await connectDB();
   const footerData = (await FooterModel.findOne({}).lean()) || {};
   const phone = footerData?.contactInfo?.phone || "";
+  const formImages = footerData?.formImages
+    ? JSON.parse(JSON.stringify(footerData.formImages))
+    : {};
   const dropdownOptions = await getDropdownOptions();
 
   return (
@@ -58,7 +61,7 @@ export default async function WebsiteLayout({ children }) {
 
       <AosInit />
       {children}
-      <ModalsAndScripts phone={phone} dropdownOptions={dropdownOptions} />
+      <ModalsAndScripts phone={phone} dropdownOptions={dropdownOptions} formImages={formImages} />
       <GlobalScripts />
     </>
   );

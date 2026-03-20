@@ -98,7 +98,7 @@ export default async function Home() {
       <OurCommunity data={safeData.ourCommunity} />
       <Testimonials data={safeData.testimonials} />
       <Blogs data={safeBlogs} />
-      <ContactForm phone={phone} dropdownOptions={dropdownOptions} />
+      <ContactForm phone={phone} dropdownOptions={dropdownOptions} contactFormImage={footerData?.formImages?.contactFormImage || ""} />
       <Footer />
     </>
   );
