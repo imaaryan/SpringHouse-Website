@@ -25,14 +25,33 @@ export async function POST(request) {
       imagePath = await uploadImage(imageFile, "solutions");
     }
 
-    // Company Images (Multiple)
-    const companyImageFiles = formData.getAll("companyImages");
+    // Company Images (structured: [{backgroundImage, logo, link}])
     const companyImages = [];
-    for (const file of companyImageFiles) {
-      if (file && file.size > 0) {
-        const path = await uploadImage(file, "solutions/company");
-        if (path) companyImages.push(path);
+    let ci = 0;
+    while (
+      formData.has(`companyImages[${ci}][backgroundImage]`) ||
+      formData.has(`companyImages[${ci}][link]`)
+    ) {
+      const bgInput = formData.get(`companyImages[${ci}][backgroundImage]`);
+      const logoInput = formData.get(`companyImages[${ci}][logo]`);
+      const link = formData.get(`companyImages[${ci}][link]`) || "";
+
+      let backgroundImage = "";
+      if (bgInput && typeof bgInput === "object" && bgInput.size > 0) {
+        backgroundImage = await uploadImage(bgInput, "solutions/company");
+      } else if (typeof bgInput === "string") {
+        backgroundImage = bgInput;
       }
+
+      let logo = "";
+      if (logoInput && typeof logoInput === "object" && logoInput.size > 0) {
+        logo = await uploadImage(logoInput, "solutions/company");
+      } else if (typeof logoInput === "string") {
+        logo = logoInput;
+      }
+
+      companyImages.push({ backgroundImage, logo, link });
+      ci++;
     }
 
     // Featured Spaces (Complex Array: [{name, image}])

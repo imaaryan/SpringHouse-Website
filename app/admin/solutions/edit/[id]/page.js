@@ -46,8 +46,8 @@ export default function EditSolutionPage() {
   const [image, setImage] = useState(null); // File object (for new upload)
   const [imagePreview, setImagePreview] = useState(null); // URL (existing or new preview)
 
-  const [companyImages, setCompanyImages] = useState([]); // Mixed: Files or URL strings
-  const [companyImagePreviews, setCompanyImagePreviews] = useState([]); // URLs
+  // Company Images: array of { backgroundImage, backgroundImagePreview, backgroundImageFile, logo, logoPreview, logoFile, link }
+  const [companyImages, setCompanyImages] = useState([]);
 
   // Featured Spaces
   const [featuredSpaces, setFeaturedSpaces] = useState([]);
@@ -91,8 +91,31 @@ export default function EditSolutionPage() {
           if (s.image) setImagePreview(s.image);
 
           if (s.companyImages && s.companyImages.length > 0) {
-            setCompanyImages(s.companyImages); // URLs
-            setCompanyImagePreviews(s.companyImages);
+            setCompanyImages(
+              s.companyImages.map((ci) => {
+                // Handle old string format gracefully
+                if (typeof ci === "string") {
+                  return {
+                    backgroundImage: ci,
+                    backgroundImagePreview: ci,
+                    backgroundImageFile: null,
+                    logo: "",
+                    logoPreview: "",
+                    logoFile: null,
+                    link: "",
+                  };
+                }
+                return {
+                  backgroundImage: ci.backgroundImage || "",
+                  backgroundImagePreview: ci.backgroundImage || "",
+                  backgroundImageFile: null,
+                  logo: ci.logo || "",
+                  logoPreview: ci.logo || "",
+                  logoFile: null,
+                  link: ci.link || "",
+                };
+              })
+            );
           }
 
           if (s.featuredSpaces && s.featuredSpaces.length > 0) {
@@ -158,18 +181,47 @@ export default function EditSolutionPage() {
     }
   };
 
-  const handleCompanyImagesChange = (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length > 0) {
-      setCompanyImages((prev) => [...prev, ...files]);
-      const newPreviews = files.map((file) => URL.createObjectURL(file));
-      setCompanyImagePreviews((prev) => [...prev, ...newPreviews]);
-    }
+  const addCompanyImage = () => {
+    setCompanyImages((prev) => [
+      ...prev,
+      {
+        backgroundImage: "",
+        backgroundImagePreview: "",
+        backgroundImageFile: null,
+        logo: "",
+        logoPreview: "",
+        logoFile: null,
+        link: "",
+      },
+    ]);
   };
 
   const removeCompanyImage = (index) => {
     setCompanyImages((prev) => prev.filter((_, i) => i !== index));
-    setCompanyImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const updateCompanyImageField = (index, field, value) => {
+    setCompanyImages((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  };
+
+  const handleCompanyBgChange = (index, e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      updateCompanyImageField(index, "backgroundImageFile", file);
+      updateCompanyImageField(index, "backgroundImagePreview", URL.createObjectURL(file));
+    }
+  };
+
+  const handleCompanyLogoChange = (index, e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      updateCompanyImageField(index, "logoFile", file);
+      updateCompanyImageField(index, "logoPreview", URL.createObjectURL(file));
+    }
   };
 
   const addSpace = () => {
@@ -230,8 +282,20 @@ export default function EditSolutionPage() {
         // So if field is missing, it keeps existing. GOOD.
       }
 
-      // Company Images
-      companyImages.forEach((img) => data.append("companyImages", img));
+      // Company Images (structured)
+      companyImages.forEach((ci, index) => {
+        if (ci.backgroundImageFile) {
+          data.append(`companyImages[${index}][backgroundImage]`, ci.backgroundImageFile);
+        } else if (ci.backgroundImage) {
+          data.append(`companyImages[${index}][backgroundImage]`, ci.backgroundImage);
+        }
+        if (ci.logoFile) {
+          data.append(`companyImages[${index}][logo]`, ci.logoFile);
+        } else if (ci.logo) {
+          data.append(`companyImages[${index}][logo]`, ci.logo);
+        }
+        data.append(`companyImages[${index}][link]`, ci.link || "");
+      });
 
       // Community Images and Networking were moved globally
 
@@ -334,12 +398,73 @@ export default function EditSolutionPage() {
             />
           </div>
 
-          <ImageUploader
-            label="Company Images"
-            images={companyImagePreviews}
-            onImageChange={handleCompanyImagesChange}
-            onRemoveImage={removeCompanyImage}
-          />
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-semibold text-gray-900">Company Images</h3>
+              <button
+                type="button"
+                onClick={addCompanyImage}
+                className="flex items-center gap-2 text-sm text-brand-primary font-medium hover:text-teal-700"
+              >
+                <Plus size={16} /> Add Entry
+              </button>
+            </div>
+            <div className="space-y-4">
+              {companyImages.map((ci, index) => (
+                <div key={index} className="p-4 border border-gray-100 rounded-lg bg-gray-50/50 space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-semibold text-gray-500 uppercase">Entry {index + 1}</span>
+                    <button type="button" onClick={() => removeCompanyImage(index)} className="text-gray-400 hover:text-red-500 p-1">
+                      <X size={16} />
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* Background Image */}
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1">Background Image</label>
+                      <label className="flex flex-col items-center justify-center w-full h-28 rounded-lg border-2 border-dashed border-gray-300 bg-white hover:bg-gray-50 cursor-pointer overflow-hidden">
+                        {ci.backgroundImagePreview ? (
+                          <img src={ci.backgroundImagePreview} alt="BG" className="w-full h-full object-cover" />
+                        ) : (
+                          <>
+                            <UploadCloud size={20} className="text-gray-400" />
+                            <span className="text-[10px] text-gray-500 mt-1">Upload</span>
+                          </>
+                        )}
+                        <input type="file" accept="image/*" className="hidden" onChange={(e) => handleCompanyBgChange(index, e)} />
+                      </label>
+                    </div>
+                    {/* Logo */}
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1">Logo</label>
+                      <label className="flex flex-col items-center justify-center w-full h-28 rounded-lg border-2 border-dashed border-gray-300 bg-white hover:bg-gray-50 cursor-pointer overflow-hidden">
+                        {ci.logoPreview ? (
+                          <img src={ci.logoPreview} alt="Logo" className="w-full h-full object-contain p-2" />
+                        ) : (
+                          <>
+                            <UploadCloud size={20} className="text-gray-400" />
+                            <span className="text-[10px] text-gray-500 mt-1">Upload</span>
+                          </>
+                        )}
+                        <input type="file" accept="image/*" className="hidden" onChange={(e) => handleCompanyLogoChange(index, e)} />
+                      </label>
+                    </div>
+                  </div>
+                  {/* Link */}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">Link (URL)</label>
+                    <input
+                      type="text"
+                      className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-brand-primary focus:ring-brand-primary bg-white"
+                      placeholder="https://example.com"
+                      value={ci.link}
+                      onChange={(e) => updateCompanyImageField(index, "link", e.target.value)}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
 
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h3 className="text-sm font-semibold text-gray-900 mb-4">

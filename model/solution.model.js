@@ -35,7 +35,9 @@ const solutionSchema = new mongoose.Schema(
     ],
     companyImages: [
       {
-        type: String,
+        backgroundImage: String,
+        logo: String,
+        link: String,
       },
     ],
     featuredSpaces: [

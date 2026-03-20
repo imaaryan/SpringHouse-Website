@@ -15,22 +15,55 @@ export default function FullHouse({ images }) {
         </div>
         <div className="row">
           <div className="d-flex">
-            {images.map((imgUrl, index) => (
-              <div className="inner-box" key={index}>
-                <a
-                  href={imgUrl}
-                  data-lightbox={`group${index + 1}`}
-                  data-title={`Project ${index + 1}`}
-                  className="cc-f"
-                >
+            {images.map((entry, index) => {
+              // Support both old string format and new object format
+              const isString = typeof entry === "string";
+              const bgImage = isString ? entry : entry.backgroundImage;
+              const logo = isString ? null : entry.logo;
+              const link = isString ? bgImage : entry.link;
+
+              const imgSrc = bgImage?.startsWith("http")
+                ? bgImage
+                : `/${bgImage?.replace(/^\//, "") || ""}`;
+
+              const logoSrc = logo
+                ? logo.startsWith("http")
+                  ? logo
+                  : `/${logo.replace(/^\//, "")}`
+                : null;
+
+              const content = (
+                <>
                   <img
-                    src={imgUrl}
+                    src={imgSrc}
                     className="img-grow"
                     alt={`Full House ${index + 1}`}
                   />
-                </a>
-              </div>
-            ))}
+                  {logoSrc && (
+                    <div className="img-box">
+                      <img src={logoSrc} alt={`Logo ${index + 1}`} />
+                    </div>
+                  )}
+                </>
+              );
+
+              return (
+                <div className="inner-box" key={index}>
+                  {link ? (
+                    <a
+                      href={link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="cc-f"
+                    >
+                      {content}
+                    </a>
+                  ) : (
+                    <div className="cc-f">{content}</div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

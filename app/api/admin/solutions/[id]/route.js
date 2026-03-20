@@ -75,24 +75,33 @@ export async function PUT(request, { params }) {
       // Usually UI sends existing URL string if unchanged.
     }
 
-    // Company Images
-    // This is tricky. Merging or Replacing?
-    // Convention: Replace all. UI sends old URLs + new Files?
-    // Parsing:
-    // We need to handle mixed content.
-    // It's easier if we handle `companyImages` as a mix.
-    const companyImageInputs = formData.getAll("companyImages");
+    // Company Images (structured: backgroundImage, logo, link)
     const newCompanyImages = [];
+    let ci = 0;
+    while (
+      formData.has(`companyImages[${ci}][backgroundImage]`) ||
+      formData.has(`companyImages[${ci}][link]`)
+    ) {
+      const bgInput = formData.get(`companyImages[${ci}][backgroundImage]`);
+      const logoInput = formData.get(`companyImages[${ci}][logo]`);
+      const link = formData.get(`companyImages[${ci}][link]`) || "";
 
-    for (const input of companyImageInputs) {
-      if (typeof input === "string") {
-        // Existing URL
-        newCompanyImages.push(input);
-      } else if (input && typeof input === "object" && input.size > 0) {
-        // New File
-        const path = await uploadImage(input, "solutions/company");
-        if (path) newCompanyImages.push(path);
+      let backgroundImage = "";
+      if (typeof bgInput === "string") {
+        backgroundImage = bgInput;
+      } else if (bgInput && typeof bgInput === "object" && bgInput.size > 0) {
+        backgroundImage = await uploadImage(bgInput, "solutions/company");
       }
+
+      let logo = "";
+      if (typeof logoInput === "string") {
+        logo = logoInput;
+      } else if (logoInput && typeof logoInput === "object" && logoInput.size > 0) {
+        logo = await uploadImage(logoInput, "solutions/company");
+      }
+
+      newCompanyImages.push({ backgroundImage, logo, link });
+      ci++;
     }
 
     // Featured Spaces
