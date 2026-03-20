@@ -47,10 +47,12 @@ export default function AboutWhoWeAre({ data = [] }) {
           </div>
         </div>
         <div className="row">
-          {whoWeAreData.map((item, index) => (
+          {whoWeAreData.map((item, index) => {
+            const isReverse = item.isReverse || index >= 2;
+            return (
             <div
               className={`col-md-6 ${
-                item.isReverse ? "mb-lg-0 mb-md-0 mb-5" : "mb-lg-4 mb-md-4 mb-5"
+                isReverse ? "mb-lg-0 mb-md-0 mb-5" : "mb-lg-4 mb-md-4 mb-5"
               }`}
               key={item._id || index}
             >
@@ -58,7 +60,7 @@ export default function AboutWhoWeAre({ data = [] }) {
                 {/* Text Block - Render first if isReverse */}
                 <div
                   className={`col-md-6 col-8 ${
-                    item.isReverse
+                    isReverse
                       ? "order-1 order-lg-1 order-md-1"
                       : "order-2 order-lg-2 order-md-2"
                   }`}
@@ -72,7 +74,7 @@ export default function AboutWhoWeAre({ data = [] }) {
                         xmlns="http://www.w3.org/2000/svg"
                         preserveAspectRatio="none"
                       >
-                        {item.isReverse ? (
+                        {isReverse ? (
                           <path
                             d="M10 0 H210 Q220 0 220 10 V30 Q220 40 230 40 H262 Q272 40 272 50 V280 Q272 290 262 290 H10 Q0 290 0 280 V10 Q0 0 10 0 Z"
                             fill="none"
@@ -99,7 +101,7 @@ export default function AboutWhoWeAre({ data = [] }) {
                 {/* Image Block */}
                 <div
                   className={`col-md-6 col-4 ${
-                    item.isReverse
+                    isReverse
                       ? "order-2 order-lg-2 order-md-2"
                       : "order-1 order-lg-1 order-md-1"
                   }`}
@@ -119,7 +121,7 @@ export default function AboutWhoWeAre({ data = [] }) {
                 </div>
               </div>
             </div>
-          ))}
+          )})}
         </div>
       </div>
     </section>
