@@ -12,7 +12,7 @@ export default function GlobalBanner({ title, imageSrc }) {
       <div className="container-fluid">
         <div className="row pt30">
           <div className="col-lg-12 mb-4">
-            <div className="locationscard relative">
+            <div className="locationscard relative group cursor-pointer">
               <div className="locations-image">
                 <img alt={title || "SpringHouse Banner"} src={imageUrl} />
 
@@ -59,7 +59,9 @@ export default function GlobalBanner({ title, imageSrc }) {
               </div>
 
               <div className="location-content">
-                <h4 className="section-title">{title?.toLowerCase() || ""}</h4>
+                <h4 className="section-title">
+                  {title?.toLowerCase() || ""}
+                </h4>
               </div>
             </div>
           </div>

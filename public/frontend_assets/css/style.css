@@ -323,12 +323,13 @@ header.sticky {
 .about .location-content {
 max-width: 490px;
 }
-/* .locationscard,
-.locations-image{
-    overflow: hidden;
-} */
+.locationscard {
+  overflow: hidden;
+  border-radius: 20px; /* Match existing border radius if any */
+}
+
 .locationscard:hover .locations-image img {
-  /* transform: scale(1.1); */
+  transform: scale(1.1);
 }
 /*
 .locationscard:hover .wavy-line{
@@ -827,26 +828,13 @@ footer::before {
   height: 450px;
   object-fit: cover;
 }
-.virtual .locations-image:hover img {
-  transform: scale(1);
-}
-.virtual .locationscard:hover .location-content h4 {
-  color: #000;
-}
 .loctions.about img {
   height: 700px;
 }
-.about .locations-image:hover img {
-  transform: scale(1);
-}
-.about .locationscard:hover .location-content h4 {
-  color: #000;
-}
-.about .locations-image {
-  overflow: inherit;
-}
+.about .locations-image,
 .virtual .locations-image {
-  overflow: inherit;
+  overflow: hidden;
+}
 }
 .about .locations-image .shape-bottom {
   height: 160px;
@@ -2921,4 +2909,13 @@ a.themebtn.themebtn1.membership-login {
 }
 .fa-whatsapp {
   --fa: "\f232";
+}
+
+.locationscard:hover .section-title {
+  color: var(--theme-primarycolor) !important;
+  transition: color 0.3s ease;
+}
+
+.section-title {
+  transition: color 0.3s ease;
 }

@@ -56,7 +56,7 @@ export default async function WebsiteLayout({ children }) {
       />
 
       <link rel="stylesheet" href="/frontend_assets/css/main.css?v=1.0" />
-      <link rel="stylesheet" href="/frontend_assets/css/style.css?v=1.0" />
+      <link rel="stylesheet" href="/frontend_assets/css/style.css?v=1.1" />
       <link rel="stylesheet" href="/frontend_assets/css/responsive.css?v=1.0" />
 
       <AosInit />
