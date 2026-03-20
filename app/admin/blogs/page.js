@@ -142,7 +142,7 @@ export default function BlogsPage() {
       header: "Date",
       render: (row) => (
         <div className="text-sm text-gray-500">
-          {new Date(row.createdAt).toLocaleDateString("en-GB", {
+          {new Date(row.publishDate || row.createdAt).toLocaleDateString("en-GB", {
             day: "numeric",
             month: "short",
             year: "numeric",

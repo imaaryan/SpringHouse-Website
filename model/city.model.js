@@ -26,26 +26,14 @@ const citySchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    amenities: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Amenity",
-      },
-    ],
+
     activeSolutions: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Solution",
       },
     ],
-    solutionsForEveryone: {
-      content: {
-        type: String,
-      },
-      image: {
-        type: String,
-      },
-    },
+
     seo: {
       metaTitle: String,
       metaDescription: String,

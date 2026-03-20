@@ -45,48 +45,26 @@ export async function PUT(request, { params }) {
     const description = formData.get("description");
     const isActive = formData.get("isActive") === "true";
 
-    // Amenities
-    const amenities = formData.getAll("amenities");
 
     // Active Solutions
     const activeSolutions = formData.getAll("activeSolutions");
 
-    // Solutions For Everyone
-    const solutionsContent = formData.get("solutionsForEveryone[content]");
 
     // Images
     const imageFile = formData.get("image");
-    const solutionImageFile = formData.get("solutionsForEveryoneImage");
-
     let imagePath = existingCity.image;
     if (imageFile && typeof imageFile === "object" && imageFile.size > 0) {
       imagePath = await uploadImage(imageFile, "cities");
     }
 
-    let solutionImagePath = existingCity.solutionsForEveryone?.image;
-    if (
-      solutionImageFile &&
-      typeof solutionImageFile === "object" &&
-      solutionImageFile.size > 0
-    ) {
-      solutionImagePath = await uploadImage(
-        solutionImageFile,
-        "cities/solutions",
-      );
-    }
 
     const updatePayload = {
       name,
       slug,
       description,
       isActive,
-      amenities,
       activeSolutions,
       image: imagePath,
-      solutionsForEveryone: {
-        content: solutionsContent !== null ? solutionsContent : existingCity.solutionsForEveryone?.content,
-        image: solutionImagePath,
-      },
       seo: {
         metaTitle: formData.get("seo[metaTitle]"),
         metaDescription: formData.get("seo[metaDescription]"),

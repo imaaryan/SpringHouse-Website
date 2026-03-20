@@ -26,7 +26,6 @@ export default function EditCityPage({ params }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [dependencies, setDependencies] = useState({
-    amenities: [],
     solutions: [],
   });
 
@@ -36,14 +35,7 @@ export default function EditCityPage({ params }) {
     description: "",
     isActive: false,
     image: "", // Featured Image
-    amenities: [],
     activeSolutions: [],
-    solutionsForEveryone: {
-      content: "",
-      image: "",
-      cta: "",
-      ctaLink: "",
-    },
     seo: {
       metaTitle: "",
       metaDescription: "",
@@ -52,9 +44,7 @@ export default function EditCityPage({ params }) {
   });
 
   const [imagePreview, setImagePreview] = useState(null);
-  const [solutionImagePreview, setSolutionImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
-  const [solutionImageFile, setSolutionImageFile] = useState(null);
 
   // Fetch Data & Dependencies
   useEffect(() => {
@@ -69,13 +59,6 @@ export default function EditCityPage({ params }) {
         const cityData = await cityRes.json();
         const amenitiesData = await amenitiesRes.json();
         const solutionsData = await solutionsRes.json();
-
-        if (amenitiesData.success) {
-          setDependencies((prev) => ({
-            ...prev,
-            amenities: amenitiesData.data,
-          }));
-        }
 
         if (solutionsData.success) {
           setDependencies((prev) => ({
@@ -92,14 +75,7 @@ export default function EditCityPage({ params }) {
             description: city.description || "",
             isActive: city.isActive ?? false,
             image: city.image || "",
-            amenities: city.amenities || [],
             activeSolutions: city.activeSolutions || [],
-            solutionsForEveryone: {
-              content: city.solutionsForEveryone?.content || "",
-              image: city.solutionsForEveryone?.image || "",
-              cta: city.solutionsForEveryone?.cta || "",
-              ctaLink: city.solutionsForEveryone?.ctaLink || "",
-            },
             seo: {
               metaTitle: city.seo?.metaTitle || "",
               metaDescription: city.seo?.metaDescription || "",
@@ -108,8 +84,6 @@ export default function EditCityPage({ params }) {
           });
 
           if (city.image) setImagePreview(city.image);
-          if (city.solutionsForEveryone?.image)
-            setSolutionImagePreview(city.solutionsForEveryone.image);
         } else {
           alert("Failed to fetch city details");
           router.push("/admin/cities");
@@ -126,19 +100,7 @@ export default function EditCityPage({ params }) {
   // Handle Input Change
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name.startsWith("solutionsForEveryone.")) {
-      const field = name.split(".")[1];
-      setFormData((prev) => ({
-        ...prev,
-        solutionsForEveryone: {
-          ...prev.solutionsForEveryone,
-          [field]: value,
-        },
-      }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleStatusChange = (e) => {
@@ -167,9 +129,6 @@ export default function EditCityPage({ params }) {
       if (type === "main") {
         setImageFile(file);
         setImagePreview(URL.createObjectURL(file));
-      } else if (type === "solution") {
-        setSolutionImageFile(file);
-        setSolutionImagePreview(URL.createObjectURL(file));
       }
     }
   };
@@ -178,16 +137,6 @@ export default function EditCityPage({ params }) {
     if (type === "main") {
       setImageFile(null);
       setImagePreview(null);
-      // If we are removing the existing image, we might need a way to tell backend to delete it?
-      // For now, if no file is sent, and no existing image string?
-      // The current API logic usually keeps existing if not provided.
-      // If we want to delete, we might need a separate flag or pass empty string if backend handles it.
-      // My API logic: `let imagePath = existingCity.image; if (file) ...`
-      // So simply setting state locally won't delete it on backend unless we send explicit signal.
-      // For now, let's just clear preview.
-    } else if (type === "solution") {
-      setSolutionImageFile(null);
-      setSolutionImagePreview(null);
     }
   };
 
@@ -203,21 +152,7 @@ export default function EditCityPage({ params }) {
       data.append("description", formData.description);
       data.append("isActive", formData.isActive);
 
-      formData.amenities.forEach((id) => data.append("amenities", id));
       formData.activeSolutions.forEach((id) => data.append("activeSolutions", id));
-
-      data.append(
-        "solutionsForEveryone[content]",
-        formData.solutionsForEveryone.content,
-      );
-      data.append(
-        "solutionsForEveryone[cta]",
-        formData.solutionsForEveryone.cta,
-      );
-      data.append(
-        "solutionsForEveryone[ctaLink]",
-        formData.solutionsForEveryone.ctaLink,
-      );
 
       if (formData.seo) {
         data.append("seo[metaTitle]", formData.seo.metaTitle);
@@ -227,9 +162,6 @@ export default function EditCityPage({ params }) {
 
       if (imageFile) {
         data.append("image", imageFile);
-      }
-      if (solutionImageFile) {
-        data.append("solutionsForEveryoneImage", solutionImageFile);
       }
 
       const res = await fetch(`/api/admin/cities/${id}`, {
@@ -324,88 +256,7 @@ export default function EditCityPage({ params }) {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
-            <h3 className="text-sm font-semibold text-gray-900">
-              Solution for Everyone
-            </h3>
-            <FormTextarea
-              label="Content"
-              name="solutionsForEveryone.content"
-              value={formData.solutionsForEveryone.content}
-              onChange={handleChange}
-              placeholder="Content"
-              rows={4}
-            />
-            <div className="bg-brand-light/50 border border-dashed border-brand-primary/30 rounded-lg p-6 text-center">
-              <div className="flex flex-col items-center justify-center">
-                {solutionImagePreview ? (
-                  <div className="relative w-full max-w-xs h-40">
-                    <img
-                      src={solutionImagePreview}
-                      alt="Preview"
-                      className="w-full h-full object-cover rounded-md"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeImage("solution")}
-                      className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md hover:bg-red-50 text-red-500"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                      </svg>
-                    </button>
-                  </div>
-                ) : (
-                  <label className="cursor-pointer flex flex-col items-center">
-                    <svg
-                      className="w-8 h-8 text-brand-primary mb-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                      ></path>
-                    </svg>
-                    <span className="text-sm text-gray-500">Upload Image</span>
-                    <input
-                      type="file"
-                      className="hidden"
-                      accept="image/*"
-                      onChange={(e) => handleImageChange(e, "solution")}
-                    />
-                  </label>
-                )}
-              </div>
-            </div>
-
-          </div>
-
           <div className="space-y-6">
-            <FormCheckboxGrid
-              label="Amenities"
-              name="amenities"
-              options={dependencies.amenities.map((a) => ({
-                value: a._id,
-                label: a.name,
-              }))}
-              selectedValues={formData.amenities}
-              onChange={handleCheckboxChange}
-            />
 
             <FormCheckboxGrid
               label="Active Solutions"

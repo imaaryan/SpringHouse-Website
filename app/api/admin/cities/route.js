@@ -93,47 +93,25 @@ export async function POST(request) {
     const description = formData.get("description");
     const isActive = formData.get("isActive") === "true";
 
-    // Amenities
-    const amenities = formData.getAll("amenities");
 
     // Active Solutions
     const activeSolutions = formData.getAll("activeSolutions");
 
-    // Solutions For Everyone
-    const solutionsContent = formData.get("solutionsForEveryone[content]");
 
     // Images
     const imageFile = formData.get("image");
-    const solutionImageFile = formData.get("solutionsForEveryoneImage");
-
     let imagePath = "";
     if (imageFile && typeof imageFile === "object" && imageFile.size > 0) {
       imagePath = await uploadImage(imageFile, "cities");
     }
 
-    let solutionImagePath = "";
-    if (
-      solutionImageFile &&
-      typeof solutionImageFile === "object" &&
-      solutionImageFile.size > 0
-    ) {
-      solutionImagePath = await uploadImage(
-        solutionImageFile,
-        "cities/solutions",
-      );
-    }
 
     const payload = {
       name,
       description,
       isActive,
-      amenities,
       activeSolutions,
       image: imagePath,
-      solutionsForEveryone: {
-        content: solutionsContent,
-        image: solutionImagePath,
-      },
       seo: {
         metaTitle: formData.get("seo[metaTitle]"),
         metaDescription: formData.get("seo[metaDescription]"),

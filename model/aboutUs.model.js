@@ -6,9 +6,7 @@ const aboutUsSchema = new mongoose.Schema(
     mainBanner: {
       type: String,
     },
-    subHeading: {
-      type: String,
-    },
+
     slug: {
       type: String,
       unique: true,

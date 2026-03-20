@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function AboutHero({ data = {} }) {
-  const { heading, subHeading, mainBanner } = data;
+  const { heading, mainBanner } = data;
 
   // Function to process headings containing \n safely
   const renderHeading = (text, defaultValues) => {
@@ -75,11 +75,7 @@ export default function AboutHero({ data = {} }) {
                     </>
                   ))}
                 </h4>
-                {subHeading && (
-                  <p className="mt-2 text-white/90 text-[18px] uppercase tracking-wider font-medium">
-                    {subHeading}
-                  </p>
-                )}
+
               </div>
             </div>
           </div>

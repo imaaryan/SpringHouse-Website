@@ -29,7 +29,6 @@ export async function PUT(request) {
 
     // Basic Fields
     const heading = formData.get("heading") || "";
-    const subHeading = formData.get("subHeading") || "";
 
     // Banner Image
     const mainBannerFile = formData.get("mainBanner");
@@ -88,7 +87,6 @@ export async function PUT(request) {
 
     // Update Payload
     aboutUs.heading = heading;
-    aboutUs.subHeading = subHeading;
     aboutUs.mainBanner = mainBannerPath;
     aboutUs.history = history;
     aboutUs.whyUs = whyUs;

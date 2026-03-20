@@ -14,7 +14,6 @@ export default function AboutUsAdmin() {
   // Form State
   const [formData, setFormData] = useState({
     heading: "",
-    subHeading: "",
     history: [],
     whyUs: ["", "", "", ""],
     whoAreWe: [
@@ -92,7 +91,6 @@ export default function AboutUsAdmin() {
 
           setFormData({
             heading: data.heading || "",
-            subHeading: data.subHeading || "",
             history: historyArr,
             whyUs: whyUsArr.slice(0, 4),
             whoAreWe: whoAreWeArr.slice(0, 4),
@@ -241,7 +239,6 @@ export default function AboutUsAdmin() {
     try {
       const data = new FormData();
       data.append("heading", formData.heading);
-      data.append("subHeading", formData.subHeading);
 
 
 
@@ -410,13 +407,7 @@ export default function AboutUsAdmin() {
                 onChange={handleInputChange}
                 placeholder="A space to work.&#10;A community to grow."
               />
-              <FormInput
-                label="Sub Heading"
-                name="subHeading"
-                value={formData.subHeading}
-                onChange={handleInputChange}
-                placeholder="CREATE. SIEZE. PROGRESS."
-              />
+
             </div>
             <div className="flex flex-col">
               <span className="block text-[13px] font-medium text-gray-700 mb-1">

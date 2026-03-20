@@ -5,7 +5,7 @@ import SolutionsDesktop from "@/app/components/home/SolutionsDesktop";
 import SolutionsMobile from "@/app/components/home/SolutionsMobile";
 import LocationCards from "@/app/components/home/LocationCards";
 import DesignYourIdealWorkNest from "@/app/components/home/DesignYourIdealWorkNest";
-import LifeAtSpringHouse from "@/app/components/home/LifeAtSpringHouse";
+
 import OurCommunity from "@/app/components/home/OurCommunity";
 import Networking from "@/app/components/home/Networking";
 import Testimonials from "@/app/components/home/Testimonials";
@@ -91,7 +91,7 @@ export default async function Home() {
       <PresenceCounter data={safeData.presence} />
       <LocationCards data={safeData.activeCities} />
       <DesignYourIdealWorkNest data={safeData.features} />
-      <LifeAtSpringHouse data={safeData.solutionsForEveryone} />
+
       <SolutionsDesktop data={safeSolutions} />
       <SolutionsMobile data={safeSolutions} />
       <Networking data={safeData.networking} />

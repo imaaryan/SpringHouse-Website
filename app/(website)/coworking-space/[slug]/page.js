@@ -10,7 +10,7 @@ import GlobalBanner from "@/app/components/home/GlobalBanner";
 import LocationContentWrapper from "@/app/components/location/LocationContentWrapper";
 import LocationAmenities from "@/app/components/location/LocationAmenities";
 
-import LifeAtSpringHouse from "@/app/components/home/LifeAtSpringHouse";
+
 import SolutionsDesktop from "@/app/components/home/SolutionsDesktop";
 import SolutionsMobile from "@/app/components/home/SolutionsMobile";
 import OtherLocations from "@/app/components/location/OtherLocations";
@@ -39,7 +39,6 @@ export default async function LocationPage({ params }) {
   // Fetch from DB
   await connectDB();
   const cityDataRaw = await City.findOne({ slug: city })
-    .populate("amenities", "name featuredIcon")
     .populate("activeSolutions")
     .lean();
   const activeSolutionsRaw = await Solution.find({ isActive: true }).lean();
@@ -47,14 +46,29 @@ export default async function LocationPage({ params }) {
   let areasRaw = [];
   let propertiesRaw = [];
 
+  let cityAmenities = [];
+
   if (cityDataRaw && cityDataRaw._id) {
     areasRaw = await Area.find({ city: cityDataRaw._id }).lean();
     propertiesRaw = await Property.find({ city: cityDataRaw._id, isActive: true })
       .populate("city", "slug name")
       .populate("area", "slug name")
       .populate("activeSolutions", "slug name")
+      .populate("amenities", "name featuredIcon")
       .lean();
-  } 
+      
+    const amenityMap = new Map();
+    propertiesRaw.forEach(prop => {
+      if (prop.amenities && Array.isArray(prop.amenities)) {
+        prop.amenities.forEach(amenity => {
+          if (!amenityMap.has(amenity._id.toString())) {
+            amenityMap.set(amenity._id.toString(), amenity);
+          }
+        });
+      }
+    });
+    cityAmenities = Array.from(amenityMap.values());
+  }
 
   const otherCitiesRaw = await City.find({ slug: { $ne: city }, isActive: true })
     .select("name slug")
@@ -83,9 +97,9 @@ export default async function LocationPage({ params }) {
         activeSolutions={activeSolutions} 
         areas={areas}
       />
-      <LocationAmenities amenities={cityData?.amenities || []} />
+      <LocationAmenities amenities={cityAmenities} />
 
-      <LifeAtSpringHouse />
+
       <SolutionsDesktop data={citySpecificSolutions} />
       <SolutionsMobile data={citySpecificSolutions} />
       <OtherLocations cities={otherCities} />

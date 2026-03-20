@@ -23,7 +23,6 @@ export default function AddCityPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [dependencies, setDependencies] = useState({
-    amenities: [],
     solutions: [],
   });
 
@@ -33,14 +32,7 @@ export default function AddCityPage() {
     description: "",
     isActive: true, // Published/Draft
     image: "", // Featured Image
-    amenities: [],
     activeSolutions: [],
-    solutionsForEveryone: {
-      content: "",
-      image: "",
-      cta: "",
-      ctaLink: "",
-    },
     seo: {
       metaTitle: "",
       metaDescription: "",
@@ -49,9 +41,7 @@ export default function AddCityPage() {
   });
 
   const [imagePreview, setImagePreview] = useState(null);
-  const [solutionImagePreview, setSolutionImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
-  const [solutionImageFile, setSolutionImageFile] = useState(null);
 
   // Fetch Dependencies (Amenities)
   useEffect(() => {
@@ -64,12 +54,6 @@ export default function AddCityPage() {
         const amenitiesData = await amenitiesRes.json();
         const solutionsData = await solutionsRes.json();
 
-        if (amenitiesData.success) {
-          setDependencies((prev) => ({
-            ...prev,
-            amenities: amenitiesData.data,
-          }));
-        }
         if (solutionsData.success) {
           setDependencies((prev) => ({
             ...prev,
@@ -87,26 +71,14 @@ export default function AddCityPage() {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Handle nested solutionsForEveryone
-    if (name.startsWith("solutionsForEveryone.")) {
-      const field = name.split(".")[1];
-      setFormData((prev) => ({
-        ...prev,
-        solutionsForEveryone: {
-          ...prev.solutionsForEveryone,
-          [field]: value,
-        },
-      }));
-    } else {
-      setFormData((prev) => {
-        const newData = { ...prev, [name]: value };
-        // Auto-generate slug
-        if (name === "name") {
-          newData.slug = slugify(value, { lower: true });
-        }
-        return newData;
-      });
-    }
+    setFormData((prev) => {
+      const newData = { ...prev, [name]: value };
+      // Auto-generate slug
+      if (name === "name") {
+        newData.slug = slugify(value, { lower: true });
+      }
+      return newData;
+    });
   };
 
   const handleStatusChange = (e) => {
@@ -135,9 +107,6 @@ export default function AddCityPage() {
       if (type === "main") {
         setImageFile(file);
         setImagePreview(URL.createObjectURL(file));
-      } else if (type === "solution") {
-        setSolutionImageFile(file);
-        setSolutionImagePreview(URL.createObjectURL(file));
       }
     }
   };
@@ -146,9 +115,6 @@ export default function AddCityPage() {
     if (type === "main") {
       setImageFile(null);
       setImagePreview(null);
-    } else if (type === "solution") {
-      setSolutionImageFile(null);
-      setSolutionImagePreview(null);
     }
   };
 
@@ -164,24 +130,8 @@ export default function AddCityPage() {
       data.append("description", formData.description);
       data.append("isActive", formData.isActive);
 
-      // Amenities
-      formData.amenities.forEach((id) => data.append("amenities", id));
       // Solutions
       formData.activeSolutions.forEach((id) => data.append("activeSolutions", id));
-
-      // Solutions For Everyone
-      data.append(
-        "solutionsForEveryone[content]",
-        formData.solutionsForEveryone.content,
-      );
-      data.append(
-        "solutionsForEveryone[cta]",
-        formData.solutionsForEveryone.cta,
-      );
-      data.append(
-        "solutionsForEveryone[ctaLink]",
-        formData.solutionsForEveryone.ctaLink,
-      );
 
       // SEO
       if (formData.seo) {
@@ -193,9 +143,6 @@ export default function AddCityPage() {
       // Images
       if (imageFile) {
         data.append("image", imageFile);
-      }
-      if (solutionImageFile) {
-        data.append("solutionsForEveryoneImage", solutionImageFile);
       }
 
       const res = await fetch("/api/admin/cities", {
@@ -282,92 +229,8 @@ export default function AddCityPage() {
             </div>
           </div>
 
-          {/* Solution for Everyone */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
-            <h3 className="text-sm font-semibold text-gray-900">
-              Solution for Everyone
-            </h3>
-            <FormTextarea
-              label="Content"
-              name="solutionsForEveryone.content"
-              value={formData.solutionsForEveryone.content}
-              onChange={handleChange}
-              placeholder="Content"
-              rows={4}
-            />
-            <div className="bg-brand-light/50 border border-dashed border-brand-primary/30 rounded-lg p-6 text-center">
-              {/* Reusing ImageUploader logic but simpler strictly for one image */}
-              <div className="flex flex-col items-center justify-center">
-                {solutionImagePreview ? (
-                  <div className="relative w-full max-w-xs h-40">
-                    <img
-                      src={solutionImagePreview}
-                      alt="Preview"
-                      className="w-full h-full object-cover rounded-md"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeImage("solution")}
-                      className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md hover:bg-red-50 text-red-500"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                      </svg>
-                    </button>
-                  </div>
-                ) : (
-                  <label className="cursor-pointer flex flex-col items-center">
-                    <svg
-                      className="w-8 h-8 text-brand-primary mb-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                      ></path>
-                    </svg>
-                    <span className="text-sm text-gray-500">Upload Image</span>
-                    <input
-                      type="file"
-                      className="hidden"
-                      accept="image/*"
-                      onChange={(e) => handleImageChange(e, "solution")}
-                    />
-                  </label>
-                )}
-              </div>
-            </div>
-
-          </div>
-
-          {/* Amenities & SEO */}
+          {/* Active Solutions & SEO */}
           <div className="space-y-6">
-            <FormCheckboxGrid
-              label="Amenities"
-              name="amenities"
-              options={dependencies.amenities.map((a) => ({
-                value: a._id,
-                label: a.name,
-              }))}
-              selectedValues={formData.amenities}
-              onChange={handleCheckboxChange}
-            />
-
             <FormCheckboxGrid
               label="Active Solutions"
               name="activeSolutions"
