@@ -26,13 +26,13 @@ export default function OtherSolutions() {
 
         <div className="row">
           {solutions.map((item, index) => {
-            const isActive = pathname === `/solutions/${item.slug}`;
+            const isActive = pathname === `/${item.slug}`;
 
             return (
               <div key={index} className="col-md-2 col-6 mt-lg-4 mt-md-4 mt-3">
                 <div className="other-solution">
                   <Link
-                    href={`/solutions/${item.slug}`}
+                    href={`/${item.slug}`}
                     className={isActive ? "active" : ""}
                   >
                     {item.name}

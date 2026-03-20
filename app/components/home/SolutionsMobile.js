@@ -119,7 +119,7 @@ export default function SolutionsMobile({ data = [] }) {
                   </div>
                   <div className="service-btn mt-2">
                     <Link
-                      href={`/solutions/${solution.slug || "#"}`}
+                      href={`/${solution.slug || "#"}`}
                       className="textright morebtn font17"
                     >
                       More Details
