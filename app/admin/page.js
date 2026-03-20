@@ -51,116 +51,19 @@ export default function AdminDashboard() {
       try {
         setLoading(true);
 
-        // Fetch dashboard stats
         const statsRes = await fetch("/api/admin/dashboard/stats");
-        const statsData = await statsRes.json();
-        if (statsData.success) {
-          setStats(statsData.data);
-        }
-
-        // Fetch cities with property count
-        const citiesRes = await fetch("/api/admin/cities");
-        const citiesJsonData = await citiesRes.json();
-        if (citiesJsonData.success && citiesJsonData.data) {
-          const chartData = citiesJsonData.data.map((city) => ({
-            name: city.name,
-            value: city.propertyCount,
-          }));
-          setCitiesData(chartData);
-        }
-
-        // Fetch enquiries
-        const enquiriesRes = await fetch("/api/enquiries");
-        const enquiriesJsonData = await enquiriesRes.json();
-        if (enquiriesJsonData.success && enquiriesJsonData.data) {
-          const readCount = enquiriesJsonData.data.filter(
-            (e) => e.isRead === true,
-          ).length;
-          const unreadCount = enquiriesJsonData.data.filter(
-            (e) => e.isRead === false,
-          ).length;
-          setEnquiriesData({
-            read: readCount,
-            unread: unreadCount,
-          });
-        }
-
-        // Fetch properties to count by solutions
-        const propertiesRes = await fetch("/api/admin/properties");
-        const propertiesJsonData = await propertiesRes.json();
-
-        // Fetch solutions
-        const solutionsRes = await fetch("/api/admin/solutions");
-        const solutionsJsonData = await solutionsRes.json();
-
-        if (
-          solutionsJsonData.success &&
-          solutionsJsonData.data &&
-          propertiesJsonData.success &&
-          propertiesJsonData.data
-        ) {
-          console.log("=== DEBUG: Fetched Data ===");
-          console.log("Total Properties:", propertiesJsonData.data.length);
-          console.log("Total Solutions:", solutionsJsonData.data.length);
-
-          // Create a map of solution IDs to solution names
-          const solutionMap = {};
-          solutionsJsonData.data.forEach((solution) => {
-            solutionMap[solution._id] = solution.name;
-          });
-
-          console.log("Solution Map:", solutionMap);
-
-          // Count properties for each solution
-          const solutionCounts = {};
-
-          // Initialize all solutions with 0
-          Object.keys(solutionMap).forEach((solutionId) => {
-            solutionCounts[solutionId] = 0;
-          });
-
-          // Count properties for each solution
-          propertiesJsonData.data.forEach((property, propertyIndex) => {
-            if (
-              property.activeSolutions &&
-              Array.isArray(property.activeSolutions)
-            ) {
-              console.log(
-                `Property ${propertyIndex} (${property.name}): ${property.activeSolutions.length} solutions`,
-              );
-              property.activeSolutions.forEach((solutionId) => {
-                if (solutionCounts.hasOwnProperty(solutionId)) {
-                  solutionCounts[solutionId]++;
-                  console.log(
-                    `  - Solution ${solutionId} (${solutionMap[solutionId]}): now ${solutionCounts[solutionId]}`,
-                  );
-                } else {
-                  // Initialize if not already present
-                  solutionCounts[solutionId] = 1;
-                  console.log(
-                    `  - Solution ${solutionId} (unknown): initialized to 1`,
-                  );
-                }
-              });
-            }
-          });
-
-          // Build chart data
-          const chartData = solutionsJsonData.data
-            .map((solution) => ({
-              id: solution._id,
-              name: solution.name,
-              value: solutionCounts[solution._id] || 0,
-            }))
-            .sort((a, b) => b.value - a.value);
-
-          console.log("=== Final Solutions Chart Data ===");
-          chartData.forEach((item) => {
-            console.log(`${item.name}: ${item.value} properties`);
-          });
-          console.log("Solution Counts Object:", solutionCounts);
-
-          setSolutionsData(chartData);
+        const statsJson = await statsRes.json();
+        
+        if (statsJson.success) {
+          const { properties, cities, areas, enquiries, charts } = statsJson.data;
+          
+          setStats({ properties, cities, areas, enquiries });
+          
+          if (charts) {
+            setCitiesData(charts.citiesData || []);
+            setEnquiriesData(charts.enquiriesData || { read: 0, unread: 0 });
+            setSolutionsData(charts.solutionsData || []);
+          }
         }
       } catch (error) {
         console.error("Failed to fetch dashboard data", error);
