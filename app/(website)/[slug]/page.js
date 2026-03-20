@@ -4,6 +4,7 @@ import connectDB from "@/utils/db";
 import { Solution } from "@/model/solution.model";
 import { OtherPage } from "@/model/otherPage.model";
 import { Property } from "@/model/property.model";
+import { Homepage } from "@/model/homepage.model";
 import FooterModel from "@/model/footer.model";
 
 import Header from "@/app/components/home/Header";
@@ -16,7 +17,8 @@ import OurCommunity from "@/app/components/home/OurCommunity";
 import Networking from "@/app/components/home/Networking";
 import GlobalBanner from "@/app/components/home/GlobalBanner";
 import SolutionIntro from "@/app/components/solutions/SolutionIntro";
-import ManagedOfficeStatic from "@/app/components/solutions/ManagedOfficeStatic";
+import FullHouse from "@/app/components/solutions/FullHouse";
+import SpacesAvailable from "@/app/components/solutions/SpacesAvailable";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -69,6 +71,10 @@ export default async function DynamicPage({ params }) {
     // For ContactForm dynamic image
     const footerData = (await FooterModel.findOne({}).lean()) || {};
 
+    // Fetch Global Homepage Data for Community and Networking
+    const homepageData = (await Homepage.findOne({}).lean()) || {};
+
+
     return (
       <>
         <Header />
@@ -79,18 +85,24 @@ export default async function DynamicPage({ params }) {
           <Testimonials data={solution.testimonials} />
         )}
 
-        {slug === "managed-office" && <ManagedOfficeStatic />}
+        {solution.companyImages && solution.companyImages.length > 0 && (
+          <FullHouse images={solution.companyImages} />
+        )}
+
+        {solution.featuredSpaces && solution.featuredSpaces.length > 0 && (
+          <SpacesAvailable spaces={solution.featuredSpaces} />
+        )}
 
         {solutionProperties && solutionProperties.length > 0 && (
           <AvailableProperties properties={solutionProperties} showTabs={true} />
         )}
 
-        {solution.ourCommunity && solution.ourCommunity.length > 0 && (
-          <OurCommunity data={solution.ourCommunity} />
+        {homepageData.ourCommunity && homepageData.ourCommunity.length > 0 && (
+          <OurCommunity data={homepageData.ourCommunity} />
         )}
 
-        {solution.networking && (solution.networking.title || solution.networking.content) && (
-          <Networking data={solution.networking} />
+        {homepageData.networking && (homepageData.networking.title || homepageData.networking.content) && (
+          <Networking data={homepageData.networking} />
         )}
 
         <OtherSolutions />

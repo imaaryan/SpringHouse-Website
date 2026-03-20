@@ -126,40 +126,6 @@ export async function PUT(request, { params }) {
       i++;
     }
 
-    const networkingTitle = formData.get("networking[title]") || "";
-    const networkingContent = formData.get("networking[content]") || "";
-    const networkingTooltip1 = formData.get("networking[tooltip1]") || "";
-    const networkingTooltip2 = formData.get("networking[tooltip2]") || "";
-    const networkingTooltip3 = formData.get("networking[tooltip3]") || "";
-    const networkingImageFile = formData.get("networkingImage");
-    let networkingImagePath = existingSolution.networking?.image || "";
-    if (
-      networkingImageFile &&
-      typeof networkingImageFile === "object" &&
-      networkingImageFile.size > 0
-    ) {
-      networkingImagePath = await uploadImage(
-        networkingImageFile,
-        "solutions/networking",
-      );
-    } else if (networkingImageFile === "") {
-      networkingImagePath = ""; // Allow clearing if empty string logic used, optional
-    }
-
-    // Our Community
-    const newCommunityImageInputs = formData.getAll("communityImages");
-    const existingCommunityImageInputs = formData.getAll(
-      "existingCommunityImages",
-    );
-    const communityImages = [...existingCommunityImageInputs];
-
-    for (const input of newCommunityImageInputs) {
-      if (input && typeof input === "object" && input.size > 0) {
-        const path = await uploadImage(input, "solutions/community");
-        if (path) communityImages.push(path);
-      }
-    }
-
     const updatePayload = {
       name,
       description,
@@ -168,17 +134,6 @@ export async function PUT(request, { params }) {
       testimonials,
       companyImages: newCompanyImages,
       featuredSpaces,
-      ourCommunity: communityImages,
-      networking: {
-        title: networkingTitle !== "" ? networkingTitle : existingSolution.networking?.title,
-        content: networkingContent !== "" ? networkingContent : existingSolution.networking?.content,
-        image: networkingImagePath,
-        tooltips: [
-          networkingTooltip1 !== "" ? networkingTooltip1 : existingSolution.networking?.tooltips?.[0] || "",
-          networkingTooltip2 !== "" ? networkingTooltip2 : existingSolution.networking?.tooltips?.[1] || "",
-          networkingTooltip3 !== "" ? networkingTooltip3 : existingSolution.networking?.tooltips?.[2] || ""
-        ],
-      },
       isActive,
       seo: {
         metaTitle: formData.get("seo[metaTitle]"),

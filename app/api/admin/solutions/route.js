@@ -55,31 +55,6 @@ export async function POST(request) {
       i++;
     }
 
-    // Networking
-    const networkingTitle = formData.get("networking[title]") || "";
-    const networkingContent = formData.get("networking[content]") || "";
-    const networkingTooltip1 = formData.get("networking[tooltip1]") || "";
-    const networkingTooltip2 = formData.get("networking[tooltip2]") || "";
-    const networkingTooltip3 = formData.get("networking[tooltip3]") || "";
-    const networkingImageFile = formData.get("networkingImage");
-    let networkingImagePath = "";
-    if (networkingImageFile && networkingImageFile.size > 0) {
-      networkingImagePath = await uploadImage(
-        networkingImageFile,
-        "solutions/networking",
-      );
-    }
-
-    // Our Community Images
-    const communityImageFiles = formData.getAll("communityImages");
-    const communityImages = [];
-    for (const file of communityImageFiles) {
-      if (file && file.size > 0) {
-        const path = await uploadImage(file, "solutions/community");
-        if (path) communityImages.push(path);
-      }
-    }
-
     const payload = {
       name,
       slug: slug || undefined,
@@ -89,17 +64,6 @@ export async function POST(request) {
       testimonials,
       companyImages,
       featuredSpaces,
-      ourCommunity: communityImages,
-      networking: {
-        title: networkingTitle,
-        content: networkingContent,
-        image: networkingImagePath,
-        tooltips: [
-          networkingTooltip1 || "", 
-          networkingTooltip2 || "", 
-          networkingTooltip3 || ""
-        ],
-      },
       isActive,
       seo: {
         metaTitle: formData.get("seo[metaTitle]"),

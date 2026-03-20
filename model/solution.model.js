@@ -44,20 +44,6 @@ const solutionSchema = new mongoose.Schema(
         image: String,
       },
     ],
-    ourCommunity: [
-      {
-        type: String,
-      },
-    ],
-    networking: {
-      title: { type: String, default: "" },
-      content: { type: String, default: "" },
-      image: { type: String, default: "" },
-      tooltips: {
-        type: [String],
-        default: ["", "", ""],
-      },
-    },
     isActive: {
       type: Boolean,
       default: true,
