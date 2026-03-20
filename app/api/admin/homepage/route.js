@@ -136,7 +136,19 @@ export async function PUT(request) {
       typeof heroVideoFile === "object" &&
       heroVideoFile.size > 0
     ) {
-      heroVideoPath = await uploadImage(heroVideoFile, "homepage/hero");
+      heroVideoPath = await uploadImage(heroVideoFile, "homepage/hero", "public/assets", {
+        maxSizeMB: 100,
+        allowedTypes: [
+          "video/mp4",
+          "video/webm",
+          "video/ogg",
+          "video/quicktime",
+          "image/jpeg",
+          "image/png",
+          "image/webp",
+          "image/gif",
+        ],
+      });
     }
 
     // Our Community Images (Array of new images + existing ones)
