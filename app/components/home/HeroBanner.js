@@ -207,36 +207,35 @@ export default function HeroBanner({ dropdownOptions = {}, data = {} }) {
               </svg>
             </div>
           </div>
-        </div>
-
-        <div className="spring-content" data-aos="fade-up">
-          {data.subHeading && (
-            <span 
-              className="section-span"
-              style={{
-                fontSize: 15,
-                fontWeight: "400",
-                fontFamily: "montserrat",
-                letterSpacing: "30%",
-              }}
-            >
-              {data.subHeading}
-            </span>
-          )}
-          {data.heading && (
-            <h2 className="section-title mt-2">
-              <p
+          <div className="spring-content" data-aos="fade-up">
+            {data.subHeading && (
+              <span 
+                className="section-span"
                 style={{
-                  fontSize: 46,
+                  fontSize: 15,
                   fontWeight: "400",
-                  fontFamily: "Gobold",
+                  fontFamily: "montserrat",
+                  letterSpacing: "30%",
                 }}
-                dangerouslySetInnerHTML={{
-                  __html: data.heading.replace(/\n/g, "<br />"),
-                }}
-              />
-            </h2>
-          )}
+              >
+                {data.subHeading}
+              </span>
+            )}
+            {data.heading && (
+              <h2 className="section-title mt-2">
+                <p
+                  style={{
+                    fontSize: "clamp(28px, 5vw, 46px)",
+                    fontWeight: "400",
+                    fontFamily: "Gobold",
+                  }}
+                  dangerouslySetInnerHTML={{
+                    __html: data.heading.replace(/\n/g, "<br />"),
+                  }}
+                />
+              </h2>
+            )}
+          </div>
         </div>
 
         <div className="row1 b-lg-0 " data-aos="fade-up">

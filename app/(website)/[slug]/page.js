@@ -59,6 +59,8 @@ export default async function DynamicPage({ params }) {
   if (rawSolution) {
     const solution = JSON.parse(JSON.stringify(rawSolution));
     const description = solution.description?.split("\r\n").filter(Boolean) || [];
+    const vs = solution.visibleSections || [];
+    const show = (key) => vs.length === 0 || vs.includes(key);
 
     // Fetch properties where this solution is active
     const rawProperties = await Property.find({
@@ -81,37 +83,43 @@ export default async function DynamicPage({ params }) {
       <>
         <Header />
         <GlobalBanner title={solution.name} imageSrc={solution.image} />
-        <SolutionIntro description={description} fourPoints={solution.fourPoints} />
         
-        {solution.testimonials && solution.testimonials.length > 0 && (
+        {show("intro") && (
+          <SolutionIntro description={description} fourPoints={solution.fourPoints} />
+        )}
+        
+        {show("testimonials") && solution.testimonials && solution.testimonials.length > 0 && (
           <Testimonials data={solution.testimonials} />
         )}
 
-        {solution.companyImages && solution.companyImages.length > 0 && (
+        {show("companyImages") && solution.companyImages && solution.companyImages.length > 0 && (
           <FullHouse images={solution.companyImages} />
         )}
 
-        {solution.featuredSpaces && solution.featuredSpaces.length > 0 && (
+        {show("featuredSpaces") && solution.featuredSpaces && solution.featuredSpaces.length > 0 && (
           <SpacesAvailable spaces={solution.featuredSpaces} />
         )}
 
-        {solutionProperties && solutionProperties.length > 0 && (
+        {show("availableProperties") && solutionProperties && solutionProperties.length > 0 && (
           <AvailableProperties properties={solutionProperties} showTabs={true} />
         )}
 
-        {homepageData.ourCommunity && homepageData.ourCommunity.length > 0 && (
+        {show("ourCommunity") && homepageData.ourCommunity && homepageData.ourCommunity.length > 0 && (
           <OurCommunity data={homepageData.ourCommunity} />
         )}
 
-        {homepageData.networking && (homepageData.networking.title || homepageData.networking.content) && (
+        {show("networking") && homepageData.networking && (homepageData.networking.title || homepageData.networking.content) && (
           <Networking data={homepageData.networking} />
         )}
 
-        <OtherSolutions />
-        <ContactForm 
-          phone={footerData?.contactInfo?.phone} 
-          contactFormImage={footerData?.formImages?.contactFormImage} 
-        />
+        {show("otherSolutions") && <OtherSolutions />}
+        
+        {show("contactForm") && (
+          <ContactForm 
+            phone={footerData?.contactInfo?.phone} 
+            contactFormImage={footerData?.formImages?.contactFormImage} 
+          />
+        )}
         {solution.seo?.codeSnippet && (
           <div dangerouslySetInnerHTML={{ __html: solution.seo.codeSnippet }} />
         )}

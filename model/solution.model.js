@@ -46,6 +46,20 @@ const solutionSchema = new mongoose.Schema(
         image: String,
       },
     ],
+    visibleSections: {
+      type: [String],
+      default: [
+        "intro",
+        "testimonials",
+        "companyImages",
+        "featuredSpaces",
+        "availableProperties",
+        "ourCommunity",
+        "networking",
+        "otherSolutions",
+        "contactForm",
+      ],
+    },
     isActive: {
       type: Boolean,
       default: true,

@@ -199,6 +199,19 @@ export default async function Footer() {
         .whatsapp i {
             font-size: 35px;
         }
+        @media (max-width: 768px) {
+            .whatsapp {
+                bottom: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                line-height: 45px;
+                z-index: 99;
+            }
+            .whatsapp i {
+                font-size: 24px;
+            }
+        }
             .dynamic-footer-bottom{ 
 max-width: 800px;
             }

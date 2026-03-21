@@ -325,25 +325,57 @@
   .about h4.section-title {
     font-size: 20px !important;
   }
-  .spring-housebaner video {
-    height: 40vh;
+  .spring-housebaner .springhouse-image {
+     position: relative;
+     height: auto;
+     min-height: 40vh;
+  }
+  .spring-housebaner .springhouse-image video,
+  .spring-housebaner .springhouse-image img {
+    height: 42vh;
     object-fit: cover;
   }
-
-  .design-image img {
-    width: 100%;
-  }
   .spring-housebaner .shape-bottom {
-    width: 65vw;
-    height: 14vh;
-    bottom: -1px;
-    top: auto;
+    width: 80%;
+    height: 135px;
+    bottom: 0;
+    left: 0;
+    background: #fff;
+    border-radius: 0 25px 0 0;
+    position: absolute;
+    z-index: 5;
+    display: block !important;
   }
   .spring-housebaner .spring-content {
     top: auto;
-    left: 26px;
+    left: 0;
     position: absolute;
-    bottom: 28vh;
+    bottom: 0;
+    padding: 25px 20px;
+    text-align: left;
+    width: 88%;
+    z-index: 10;
+    background: transparent;
+  }
+  .spring-housebaner .section-span {
+    justify-content: flex-start;
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px !important;
+    font-weight: 500;
+    letter-spacing: 2px;
+  }
+  .spring-housebaner .section-title p {
+    font-size: 28px !important;
+    line-height: 1.2;
+    margin-top: 5px;
+  }
+  .spring-housebaner .row1 {
+    width: 100%;
+    position: relative;
+    left: 0;
+    right: 0;
+    top: 20px;
   }
   .spring-housebaner .shape-left-top {
     position: absolute;
@@ -906,14 +938,24 @@
     width: 16vh;
   }
   .spring-housebaner .shape-bottom {
-    width: 52vw;
-    height: 17vh;
-    bottom: 17vh;
-    top: auto;
+    width: 88%;
+    height: 165px;
+    bottom: 0;
+    left: 0;
+    background: #fff;
+    border-radius: 0 25px 0 0;
+    position: absolute;
+    z-index: 5;
+    display: block !important;
   }
   .spring-housebaner .spring-content {
-    top: -32vh;
-    left: 0px;
-    position: relative;
+    top: auto;
+    left: 0;
+    position: absolute;
+    bottom: 0;
+    padding: 20px 15px;
+    text-align: left;
+    width: 88%;
+    z-index: 10;
   }
 }

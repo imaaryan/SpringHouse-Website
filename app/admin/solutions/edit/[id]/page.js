@@ -15,6 +15,18 @@ import {
 import slugify from "slugify";
 import SEOForm from "@/app/components/admin/SEOForm";
 
+const ALL_SECTIONS = [
+  { key: "intro", label: "Introduction" },
+  { key: "testimonials", label: "Testimonials" },
+  { key: "companyImages", label: "Company Images" },
+  { key: "featuredSpaces", label: "Featured Spaces" },
+  { key: "availableProperties", label: "Available Properties" },
+  { key: "ourCommunity", label: "Our Community" },
+  { key: "networking", label: "Networking" },
+  { key: "otherSolutions", label: "Other Solutions" },
+  { key: "contactForm", label: "Contact Form" },
+];
+
 export default function EditSolutionPage() {
   const router = useRouter();
   const params = useParams();
@@ -32,15 +44,25 @@ export default function EditSolutionPage() {
     description: "",
     isActive: false,
     fourPoints: ["", "", "", ""],
-    isActive: false,
-    fourPoints: ["", "", "", ""],
     testimonials: [],
+    visibleSections: ALL_SECTIONS.map((s) => s.key),
     seo: {
       metaTitle: "",
       metaDescription: "",
       codeSnippet: "",
     },
   });
+
+  const toggleSection = (key) => {
+    setFormData((prev) => {
+      const sections = prev.visibleSections.includes(key)
+        ? prev.visibleSections.filter((s) => s !== key)
+        : [...prev.visibleSections, key];
+      return { ...prev, visibleSections: sections };
+    });
+  };
+
+  const isSectionVisible = (key) => formData.visibleSections.includes(key);
 
   // Image States
   const [image, setImage] = useState(null); // File object (for new upload)
@@ -81,6 +103,10 @@ export default function EditSolutionPage() {
             testimonials: s.testimonials
               ? s.testimonials.map((t) => (typeof t === "object" ? t._id : t))
               : [],
+            visibleSections:
+              s.visibleSections && s.visibleSections.length > 0
+                ? s.visibleSections
+                : ALL_SECTIONS.map((sec) => sec.key),
             seo: {
               metaTitle: s.seo?.metaTitle || "",
               metaDescription: s.seo?.metaDescription || "",
@@ -269,6 +295,8 @@ export default function EditSolutionPage() {
 
       formData.fourPoints.forEach((point) => data.append("fourPoints", point));
       formData.testimonials.forEach((id) => data.append("testimonials", id));
+      data.append("visibleSectionsUpdate", "true");
+      formData.visibleSections.forEach((s) => data.append("visibleSections", s));
 
       if (image) {
         data.append("image", image);
@@ -398,6 +426,8 @@ export default function EditSolutionPage() {
             />
           </div>
 
+          {/* Company Images */}
+          {isSectionVisible("companyImages") && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-semibold text-gray-900">Company Images</h3>
@@ -465,7 +495,9 @@ export default function EditSolutionPage() {
               ))}
             </div>
           </div>
+          )}
 
+          {isSectionVisible("featuredSpaces") && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h3 className="text-sm font-semibold text-gray-900 mb-4">
               Featured Spaces
@@ -534,7 +566,10 @@ export default function EditSolutionPage() {
               </button>
             </div>
           </div>
+          )}
 
+          {/* Testimonials */}
+          {isSectionVisible("testimonials") && (
           <FormCheckboxGrid
             label="Testimonials"
             name="testimonials"
@@ -545,6 +580,7 @@ export default function EditSolutionPage() {
             selectedValues={formData.testimonials}
             onChange={handleCheckboxChange}
           />
+          )}
 
           <SEOForm
             values={formData.seo}
@@ -572,6 +608,23 @@ export default function EditSolutionPage() {
                 { value: "true", label: "Published" },
               ]}
             />
+          </div>
+
+          {/* Visible Sections */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-3">
+            <h3 className="text-sm font-semibold text-gray-900">Visible Sections</h3>
+            <p className="text-xs text-gray-500">Toggle which sections appear on the frontend page.</p>
+            {ALL_SECTIONS.map((section) => (
+              <label key={section.key} className="flex items-center gap-3 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={formData.visibleSections.includes(section.key)}
+                  onChange={() => toggleSection(section.key)}
+                  className="rounded border-gray-300 text-brand-primary focus:ring-brand-primary h-4 w-4"
+                />
+                <span className="text-sm text-gray-700 group-hover:text-gray-900">{section.label}</span>
+              </label>
+            ))}
           </div>
 
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">

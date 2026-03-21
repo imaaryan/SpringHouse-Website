@@ -74,6 +74,10 @@ export async function POST(request) {
       i++;
     }
 
+    // Visible Sections
+    const hasVisibleSectionsUpdate = formData.has("visibleSectionsUpdate");
+    const visibleSections = formData.getAll("visibleSections");
+
     const payload = {
       name,
       slug: slug || undefined,
@@ -83,6 +87,7 @@ export async function POST(request) {
       testimonials,
       companyImages,
       featuredSpaces,
+      visibleSections: hasVisibleSectionsUpdate ? visibleSections : undefined,
       isActive,
       seo: {
         metaTitle: formData.get("seo[metaTitle]"),

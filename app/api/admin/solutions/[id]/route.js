@@ -136,6 +136,10 @@ export async function PUT(request, { params }) {
       i++;
     }
 
+    // Visible Sections
+    const hasVisibleSectionsUpdate = formData.has("visibleSectionsUpdate");
+    const visibleSections = formData.getAll("visibleSections");
+
     const updatePayload = {
       name,
       description,
@@ -144,6 +148,7 @@ export async function PUT(request, { params }) {
       testimonials,
       companyImages: newCompanyImages,
       featuredSpaces,
+      visibleSections: hasVisibleSectionsUpdate ? visibleSections : existingSolution.visibleSections,
       isActive,
       seo: {
         metaTitle: formData.get("seo[metaTitle]"),
@@ -169,6 +174,7 @@ export async function PUT(request, { params }) {
     });
   } catch (error) {
     console.error("Update Solution Error:", error);
+    console.error("Error stack:", error.stack);
     return NextResponse.json(
       { success: false, error: error.message || "Failed to update" },
       { status: 500 },

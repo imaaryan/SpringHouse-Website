@@ -8,6 +8,11 @@
   src: url("/admin_assets/font/Gobold Regular.otf");
 }
 
+body, html {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 @theme {
   /* Brand Colors from style.css */
   --color-brand-primary: #00aaa6; /* --theme-primarycolor */
