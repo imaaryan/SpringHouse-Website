@@ -77,7 +77,7 @@ export default async function SingleBlogPage({ params }) {
                 }
               `}} />
 
-              <div className="blog-content-body mt-5" dangerouslySetInnerHTML={{ __html: blog.content }}></div>
+              <div className="blog-content-body mt-5 ql-content" dangerouslySetInnerHTML={{ __html: blog.content }}></div>
             </div>
           </div>
         </div>

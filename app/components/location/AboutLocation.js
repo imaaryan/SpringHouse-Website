@@ -20,7 +20,7 @@ export default function AboutLocation({
 
             {city.description ? (
               <div 
-                className="rich-text-content"
+                className="rich-text-content ql-content"
                 dangerouslySetInnerHTML={{ __html: city.description }} 
               />
             ) : (

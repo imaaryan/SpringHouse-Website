@@ -12,6 +12,10 @@ export default function RootLayout({ children }) {
           type="image/x-icon"
           href="/frontend_assets/img/favicon.png"
         />
+        <link
+          rel="stylesheet"
+          href="/frontend_assets/css/quill-content.css"
+        />
       </head>
       <body>{children}</body>
     </html>

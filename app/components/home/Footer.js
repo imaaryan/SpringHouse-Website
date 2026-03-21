@@ -34,7 +34,7 @@ export default async function Footer() {
 
                 <div className="col-lg-12">
                   <div
-                    className="dynamic-footer-bottom pt-5"
+                    className="dynamic-footer-bottom pt-5 ql-content"
                     dangerouslySetInnerHTML={{ __html: bottomBlocks }}
                   />
                 </div>

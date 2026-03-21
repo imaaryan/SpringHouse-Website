@@ -61,7 +61,7 @@ export default function FaqAccordion({ faqData }) {
                       aria-labelledby={`${itemId}-heading`}
                     >
                       <div
-                        className="accordion-body faq-answer-content"
+                        className="accordion-body faq-answer-content ql-content"
                         dangerouslySetInnerHTML={{ __html: item.answer }}
                       />
                     </div>

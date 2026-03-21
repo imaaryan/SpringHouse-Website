@@ -135,7 +135,7 @@ export default async function DynamicPage({ params }) {
             <div className="row">
               <div className="col-lg-12">
                 <div
-                  className="rich-text-content"
+                  className="rich-text-content ql-content"
                   dangerouslySetInnerHTML={{ __html: page.content }}
                 />
               </div>
