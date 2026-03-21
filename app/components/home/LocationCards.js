@@ -98,7 +98,7 @@ export default function LocationCards({ data = [] }) {
                     <span className="wavy-line">{firstCity.propertyCount}</span>{" "}
                     centers
                   </span>
-                  <h4 className="section-title mt-2">{firstCity.name}</h4>
+                  <h1 className="section-title mt-2">{firstCity.name}</h1>
                 </div>
               </Link>
             </div>
@@ -163,7 +163,7 @@ export default function LocationCards({ data = [] }) {
                       <span className="wavy-line">{city.propertyCount}</span>{" "}
                       centers
                     </span>
-                    <h4 className="section-title mt-2">{city.name}</h4>
+                    <h1 className="section-title mt-2">{city.name}</h1>
                   </div>
                 </Link>
               </div>

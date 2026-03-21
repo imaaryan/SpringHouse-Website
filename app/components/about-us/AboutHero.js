@@ -66,7 +66,7 @@ export default function AboutHero({ data = {} }) {
                 </div>
               </div>
               <div className="location-content">
-                <h4 className="section-title">
+                <h1 className="section-title">
                   {renderHeading(heading, (
                     <>
                       A Space to Work.
@@ -74,7 +74,7 @@ export default function AboutHero({ data = {} }) {
                       Community to Grow.
                     </>
                   ))}
-                </h4>
+                </h1>
 
               </div>
             </div>

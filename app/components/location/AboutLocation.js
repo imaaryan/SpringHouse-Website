@@ -63,11 +63,15 @@ export default function AboutLocation({
                   onChange={(e) => onSolutionChange?.(e.target.value)}
                 >
                   <option value="">Select a Solution</option>
-                  {activeSolutions?.map((sol) => (
-                    <option key={sol._id || sol.slug} value={sol.slug || sol._id}>
-                      {sol.name || sol.title || sol.slug}
-                    </option>
-                  ))}
+                  {activeSolutions?.map((sol) => {
+                    const name = sol.name || sol.title || sol.slug || "";
+                    const formattedName = name ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() : "";
+                    return (
+                      <option key={sol._id || sol.slug} value={sol.slug || sol._id}>
+                        {formattedName}
+                      </option>
+                    );
+                  })}
                 </select>
               </form>
             </div>

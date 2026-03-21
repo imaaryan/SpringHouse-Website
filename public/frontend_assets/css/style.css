@@ -2918,3 +2918,12 @@ a.themebtn.themebtn1.membership-login {
 .section-title {
   transition: color 0.3s ease;
 }
+
+.rich-text-content h1,
+.rich-text-content h2,
+.rich-text-content h3,
+.rich-text-content h4,
+.rich-text-content h5,
+.rich-text-content h6 {
+  font-family: "Montserrat", sans-serif !important;
+}

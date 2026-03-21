@@ -59,9 +59,9 @@ export default function GlobalBanner({ title, imageSrc }) {
               </div>
 
               <div className="location-content">
-                <h4 className="section-title">
+                <h1 className="section-title">
                   {title?.toLowerCase() || ""}
-                </h4>
+                </h1>
               </div>
             </div>
           </div>
