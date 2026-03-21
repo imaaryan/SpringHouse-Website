@@ -23,6 +23,17 @@ export default function PropertyDescription({
     solution: "",
   });
 
+  // Pre-fill location and property on initial load
+  React.useEffect(() => {
+    if (property) {
+      setFormData((prev) => ({
+        ...prev,
+        location: property.city?.slug || "",
+        property: property.slug || "",
+      }));
+    }
+  }, [property]);
+
   if (!property) return null;
 
   const handleIncrement = () => setDeskCount((prev) => prev + 1);
@@ -56,16 +67,19 @@ export default function PropertyDescription({
       });
       return;
     }
-    Swal.fire({
-      title: "Success!",
-      text: "Your request has been submitted successfully.",
-      icon: "success",
-    });
+
+    // Clean phone number: remove spaces/dashes but keep leading +
+    const cleanedContact = formData.contact_number.replace(/[^\d+]/g, '');
+
     try {
       fetch("/api/enquire", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, desk_required: deskCount }),
+        body: JSON.stringify({ 
+          ...formData, 
+          contact_number: cleanedContact,
+          desk_required: deskCount 
+        }),
       })
         .then((res) => res.json())
         .then((data) => {
@@ -80,8 +94,8 @@ export default function PropertyDescription({
               company_name: "",
               work_email: "",
               contact_number: "",
-              location: "",
-              property: "",
+              location: property.city?.slug || "",
+              property: property.slug || "",
               solution: "",
             });
             setDeskCount(1);
@@ -103,7 +117,7 @@ export default function PropertyDescription({
   };
 
   return (
-    <div className="get-touch pb-4">
+    <div className="get-touch pb-4" id="enquiry-form">
       <div className="container">
         <div className="row d-flex align-items-center justify-content-center">
           <div className="col-lg-5">

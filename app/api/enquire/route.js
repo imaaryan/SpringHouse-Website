@@ -7,13 +7,15 @@ export async function POST(request) {
     await connectDB();
     const data = await request.json();
 
-    // Map frontend form data keys to backend Mongoose schema if needed,
-    // though the frontend will be updated to send the correct keys.
+    // Clean phone number strings (remove spaces, dashes etc) before converting to Number
+    const rawPhone = String(data.phoneNumber || data.contact_number || "");
+    const cleanedPhone = rawPhone.replace(/[^\d]/g, ""); // Keep only digits for Number type
+
     const newEnquiry = new Enquiry({
       fullName: data.fullName || data.full_name,
       companyName: data.companyName || data.company_name,
       email: data.email || data.work_email,
-      phoneNumber: Number(data.phoneNumber || data.contact_number),
+      phoneNumber: Number(cleanedPhone),
       selectCity: data.selectCity || data.location,
       selectProperty: data.selectProperty || data.property,
       selectSolution: data.selectSolution || data.solution,

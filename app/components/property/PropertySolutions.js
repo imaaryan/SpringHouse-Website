@@ -1,3 +1,4 @@
+"use client";
 import "./property.css";
 
 export default function PropertySolutions({ activeSolutions }) {
@@ -59,10 +60,46 @@ export default function PropertySolutions({ activeSolutions }) {
                   </div>
                   <div className="bottom-right">
                     <a
-                      href={`#solutionModal-${sol._id}`}
+                      href="#exampleModaltwo"
                       className="details-link enquire"
                       data-bs-toggle="modal"
-                      data-bs-target={`#solutionModal-${sol._id}`}
+                      data-bs-target="#exampleModaltwo"
+                      onClick={(e) => {
+                        // Find the solution dropdown in the modal
+                        // The modal uses id="exampleModaltwo"
+                        const modal = document.getElementById('exampleModaltwo');
+                        if (modal) {
+                          const solutionSelect = modal.querySelector('select[name="solution"]');
+                          if (solutionSelect) {
+                            solutionSelect.value = sol.slug;
+                            solutionSelect.dispatchEvent(new Event('change', { bubbles: true }));
+                          }
+                          
+                          // Also try to find city/property if they are available in the page state
+                          // This is a bit tricky across components, but we'll try to find the values from the page form
+                          const pageCity = document.querySelector('select[name="location"]:not(#exampleModaltwo select)');
+                          const pageProperty = document.querySelector('select[name="property"]:not(#exampleModaltwo select)');
+                          
+                          if (pageCity && pageCity.value) {
+                            const modalCity = modal.querySelector('select[name="location"]');
+                            if (modalCity) {
+                              modalCity.value = pageCity.value;
+                              modalCity.dispatchEvent(new Event('change', { bubbles: true }));
+                            }
+                          }
+                          
+                          if (pageProperty && pageProperty.value) {
+                            const modalProperty = modal.querySelector('select[name="property"]');
+                            if (modalProperty) {
+                              // We need a slight delay or wait for city change to populate properties
+                              setTimeout(() => {
+                                modalProperty.value = pageProperty.value;
+                                modalProperty.dispatchEvent(new Event('change', { bubbles: true }));
+                              }, 100);
+                            }
+                          }
+                        }
+                      }}
                     >
                       enquire now
                     </a>

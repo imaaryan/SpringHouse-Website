@@ -58,11 +58,18 @@ export default function ModalsAndScripts({ phone, dropdownOptions, formImages = 
       return;
     }
 
+    // Clean phone number: remove spaces/dashes but keep leading +
+    const cleanedContact = formData.contact_number.replace(/[^\d+]/g, '');
+
     try {
       fetch("/api/enquire", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, desk_required: deskCount }),
+        body: JSON.stringify({ 
+          ...formData, 
+          contact_number: cleanedContact,
+          desk_required: deskCount 
+        }),
       })
         .then((res) => res.json())
         .then((data) => {
