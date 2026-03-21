@@ -44,7 +44,7 @@ export default function AboutTimeline({ data = [] }) {
           <div className="col-lg-12 mt-3 mt-lg-0 mt-md-0">
             <div className="timeline-p">
               <div className="timeline-wrapper">
-                <div className="timeline-nav" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "10px" }}>
+                <div className="timeline-nav" style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "10px" }}>
                   {timelineData.map((item, index) => (
                     <button
                       key={index}

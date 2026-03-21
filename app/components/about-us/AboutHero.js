@@ -15,12 +15,12 @@ export default function AboutHero({ data = {} }) {
   };
 
   return (
-    <div className="loctionstimeline-nav about">
+    <div className="loctions specific-location about">
       <div className="container-fluid">
         <div className="row pt30">
           <div className="col-lg-12 mb-4">
             <div className="locationscard relative">
-              <div className="locations-image">
+              <div className="locations-image about">
                 <img
                   src={mainBanner || "/assets/aboutus/banner/1750683580_Hero Banner 2.png"}
                   alt="coworking spaces - SpringHouse coworking office view"
@@ -65,17 +65,10 @@ export default function AboutHero({ data = {} }) {
                   </div>
                 </div>
               </div>
-              <div className="location-content">
+              <div className="location-content about">
                 <h1 className="section-title">
-                  {renderHeading(heading, (
-                    <>
-                      A Space to Work.
-                      <br />
-                      Community to Grow.
-                    </>
-                  ))}
+                  {renderHeading(heading)}
                 </h1>
-
               </div>
             </div>
           </div>
