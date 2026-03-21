@@ -19,11 +19,11 @@ export default async function BlogsArchivePage() {
   return (
     <>
       <Header />
-      <div className="blogs blog-archive pt60 pb60" style={{ paddingTop: "120px", background: "#f8f9fa" }}>
+      <div className="blogs blog-archive pt30 pb60" style={{  background: "#f8f9fa" }}>
         <div className="container-fluid pt-4">
           <div className="row mb-5">
             <div className="col-lg-12">
-              <span className="section-title-span">our blogs</span>
+              <span className="section-title">blogs</span>
             </div>
           </div>
           <div className="row">
