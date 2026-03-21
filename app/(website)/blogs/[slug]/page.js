@@ -1,5 +1,6 @@
 import Header from "@/app/components/home/Header";
 import Footer from "@/app/components/home/Footer";
+import GlobalBanner from "@/app/components/home/GlobalBanner";
 import connectDB from "@/utils/db";
 import { Blog } from "@/model/blog.model";
 import { notFound } from "next/navigation";
@@ -36,28 +37,25 @@ export default async function SingleBlogPage({ params }) {
     <>
       <Header />
       
-      <div className="pt60 pb60" style={{ paddingTop: "140px", paddingBottom: "80px", background: "#ffffff" }}>
+      {/* Blog Hero Banner */}
+      <GlobalBanner 
+        title="" 
+        imageSrc={blog.imageURL || "/assets/bannerimage/1747035219_home-banner.jpg"} 
+      />
+
+      <div className="pt60 pb60" style={{ paddingBottom: "60px", background: "#ffffff" }}>
         <div className="container">
           <div className="row justify-content-center">
-            <div className="col-12 col-lg-10">
-              <div className="blog-header mb-4 text-center">
-                <h1 className="mb-3" style={{ fontSize: "2.8rem", fontWeight: "900", fontFamily: "gobold", textTransform: "uppercase", wordWrap: "break-word" }}>
+            <div className="col-12 col-lg-9">
+              <div className="blog-content-header mb-5">
+                <h1 className="mb-3" style={{ fontSize: "2.8rem", fontWeight: "700", fontFamily: "gobold", textTransform: "uppercase", wordWrap: "break-word", lineHeight: "1.2", color: "#000" }}>
                   {blog.title}
                 </h1>
-                <p className="text-muted" style={{ color: "#575757", fontSize: "1.1rem" }}>
+                <p className="text-muted" style={{ color: "#575757", fontSize: "1.1rem", fontWeight: "500" }}>
                     Published on {(blog.publishDate || blog.createdAt) ? new Date(blog.publishDate || blog.createdAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : ""}
                 </p>
+                <hr className="mt-4" style={{ borderTop: "2px solid #f0f0f0", opacity: "1" }} />
               </div>
-
-              {blog.imageURL && (
-                <div className="blog-hero-image mb-5">
-                  <img 
-                    src={blog.imageURL} 
-                    alt={blog.title} 
-                    style={{ width: "100%", maxHeight: "550px", objectFit: "cover", borderRadius: "10px" }} 
-                  />
-                </div>
-              )}
 
               <style dangerouslySetInnerHTML={{__html: `
                 .blog-content-body {
@@ -77,7 +75,7 @@ export default async function SingleBlogPage({ params }) {
                 }
               `}} />
 
-              <div className="blog-content-body mt-5 ql-content" dangerouslySetInnerHTML={{ __html: blog.content }}></div>
+              <div className="blog-content-body ql-content" dangerouslySetInnerHTML={{ __html: blog.content }}></div>
             </div>
           </div>
         </div>
