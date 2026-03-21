@@ -16,18 +16,20 @@ export default function AboutLocation({
     <section className="specfic-guru pt30" data-aos="fade-up">
       <div className="container-fluid">
         <div className="row">
-          <div className="col-lg-12 mb-4">
+          <div className="col-12 mb-4">
 
             {city.description ? (
               <div 
                 className="rich-text-content ql-content"
-                dangerouslySetInnerHTML={{ __html: city.description }} 
+                dangerouslySetInnerHTML={{ 
+                  __html: city.description.replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ') 
+                }} 
               />
             ) : (
               <p>No description available for {city.name}.</p>
             )}
           </div>
-          <div className="col-md-8 col-12 mt-4">
+          <div className="col-12 col-md-8 mt-4">
             <div className="loaction-tab flex gap-2 flex-wrap">
               {areas?.map((area) => {
                 const areaIdentity = area.slug || area._id || area.name;
@@ -53,7 +55,7 @@ export default function AboutLocation({
               })}
             </div>
           </div>
-          <div className="col-md-4 mt-4">
+          <div className="col-12 col-md-4 mt-4">
             <div className="loaction-drop">
               <form action="#" id="filterForm" method="POST" onSubmit={(e) => e.preventDefault()}>
                 <select

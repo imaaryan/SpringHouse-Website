@@ -5,11 +5,11 @@ export default function PropertyAmenities({ amenities }) {
     <section className="specfic-prop amenities pt-5">
       <div className="container-fluid">
         <div className="row mb-4">
-          <div className="col-lg-6 col-12">
-            <span className="section-title-span">amenities</span>
+          <div className="col-12 text-center">
+            <span className="section-title-span d-block text-center">amenities</span>
           </div>
         </div>
-        <div className="row line pe-3 ps-lg-3 ps-md-3 ps-0">
+        <div className="row line justify-content-center px-3">
           {amenities.map((amenity) => (
             <div
               key={amenity._id}

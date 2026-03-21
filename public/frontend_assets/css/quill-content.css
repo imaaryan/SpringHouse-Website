@@ -4,10 +4,12 @@
    ============================================================ */
 
 /* --- Base Container --- */
-.ql-content {
+.ql-content, .ql-content * {
   line-height: 1.8;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+  hyphens: none !important;
 }
 
 /* --- Paragraphs & Line Breaks --- */

@@ -64,6 +64,21 @@
   }
 }
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+  .amenities .section-title-span {
+    display: block;
+    text-align: center !important;
+    padding-left: 0;
+  }
+  .amenities .row.line {
+    justify-content: center !important;
+  }
+  .icon-amen {
+    align-items: center !important;
+    text-align: center !important;
+  }
+  .avail-prop .nav-tabs {
+    justify-content: center !important;
+  }
   .location-home-box1 .locations-image .shape-bottom {
     height: 140px;
     width: 50vh;
@@ -118,6 +133,37 @@
   }
 }
 @media only screen and (max-width: 799px) {
+  /* Global Nuclear Word-Break Fix for Mobile/Tablet */
+  .rich-text-content, .rich-text-content *, .ql-content, .ql-content * {
+    word-break: normal !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    hyphens: none !important;
+  }
+  .avail-prop .nav-tabs {
+    justify-content: center !important;
+  }
+  .location-content {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 20px !important;
+    width: auto !important;
+    padding: 0 20px !important;
+    text-align: left !important;
+  }
+  .amenities .section-title-span {
+    display: block;
+    text-align: center !important;
+    padding-left: 0;
+  }
+  .amenities .row.line {
+    justify-content: center !important;
+  }
+  .icon-amen {
+    align-items: center !important;
+    text-align: center !important;
+  }
   li.dropdown.drop1 {
     display: block;
   }
@@ -131,12 +177,10 @@
 }
 */
   .talk {
-    display: block !important;
+    display: none !important;
   }
   .talk a {
-    bottom: 150px;
-    right: -45px;
-    width: 140px;
+    display: none !important;
   }
   .nav__menu .dropdown > a:after {
     content: "\f107";
@@ -729,14 +773,19 @@
     width: auto;
     padding: 5px 14px;
     margin-right: 0px;
+    margin-bottom: 10px;
+    display: inline-block;
   }
   .loaction-tab {
     margin: auto;
-    display: block;
-    text-align: center;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 15px !important;
   }
   #golf-course .loaction-tab {
     text-align: left;
+    justify-content: flex-start !important;
   }
   div#GOLF\ COURSE\ ROAD {
     padding-left: 0;

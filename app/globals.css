@@ -13,6 +13,15 @@ body, html {
   max-width: 100vw;
 }
 
+/* Global Word-Break Fix for Mobile */
+@media only screen and (max-width: 991px) {
+  * {
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    hyphens: none !important;
+  }
+}
+
 @theme {
   /* Brand Colors from style.css */
   --color-brand-primary: #00aaa6; /* --theme-primarycolor */

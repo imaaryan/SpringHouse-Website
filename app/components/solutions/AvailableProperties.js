@@ -111,7 +111,7 @@ export default function AvailableProperties({ properties, showTabs = false, maxC
           <div className="row pe-3 ps-3">
             <div className="col-md-12 pt-3">
               <nav>
-                <div className="nav nav-tabs mb-3">
+                <div className="nav nav-tabs mb-3 d-flex w-100 justify-content-center justify-content-md-start">
                   {cities.map((city) => (
                     <button
                       key={city.name}

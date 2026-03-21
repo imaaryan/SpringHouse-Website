@@ -23,6 +23,17 @@ export default function CareerForm({ careerFormImage }) {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        Swal.fire({
+          title: "File Too Large",
+          text: "Resume upload size is limited to 5 MB maximum.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+        e.target.value = "";
+        setResumeFile(null);
+        return;
+      }
       setResumeFile(file);
     }
   };
@@ -241,7 +252,7 @@ export default function CareerForm({ careerFormImage }) {
                               className="form-label"
                               style={{ fontSize: "14px", color: "#6b7280" }}
                             >
-                              Upload Resume (PDF, DOC, DOCX)
+                              Upload Resume (PDF, DOC, DOCX - Max 5 MB)
                             </label>
                             <input
                               type="file"
