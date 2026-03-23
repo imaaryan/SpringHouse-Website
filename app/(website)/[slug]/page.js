@@ -21,6 +21,7 @@ import GlobalBanner from "@/app/components/home/GlobalBanner";
 import SolutionIntro from "@/app/components/solutions/SolutionIntro";
 import FullHouse from "@/app/components/solutions/FullHouse";
 import SpacesAvailable from "@/app/components/solutions/SpacesAvailable";
+import { getDropdownOptions } from "@/utils/dropdowns";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -78,6 +79,8 @@ export default async function DynamicPage({ params }) {
     // Fetch Global Homepage Data for Community and Networking
     const homepageData = (await Homepage.findOne({}).lean()) || {};
 
+    const dropdownOptions = await getDropdownOptions();
+
 
     return (
       <>
@@ -117,6 +120,7 @@ export default async function DynamicPage({ params }) {
         {show("contactForm") && (
           <ContactForm 
             phone={footerData?.contactInfo?.phone} 
+            dropdownOptions={dropdownOptions}
             contactFormImage={footerData?.formImages?.contactFormImage} 
           />
         )}

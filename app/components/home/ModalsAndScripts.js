@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Swal from "sweetalert2";
+import { isValidEmail, isValidPhone } from "@/utils/validation";
 
 export default function ModalsAndScripts({ phone, dropdownOptions, formImages = {} }) {
   const {
@@ -9,7 +10,7 @@ export default function ModalsAndScripts({ phone, dropdownOptions, formImages = 
     properties = [],
     solutions = [],
   } = dropdownOptions || {};
-  const [deskCount, setDeskCount] = useState(1);
+  const [deskCount, setDeskCount] = useState("");
   const [formData, setFormData] = useState({
     full_name: "",
     company_name: "",
@@ -19,10 +20,15 @@ export default function ModalsAndScripts({ phone, dropdownOptions, formImages = 
     property: "",
     solution: "",
   });
+  const [errors, setErrors] = useState({
+    work_email: "",
+    contact_number: "",
+  });
 
-  const handleIncrement = () => setDeskCount((prev) => prev + 1);
+  const handleIncrement = () =>
+    setDeskCount((prev) => (prev === "" ? 1 : prev + 1));
   const handleDecrement = () =>
-    setDeskCount((prev) => (prev > 1 ? prev - 1 : 1));
+    setDeskCount((prev) => (prev > 1 ? prev - 1 : ""));
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,6 +38,20 @@ export default function ModalsAndScripts({ phone, dropdownOptions, formImages = 
       if (name === "location") newData.property = "";
       return newData;
     });
+
+    // Real-time validation
+    if (name === "work_email") {
+      setErrors((prev) => ({
+        ...prev,
+        work_email: value && !isValidEmail(value) ? "Please enter a valid email address." : "",
+      }));
+    } else if (name === "contact_number") {
+      // Allow only digits during typing for better UX if desired, or just validate
+      setErrors((prev) => ({
+        ...prev,
+        contact_number: value && !isValidPhone(value) ? "Please enter a valid 10-digit phone number." : "",
+      }));
+    }
   };
 
   // Filter properties based on the selected city (location)
@@ -58,6 +78,16 @@ export default function ModalsAndScripts({ phone, dropdownOptions, formImages = 
       return;
     }
 
+    if (errors.work_email || errors.contact_number) {
+      Swal.fire({
+        title: "Error!",
+        text: "Please fix the validation errors before submitting.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
     // Clean phone number: remove spaces/dashes but keep leading +
     const cleanedContact = formData.contact_number.replace(/[^\d+]/g, '');
 
@@ -68,7 +98,7 @@ export default function ModalsAndScripts({ phone, dropdownOptions, formImages = 
         body: JSON.stringify({ 
           ...formData, 
           contact_number: cleanedContact,
-          desk_required: deskCount 
+          desk_required: deskCount || 1 
         }),
       })
         .then((res) => res.json())
@@ -89,7 +119,11 @@ export default function ModalsAndScripts({ phone, dropdownOptions, formImages = 
               property: "",
               solution: "",
             });
-            setDeskCount(1);
+            setErrors({
+              work_email: "",
+              contact_number: "",
+            });
+            setDeskCount("");
 
             if (typeof window !== "undefined" && window.bootstrap) {
               const modalEl = document.getElementById("exampleModaltwo");
@@ -256,6 +290,9 @@ export default function ModalsAndScripts({ phone, dropdownOptions, formImages = 
                                 onChange={handleChange}
                                 required
                               />
+                              {errors.work_email && (
+                                <div className="text-danger small mt-1">{errors.work_email}</div>
+                              )}
                             </div>
                           </div>
                           <div className="col-lg-5">
@@ -269,6 +306,9 @@ export default function ModalsAndScripts({ phone, dropdownOptions, formImages = 
                                 onChange={handleChange}
                                 required
                               />
+                              {errors.contact_number && (
+                                <div className="text-danger small mt-1">{errors.contact_number}</div>
+                              )}
                             </div>
                           </div>
                           <div className="col-lg-7">
@@ -299,6 +339,8 @@ export default function ModalsAndScripts({ phone, dropdownOptions, formImages = 
                                 id="propertypopup"
                                 value={formData.property}
                                 onChange={handleChange}
+                                required
+                                disabled={!formData.location}
                               >
                                 <option value="">Select Property</option>
                                 {filteredProperties.map((prop) => (
@@ -337,11 +379,14 @@ export default function ModalsAndScripts({ phone, dropdownOptions, formImages = 
                                 placeholder="Desk Required"
                                 min="1"
                                 value={deskCount}
-                                onChange={(e) =>
-                                  setDeskCount(
-                                    Math.max(1, parseInt(e.target.value) || 1),
-                                  )
-                                }
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  if (val === "") {
+                                    setDeskCount("");
+                                  } else {
+                                    setDeskCount(Math.max(1, parseInt(val) || 1));
+                                  }
+                                }}
                                 required
                               />
                               <div className="desk-additionbox">

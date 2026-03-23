@@ -71,10 +71,10 @@ export default function ImageSlider({ images, className, propertyName }) {
   if (!images || images.length === 0) {
     return (
       <div
-        className="img-fluid w-100"
+        className="img-fluid w-100 responsive-slider-container"
         style={{
           background: "#f0f0f0",
-          height: "400px",
+          height: "550px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -100,11 +100,11 @@ export default function ImageSlider({ images, className, propertyName }) {
     <div className={`${className} position-relative`}>
       <Slider {...settings}>
         {images.map((img, idx) => (
-          <div key={idx} style={{ height: "550px" }}>
+          <div key={idx} className="responsive-slider-container" style={{ height: "550px" }}>
             <img
               src={img}
               alt={propertyName}
-              className="img-fluid w-100"
+              className="img-fluid w-100 responsive-slider-img"
               style={{
                 height: "550px",
                 objectFit: "cover",

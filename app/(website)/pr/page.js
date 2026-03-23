@@ -1,20 +1,19 @@
 import Header from "@/app/components/home/Header";
 import Footer from "@/app/components/home/Footer";
-import { Blog } from "@/model/blog.model";
+import { PR } from "@/model/pr.model";
 import connectDB from "@/utils/db";
-import Link from "next/link";
 import "@/app/components/blogs/blogs.css";
 
 export const metadata = {
-  title: "Blogs | SpringHouse Coworking Space",
-  description: "Read the latest blogs and articles from SpringHouse Coworking.",
+  title: "Public Relations | SpringHouse Coworking Space",
+  description: "Read the latest public relations and news from SpringHouse Coworking.",
 };
 
-export default async function BlogsArchivePage() {
+export default async function PRArchivePage() {
   await connectDB();
   
-  const rawBlogs = await Blog.find({ isActive: true }).sort({ publishDate: -1, createdAt: -1 }).lean();
-  const blogs = JSON.parse(JSON.stringify(rawBlogs));
+  const rawPRs = await PR.find({ isActive: true }).sort({ publishDate: -1, createdAt: -1 }).lean();
+  const prs = JSON.parse(JSON.stringify(rawPRs));
 
   return (
     <>
@@ -23,23 +22,23 @@ export default async function BlogsArchivePage() {
         <div className="container-fluid pt-4">
           <div className="row mb-5">
             <div className="col-lg-12">
-              <span className="section-title">blogs</span>
+              <span className="section-title">Public Relations</span>
             </div>
           </div>
           <div className="row">
-            {blogs.length === 0 ? (
+            {prs.length === 0 ? (
               <div className="col-12 text-center">
-                <p>No published blogs available at the moment.</p>
+                <p>No published PRs available at the moment.</p>
               </div>
             ) : (
-              blogs.map((blog, idx) => (
-                <div className="col-lg-4 col-md-6 mb-5" key={blog._id || idx}>
-                  <Link href={`/blogs/${blog.slug || "#"}`}>
+              prs.map((pr, idx) => (
+                <div className="col-lg-4 col-md-6 mb-5" key={pr._id || idx}>
+                  <a href={pr.link || "#"} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
                     <div className="blog-card" style={{ cursor: "pointer", height: "100%", background: "#fff", borderRadius: "20px", overflow: "hidden" }}>
                       <div className="locations-image relative">
                         <img
-                          src={blog.imageURL || "/assets/blogs/1748253643_1.png"}
-                          alt={blog.title}
+                          src={pr.imageURL || "/assets/blogs/1748253643_1.png"}
+                          alt={pr.title}
                           style={{ objectFit: "cover", width: "100%", height: "400px" }}
                         />
                         <div className="shape-bottom">
@@ -58,13 +57,13 @@ export default async function BlogsArchivePage() {
                       <div className="blog-content text-shape relative" style={{ padding: "20px" }}>
                         <div className="blog-para">
                           <p style={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", fontSize: "20px", fontWeight: "600", color: "#000", fontFamily: "Montserrat, sans-serif" }}>
-                            {blog.title}
+                            {pr.title}
                           </p>
                         </div>
                         <div className="blog-date textright" style={{ marginTop: "15px" }}>
                           <span className="font17 textright" style={{ display: "block", color: "#575757" }}>
-                            {blog.publishDate
-                              ? new Date(blog.publishDate).toLocaleDateString(
+                            {pr.publishDate
+                              ? new Date(pr.publishDate).toLocaleDateString(
                                   "en-US",
                                   {
                                     month: "short",
@@ -72,8 +71,8 @@ export default async function BlogsArchivePage() {
                                     year: "numeric",
                                   },
                                 )
-                              : blog.createdAt 
-                                ? new Date(blog.createdAt).toLocaleDateString(
+                              : pr.createdAt 
+                                ? new Date(pr.createdAt).toLocaleDateString(
                                     "en-US",
                                     {
                                       month: "short",
@@ -86,7 +85,7 @@ export default async function BlogsArchivePage() {
                         </div>
                       </div>
                     </div>
-                  </Link>
+                  </a>
                 </div>
               ))
             )}

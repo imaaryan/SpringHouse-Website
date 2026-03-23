@@ -54,7 +54,7 @@ export default function PropertySolutions({ activeSolutions }) {
                   </div>
                 </div>
 
-                <div className="col-md-7 col-12 ps-4 pt-3 pb-lg-4 pb-md-0 pb-3 d-flex flex-column justify-content-center">
+                <div className="col-md-7 col-12 ps-4 pt-4 pb-lg-4 pb-md-0 pb-4 d-flex flex-column justify-content-center">
                   <div className="ps-0">
                     <div className="h5 mb-0">{sol.name}</div>
                   </div>

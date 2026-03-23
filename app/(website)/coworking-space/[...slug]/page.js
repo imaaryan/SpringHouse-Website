@@ -93,6 +93,10 @@ export default async function CoworkingSpaceCatchAll({ params }) {
     const otherCities = JSON.parse(JSON.stringify(otherCitiesRaw));
     const citySpecificSolutions = cityData?.activeSolutions || [];
 
+    const dropdownOptions = await getDropdownOptions();
+    const footerData = (await FooterModel.findOne({}).lean()) || {};
+    const phone = footerData?.contactInfo?.phone || "";
+
     return (
       <>
         <Header />
@@ -102,7 +106,11 @@ export default async function CoworkingSpaceCatchAll({ params }) {
         <SolutionsDesktop data={citySpecificSolutions} />
         <SolutionsMobile data={citySpecificSolutions} />
         <OtherLocations cities={otherCities} />
-        <ContactForm />
+        <ContactForm 
+          phone={phone} 
+          dropdownOptions={dropdownOptions} 
+          contactFormImage={footerData?.formImages?.contactFormImage} 
+        />
         {cityData.seo?.codeSnippet && (
           <div dangerouslySetInnerHTML={{ __html: cityData.seo.codeSnippet }} />
         )}
@@ -154,7 +162,7 @@ export default async function CoworkingSpaceCatchAll({ params }) {
 
     // Build "See More" link to city page's area section
     const areaSlug = rawProperty.area?.slug || rawProperty.area?._id || "";
-    const seeMoreLink = `/coworking-space/${rawProperty.city.slug}-coworking-space#area-${areaSlug}`;
+    const seeMoreLink = `/coworking-space/${rawProperty.city.slug}-coworking-space`;
 
     const rawOtherCities = await City.find({ _id: { $ne: rawProperty.city._id }, isActive: true }).select("name slug").lean();
     

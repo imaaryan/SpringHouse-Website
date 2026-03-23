@@ -66,7 +66,7 @@
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
   .amenities .section-title-span {
     display: block;
-    text-align: center !important;
+
     padding-left: 0;
   }
   .amenities .row.line {
@@ -134,11 +134,22 @@
 }
 @media only screen and (max-width: 799px) {
   /* Global Nuclear Word-Break Fix for Mobile/Tablet */
-  .rich-text-content, .rich-text-content *, .ql-content, .ql-content * {
+  .rich-text-content,
+  .rich-text-content *,
+  .ql-content,
+  .ql-content * {
     word-break: normal !important;
     word-wrap: break-word !important;
     overflow-wrap: break-word !important;
     hyphens: none !important;
+  }
+
+  /* WHO ARE WE Section Hover State on Mobile */
+  .hover-sec .image-container .image-back {
+    opacity: 1;
+  }
+  .hover-sec .image-container .image-front {
+    opacity: 0;
   }
   .avail-prop .nav-tabs {
     justify-content: center !important;
@@ -168,7 +179,7 @@
   }
   .amenities .section-title-span {
     display: block;
-    text-align: center !important;
+
     padding-left: 0;
   }
   .amenities .row.line {
@@ -257,11 +268,13 @@
   }
   .container-fluid {
     width: 98% !important;
-    /*        overflow: hidden;*/
   }
-  .get-touch {
-    overflow: hidden;
-    width: 100%;
+  .virtual-guru.cowork .grid {
+    height: auto;
+  }
+  .virtual-guru.cowork .grid .cell {
+    justify-content: center;
+    padding: 20px;
   }
 }
 
@@ -340,12 +353,12 @@
 }
 */
 
-.about .section-title {
-  width: 250px;
-}
-.about .shape-bottom {
-  width: 280px!important;
-}
+  .about .section-title {
+    width: 250px;
+  }
+  .about .shape-bottom {
+    width: 280px !important;
+  }
 
   .location-home-box1 img {
     height: auto;
@@ -392,9 +405,9 @@
     font-size: 20px !important;
   }
   .spring-housebaner .springhouse-image {
-     position: relative;
-     height: auto;
-     min-height: 40vh;
+    position: relative;
+    height: auto;
+    min-height: 40vh;
   }
   .spring-housebaner .springhouse-image video,
   .spring-housebaner .springhouse-image img {
@@ -410,6 +423,7 @@
     border-radius: 0 25px 0 0;
     position: absolute;
     z-index: 5;
+    margin-left: -2px;
     display: block !important;
   }
   .spring-housebaner .spring-content {
@@ -419,7 +433,7 @@
     bottom: 0;
     padding: 25px 20px;
     text-align: left;
-    width: 88%;
+    width: 340px;
     z-index: 10;
     background: transparent;
   }
@@ -445,8 +459,8 @@
   }
   .spring-housebaner .shape-left-top {
     position: absolute;
-    top: -19px;
-    left: -3px;
+    top: -30px;
+    left: -2px;
     transform: rotate(270deg);
   }
   .spring-housebaner .section-span {
@@ -700,7 +714,14 @@
     height: 10vh;
     bottom: -1px;
   }
-
+  .about .shape-right-bottom {
+    position: absolute;
+    right: -14px;
+    bottom: 35px;
+    -webkit-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    transform: rotate(270deg);
+  }
   .about .row.pt30 {
     padding-top: 0;
   }
@@ -779,9 +800,17 @@
   .specific-location .locations-image img {
     height: auto;
   }
+  .about .locations-image img {
+    height: 300px;
+  }
   .specific-location .locations-image .shape-bottom {
     height: 10vh;
-    width: 20vh;
+    width: 28vh;
+    bottom: -1px;
+  }
+  .about .locations-image .shape-bottom {
+    height: 120px;
+    width: 28vh;
     bottom: -1px;
   }
   .specific-location .location-content {
@@ -822,7 +851,8 @@
     padding-top: 30px;
   }
   .icon-amen img {
-    max-width: 44px;
+    max-width: 60px;
+    height: auto;
   }
   .icon-amen a {
     color: #282828;
@@ -884,7 +914,7 @@
     padding-top: 0;
   }
   .loctions.virtual img {
-    height: auto;
+    height: 400px;
   }
   .loctions.virtual .row.pt30 {
     padding-top: 0;
@@ -918,7 +948,7 @@
   .avail-prop .nav-tabs .nav-link {
     width: fit-content;
     padding: 6px 14px;
-    margin-right: 3px;
+    margin-right: 7px;
     font-size: 14px;
     margin-bottom: 10px;
   }
@@ -944,9 +974,9 @@
     height: 50px;
   }
   .cowork .cell {
-    padding-right: 10px;
-    text-align: left;
-    padding-left: 10px;
+    padding-bottom: 20px;
+    text-align: center;
+    padding-top: 20px;
   }
   .inner-box:first-child {
     width: auto;
@@ -1026,7 +1056,7 @@
     bottom: 0;
     padding: 20px 15px;
     text-align: left;
-    width: 88%;
+    width: 340px;
     z-index: 10;
   }
 }

@@ -247,13 +247,17 @@ a:hover {
     left: 35px;
 }
 */
-.springhouse-image video {
+.springhouse-image {
   border-radius: 20px;
+  overflow: hidden;
+  isolation: isolate;
+  width: 100%;
+}
+.springhouse-image video {
   width: 100%;
 }
 .springhouse-image img {
   height: 750px;
-  border-radius: 20px;
 }
 
 .springhouse-image img,
@@ -316,16 +320,22 @@ header.sticky {
   text-decoration-style: wavy;
   color: var(--theme-blackcolor);
 }
-.about .locations-image img {
+.locations-image {
   border-radius: 20px;
+  overflow: hidden;
+  isolation: isolate;
+}
+.about .locations-image img {
+  width: 100%;
 }
 
 .about .location-content {
 max-width: 490px;
 }
-.home-l .locationscard {
+.locationscard {
   overflow: hidden;
   border-radius: 20px;
+  isolation: isolate;
 }
 
 .locationscard:hover .locations-image img {
@@ -410,6 +420,7 @@ max-width: 490px;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 4;
+  line-clamp: 4;
   -webkit-box-orient: vertical;
 }
 .service-btn {
@@ -535,8 +546,8 @@ max-width: 490px;
 
 .spring-housebaner .shape-right-bottom-home {
     position: absolute;
-    right: -31px;
-    bottom: -2px;
+    right: -30px;
+    bottom: 4px;
     -webkit-transform: rotate(270deg);
     -ms-transform: rotate(270deg);
     transform: rotate(270deg);
@@ -836,7 +847,7 @@ footer::before {
   overflow: hidden;
 }
 .about .locations-image .shape-bottom {
-  height: 160px;
+  height: 180px;
 }
 
 /*---specific location----*/
@@ -1439,9 +1450,6 @@ ul.slick-dots {
   height: 450px;
   object-fit: cover;
   object-position: center;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
 }
 .image-container:hover .image-back {
   opacity: 1;
@@ -1491,7 +1499,7 @@ div#nav-tabContent {
 }
 
 .cowork .cell {
-  padding-right: 50px;
+  /* padding-right: 50px; */
   text-align: left;
 }
 .networking1 .section-title-span {
@@ -2435,6 +2443,7 @@ form select.form-select {
 .blog-para p {
   font-size: 25px;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;

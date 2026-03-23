@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-// Import SweetAlert2 if used globally, or install it: npm install sweetalert2
 import Swal from "sweetalert2";
+import { isValidEmail, isValidPhone } from "@/utils/validation";
 
 export default function ContactForm({ phone, dropdownOptions, contactFormImage }) {
   const {
@@ -10,7 +10,7 @@ export default function ContactForm({ phone, dropdownOptions, contactFormImage }
     properties = [],
     solutions = [],
   } = dropdownOptions || {};
-  const [deskCount, setDeskCount] = useState(1);
+  const [deskCount, setDeskCount] = useState("");
   const [formData, setFormData] = useState({
     full_name: "",
     company_name: "",
@@ -20,10 +20,15 @@ export default function ContactForm({ phone, dropdownOptions, contactFormImage }
     property: "",
     solution: "",
   });
+  const [errors, setErrors] = useState({
+    work_email: "",
+    contact_number: "",
+  });
 
-  const handleIncrement = () => setDeskCount((prev) => prev + 1);
+  const handleIncrement = () =>
+    setDeskCount((prev) => (prev === "" ? 1 : prev + 1));
   const handleDecrement = () =>
-    setDeskCount((prev) => (prev > 1 ? prev - 1 : 1));
+    setDeskCount((prev) => (prev > 1 ? prev - 1 : ""));
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,6 +37,19 @@ export default function ContactForm({ phone, dropdownOptions, contactFormImage }
       if (name === "location") newData.property = "";
       return newData;
     });
+
+    // Real-time validation
+    if (name === "work_email") {
+      setErrors((prev) => ({
+        ...prev,
+        work_email: value && !isValidEmail(value) ? "Please enter a valid email address." : "",
+      }));
+    } else if (name === "contact_number") {
+      setErrors((prev) => ({
+        ...prev,
+        contact_number: value && !isValidPhone(value) ? "Please enter a valid 10-digit phone number." : "",
+      }));
+    }
   };
 
   const filteredProperties = formData.location
@@ -58,11 +76,21 @@ export default function ContactForm({ phone, dropdownOptions, contactFormImage }
       return;
     }
 
+    if (errors.work_email || errors.contact_number) {
+      Swal.fire({
+        title: "Error!",
+        text: "Please fix the validation errors before submitting.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
     try {
       const response = await fetch("/api/enquire", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, desk_required: deskCount }),
+        body: JSON.stringify({ ...formData, desk_required: deskCount || 1 }),
       });
 
       if (!response.ok) {
@@ -86,7 +114,11 @@ export default function ContactForm({ phone, dropdownOptions, contactFormImage }
         property: "",
         solution: "",
       });
-      setDeskCount(1);
+      setErrors({
+        work_email: "",
+        contact_number: "",
+      });
+      setDeskCount("");
     } catch (error) {
       Swal.fire({
         title: "Error!",
@@ -220,6 +252,9 @@ export default function ContactForm({ phone, dropdownOptions, contactFormImage }
                               onChange={handleChange}
                               required
                             />
+                            {errors.work_email && (
+                              <div className="text-danger small mt-1">{errors.work_email}</div>
+                            )}
                           </div>
                         </div>
                         <div className="col-lg-5">
@@ -234,6 +269,9 @@ export default function ContactForm({ phone, dropdownOptions, contactFormImage }
                               onChange={handleChange}
                               required
                             />
+                            {errors.contact_number && (
+                              <div className="text-danger small mt-1">{errors.contact_number}</div>
+                            )}
                           </div>
                         </div>
 
@@ -265,6 +303,8 @@ export default function ContactForm({ phone, dropdownOptions, contactFormImage }
                               id="property"
                               value={formData.property}
                               onChange={handleChange}
+                              required
+                              disabled={!formData.location}
                             >
                               <option value="">Select Property</option>
                               {filteredProperties.map((prop) => (
@@ -304,11 +344,14 @@ export default function ContactForm({ phone, dropdownOptions, contactFormImage }
                               placeholder="Desk Required"
                               min="1"
                               value={deskCount}
-                              onChange={(e) =>
-                                setDeskCount(
-                                  Math.max(1, parseInt(e.target.value) || 1),
-                                )
-                              }
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                if (val === "") {
+                                  setDeskCount("");
+                                } else {
+                                  setDeskCount(Math.max(1, parseInt(val) || 1));
+                                }
+                              }}
                               required
                             />
                             <div className="desk-additionbox">

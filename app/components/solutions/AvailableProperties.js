@@ -111,7 +111,7 @@ export default function AvailableProperties({ properties, showTabs = false, maxC
           <div className="row pe-3 ps-3">
             <div className="col-md-12 pt-3">
               <nav>
-                <div className="nav nav-tabs mb-3 d-flex w-100 justify-content-center justify-content-md-start">
+                <div className="nav nav-tabs mb-3 d-flex w-100 justify-content-center ">
                   {cities.map((city) => (
                     <button
                       key={city.name}
@@ -175,6 +175,7 @@ export default function AvailableProperties({ properties, showTabs = false, maxC
                   key={areaName}
                   id={`area-${areaIdentity}`}
                   className="mb-3 mt-4 pt-2"
+                  style={{ scrollMarginTop: "120px" }}
                 >
                   <p
                     className="text-uppercase mb-4 mt-2"

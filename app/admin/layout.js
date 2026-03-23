@@ -28,6 +28,7 @@ export default function AdminLayout({ children }) {
     { name: "Areas", href: "/admin/areas" },
     { name: "Amenities", href: "/admin/amenities" },
     { name: "Testimonials", href: "/admin/testimonials" },
+    { name: "Public Relations", href: "/admin/prs" },
     { name: "Blogs", href: "/admin/blogs" },
     { name: "FAQ", href: "/admin/faq" },
     { name: "Homepage", href: "/admin/homepage" },

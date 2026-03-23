@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Swal from "sweetalert2";
+import { isValidEmail, isValidPhone } from "@/utils/validation";
 
 export default function PropertyDescription({
   property,
@@ -12,7 +13,7 @@ export default function PropertyDescription({
     properties = [],
     solutions = [],
   } = dropdownOptions || {};
-  const [deskCount, setDeskCount] = useState(1);
+  const [deskCount, setDeskCount] = useState("");
   const [formData, setFormData] = useState({
     full_name: "",
     company_name: "",
@@ -21,6 +22,10 @@ export default function PropertyDescription({
     location: "",
     property: "",
     solution: "",
+  });
+  const [errors, setErrors] = useState({
+    work_email: "",
+    contact_number: "",
   });
 
   // Pre-fill location and property on initial load
@@ -36,9 +41,10 @@ export default function PropertyDescription({
 
   if (!property) return null;
 
-  const handleIncrement = () => setDeskCount((prev) => prev + 1);
+  const handleIncrement = () =>
+    setDeskCount((prev) => (prev === "" ? 1 : prev + 1));
   const handleDecrement = () =>
-    setDeskCount((prev) => (prev > 1 ? prev - 1 : 1));
+    setDeskCount((prev) => (prev > 1 ? prev - 1 : ""));
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,6 +53,19 @@ export default function PropertyDescription({
       if (name === "location") newData.property = "";
       return newData;
     });
+
+    // Real-time validation
+    if (name === "work_email") {
+      setErrors((prev) => ({
+        ...prev,
+        work_email: value && !isValidEmail(value) ? "Please enter a valid email address." : "",
+      }));
+    } else if (name === "contact_number") {
+      setErrors((prev) => ({
+        ...prev,
+        contact_number: value && !isValidPhone(value) ? "Please enter a valid 10-digit phone number." : "",
+      }));
+    }
   };
 
   const filteredProperties = formData.location
@@ -68,6 +87,15 @@ export default function PropertyDescription({
       return;
     }
 
+    if (errors.work_email || errors.contact_number) {
+      Swal.fire({
+        title: "Error!",
+        text: "Please fix the validation errors before submitting.",
+        icon: "error",
+      });
+      return;
+    }
+
     // Clean phone number: remove spaces/dashes but keep leading +
     const cleanedContact = formData.contact_number.replace(/[^\d+]/g, '');
 
@@ -78,7 +106,7 @@ export default function PropertyDescription({
         body: JSON.stringify({ 
           ...formData, 
           contact_number: cleanedContact,
-          desk_required: deskCount 
+          desk_required: deskCount || 1 
         }),
       })
         .then((res) => res.json())
@@ -98,7 +126,11 @@ export default function PropertyDescription({
               property: property.slug || "",
               solution: "",
             });
-            setDeskCount(1);
+            setErrors({
+              work_email: "",
+              contact_number: "",
+            });
+            setDeskCount("");
           } else {
             Swal.fire({
               title: "Error!",
@@ -165,14 +197,15 @@ export default function PropertyDescription({
               <div className="get-right-form-design mt20">
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="full_name"
-                      placeholder="Full Name"
-                      value={formData.full_name}
-                      onChange={handleChange}
-                    />
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="full_name"
+                        placeholder="Full Name"
+                        value={formData.full_name}
+                        onChange={handleChange}
+                        required
+                      />
                   </div>
                   <div className="row">
                     <div className="col-lg-5">
@@ -184,32 +217,41 @@ export default function PropertyDescription({
                           placeholder="Company Name"
                           value={formData.company_name}
                           onChange={handleChange}
+                          required
                         />
                       </div>
                     </div>
                     <div className="col-lg-7">
                       <div className="mb-3">
-                        <input
-                          type="email"
-                          className="form-control"
-                          name="work_email"
-                          placeholder="Work Email Address"
-                          value={formData.work_email}
-                          onChange={handleChange}
-                        />
-                      </div>
+                            <input
+                              type="email"
+                              className="form-control"
+                              name="work_email"
+                              placeholder="Work Email Address"
+                              value={formData.work_email}
+                              onChange={handleChange}
+                              required
+                            />
+                            {errors.work_email && (
+                              <div className="text-danger small mt-1">{errors.work_email}</div>
+                            )}
+                          </div>
                     </div>
                     <div className="col-lg-5">
                       <div className="mb-3">
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="contact_number"
-                          placeholder="Contact Number"
-                          value={formData.contact_number}
-                          onChange={handleChange}
-                        />
-                      </div>
+                            <input
+                              type="text"
+                              className="form-control"
+                              name="contact_number"
+                              placeholder="Contact Number"
+                              value={formData.contact_number}
+                              onChange={handleChange}
+                              required
+                            />
+                            {errors.contact_number && (
+                              <div className="text-danger small mt-1">{errors.contact_number}</div>
+                            )}
+                          </div>
                     </div>
                     <div className="col-lg-7">
                       <div className="mb-3">
@@ -218,6 +260,7 @@ export default function PropertyDescription({
                           name="location"
                           value={formData.location}
                           onChange={handleChange}
+                          required
                         >
                           <option value="">Location</option>
                           {cities.map((city) => (
@@ -235,6 +278,8 @@ export default function PropertyDescription({
                           name="property"
                           value={formData.property}
                           onChange={handleChange}
+                          required
+                          disabled={!formData.location}
                         >
                           <option value="">Property</option>
                           {filteredProperties.map((prop) => (
@@ -252,6 +297,7 @@ export default function PropertyDescription({
                           name="solution"
                           value={formData.solution}
                           onChange={handleChange}
+                          required
                         >
                           <option value="">Solution</option>
                           {solutions.map((sol) => (
@@ -271,11 +317,14 @@ export default function PropertyDescription({
                           placeholder="Desk Required"
                           min="1"
                           value={deskCount}
-                          onChange={(e) =>
-                            setDeskCount(
-                              Math.max(1, parseInt(e.target.value) || 1),
-                            )
-                          }
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === "") {
+                              setDeskCount("");
+                            } else {
+                              setDeskCount(Math.max(1, parseInt(val) || 1));
+                            }
+                          }}
                           required
                         />
                         <div className="desk-additionbox">

@@ -9,8 +9,8 @@ export default function LocationAmenities({ amenities }) {
     <section className=" amenities pt6">
       <div className="container-fluid">
         <div className="row">
-          <div className="col-12 text-center pb30">
-            <span className="section-title-span d-block text-center">AMENITIES</span>
+          <div className="col-12  pb30">
+            <span className="section-title-span d-block ">AMENITIES</span>
           </div>
         </div>
         <div className="row line justify-content-center px-3">

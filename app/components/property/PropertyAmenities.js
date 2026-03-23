@@ -5,8 +5,8 @@ export default function PropertyAmenities({ amenities }) {
     <section className="specfic-prop amenities pt-5">
       <div className="container-fluid">
         <div className="row mb-4">
-          <div className="col-12 text-center">
-            <span className="section-title-span d-block text-center">amenities</span>
+          <div className="col-12 ">
+            <span className="section-title-span d-block ">amenities</span>
           </div>
         </div>
         <div className="row line justify-content-center px-3">

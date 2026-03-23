@@ -15,7 +15,7 @@ export default function PropertyHero({ property }) {
               propertyName={property.name}
             />
             <span
-              className="locationscard"
+              className="property-hero-overlay"
               style={{
                 position: "absolute",
                 bottom: "0",
@@ -83,7 +83,7 @@ export default function PropertyHero({ property }) {
                 </span>
                 <h4
                   className="section-title text-uppercase m-0"
-                  style={{ fontSize: "22px", fontWeight: "900", color: "#000" }}
+                  style={{ fontSize: "26px", fontWeight: "900", color: "#000" }}
                 >
                   {property.area?.name || property.location?.name}
                 </h4>

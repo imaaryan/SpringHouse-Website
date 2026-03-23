@@ -41,7 +41,7 @@ export default function SolutionsMobile({ data = [] }) {
     <div className="service-section d-lg-none d-md-none d-block">
       <div className="container-fluid">
         <div className="row">
-          <div className="col-lg-12 pb-3">
+          <div className="col-lg-12 pb-3 pt-4">
             <span className="section-title-span">Solutions</span>
           </div>
         </div>

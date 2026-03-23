@@ -1,9 +1,12 @@
 import Header from "@/app/components/home/Header";
 import Footer from "@/app/components/home/Footer";
+import ContactForm from "@/app/components/home/ContactForm";
 import GlobalBanner from "@/app/components/home/GlobalBanner";
 import connectDB from "@/utils/db";
 import { Blog } from "@/model/blog.model";
+import FooterModel from "@/model/footer.model";
 import { notFound } from "next/navigation";
+import { getDropdownOptions } from "@/utils/dropdowns";
 import "@/app/components/blogs/blogs.css";
 
 export async function generateMetadata({ params }) {
@@ -33,6 +36,10 @@ export default async function SingleBlogPage({ params }) {
   // Safe mapping for Client Components
   const blog = JSON.parse(JSON.stringify(rawBlog));
 
+  const dropdownOptions = await getDropdownOptions();
+  const footerData = (await FooterModel.findOne({}).lean()) || {};
+  const phone = footerData?.contactInfo?.phone || "";
+
   return (
     <>
       <Header />
@@ -51,14 +58,14 @@ export default async function SingleBlogPage({ params }) {
         className="pt60 pb60"
         style={{ paddingBottom: "60px", background: "#ffffff" }}
       >
-        <div className="container">
+        <div className="">
           <div className="row justify-content-center">
             <div className="col-12 col-lg-9">
               <div className="blog-content-header mb-5">
                 <h1
                   className="mb-3"
                   style={{
-                    fontSize: "2.8rem",
+                    fontSize: "2rem",
                     fontWeight: "700",
                     fontFamily: "gobold",
                     textTransform: "uppercase",
@@ -125,6 +132,11 @@ export default async function SingleBlogPage({ params }) {
         </div>
       </div>
 
+      <ContactForm 
+        phone={phone} 
+        dropdownOptions={dropdownOptions} 
+        contactFormImage={footerData?.formImages?.contactFormImage} 
+      />
       <Footer />
     </>
   );
