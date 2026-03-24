@@ -1,4 +1,5 @@
 export const metadata = {
+  metadataBase: new URL("https://springhouse.in"),
   title: "SpringHouse | Premium Managed Office Spaces",
   description: "Experience premium managed office spaces and coworking solutions with SpringHouse.",
 };
