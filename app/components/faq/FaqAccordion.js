@@ -62,7 +62,9 @@ export default function FaqAccordion({ faqData }) {
                     >
                       <div
                         className="accordion-body faq-answer-content ql-content"
-                        dangerouslySetInnerHTML={{ __html: item.answer }}
+                        dangerouslySetInnerHTML={{ 
+                          __html: item.answer.replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ') 
+                        }}
                       />
                     </div>
                   </div>

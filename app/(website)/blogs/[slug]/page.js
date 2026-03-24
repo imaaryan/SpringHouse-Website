@@ -125,7 +125,9 @@ export default async function SingleBlogPage({ params }) {
 
               <div
                 className="blog-content-body ql-content"
-                dangerouslySetInnerHTML={{ __html: blog.content }}
+                dangerouslySetInnerHTML={{ 
+                  __html: blog.content.replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ') 
+                }}
               ></div>
             </div>
           </div>
