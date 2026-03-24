@@ -44,7 +44,8 @@ export async function middleware(request) {
   if (pathname.startsWith("/api")) {
     const isPublicRoute = 
       pathname === "/api/auth/login" || 
-      pathname === "/api/enquire";
+      pathname === "/api/enquire" ||
+      (pathname === "/api/careers" && method === "POST");
 
     if (!isPublicRoute) {
       const isAdminApi = pathname.startsWith("/api/admin");

@@ -29,7 +29,7 @@ export async function POST(request) {
 
     const resume = formData.get("resume");
     if (resume instanceof File) {
-      const path = await uploadImage(resume, "resumes", "private_uploads", {
+      const path = await uploadImage(resume, "resumes", "public/assets", {
         allowedTypes: [
           "application/pdf",
           "application/msword",
