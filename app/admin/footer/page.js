@@ -158,10 +158,12 @@ export default function FooterAdminPage() {
     socialLinks: { instagram: "", facebook: "", linkedin: "" },
     contactInfo: { address: "", phone: "", whatsapp: "", email: "" },
     formImages: { contactFormImage: "", careerFormImage: "" },
+    pageBanners: { careerHeroBanner: "" },
   });
   const [newImageFiles, setNewImageFiles] = useState({
     contactFormImage: null,
     careerFormImage: null,
+    careerHeroBanner: null,
   });
 
   useEffect(() => {
@@ -188,6 +190,9 @@ export default function FooterAdminPage() {
             formImages: d.formImages || {
               contactFormImage: "",
               careerFormImage: "",
+            },
+            pageBanners: d.pageBanners || {
+              careerHeroBanner: "",
             },
           });
         }
@@ -279,6 +284,25 @@ export default function FooterAdminPage() {
     }));
   };
 
+  const handlePageBannerImageChange = (field) => (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setNewImageFiles((prev) => ({ ...prev, [field]: file }));
+    const previewUrl = URL.createObjectURL(file);
+    setFormData((prev) => ({
+      ...prev,
+      pageBanners: { ...prev.pageBanners, [field]: previewUrl },
+    }));
+  };
+
+  const handleRemovePageBannerImage = (field) => () => {
+    setNewImageFiles((prev) => ({ ...prev, [field]: null }));
+    setFormData((prev) => ({
+      ...prev,
+      pageBanners: { ...prev.pageBanners, [field]: "" },
+    }));
+  };
+
   // Submit Handler
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -292,6 +316,9 @@ export default function FooterAdminPage() {
       }
       if (newImageFiles.careerFormImage) {
         submitData.append("careerFormImage", newImageFiles.careerFormImage);
+      }
+      if (newImageFiles.careerHeroBanner) {
+        submitData.append("careerHeroBanner", newImageFiles.careerHeroBanner);
       }
 
       const res = await fetch("/api/admin/footer", {
@@ -307,7 +334,13 @@ export default function FooterAdminPage() {
             formImages: result.data.formImages,
           }));
         }
-        setNewImageFiles({ contactFormImage: null, careerFormImage: null });
+        if (result.data?.pageBanners) {
+          setFormData((prev) => ({
+            ...prev,
+            pageBanners: result.data.pageBanners,
+          }));
+        }
+        setNewImageFiles({ contactFormImage: null, careerFormImage: null, careerHeroBanner: null });
         alert("Footer configurations saved successfully!");
       } else {
         alert(result.error || "Failed to save footer configurations");
@@ -487,6 +520,24 @@ export default function FooterAdminPage() {
                 onImageChange={handleFormImageChange("careerFormImage")}
                 onRemoveImage={handleRemoveFormImage("careerFormImage")}
                 helperText="Image shown beside the Career application form"
+              />
+            </div>
+          </section>
+
+          <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <h3 className="text-base font-bold text-gray-800 mb-4">
+              Page Banners
+            </h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Upload top hero banners for specific pages.
+            </p>
+            <div className="space-y-4">
+              <SingleImageUploader
+                label="Career Page Hero Banner"
+                image={formData.pageBanners.careerHeroBanner}
+                onImageChange={handlePageBannerImageChange("careerHeroBanner")}
+                onRemoveImage={handleRemovePageBannerImage("careerHeroBanner")}
+                helperText="Hero Banner shown at the top of the careers page"
               />
             </div>
           </section>

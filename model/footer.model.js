@@ -38,6 +38,11 @@ const footerSchema = new mongoose.Schema(
       contactFormImage: { type: String, default: "" },
       careerFormImage: { type: String, default: "" },
     },
+
+    // 6. Page Banners
+    pageBanners: {
+      careerHeroBanner: { type: String, default: "" },
+    },
   },
   { timestamps: true },
 );

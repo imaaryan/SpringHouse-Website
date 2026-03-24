@@ -25,6 +25,7 @@ export async function PUT(request) {
     let body;
     let contactFormImageFile = null;
     let careerFormImageFile = null;
+    let careerHeroBannerFile = null;
 
     if (contentType.includes("multipart/form-data")) {
       const formData = await request.formData();
@@ -35,6 +36,9 @@ export async function PUT(request) {
 
       const careerImg = formData.get("careerFormImage");
       if (careerImg instanceof File) careerFormImageFile = careerImg;
+
+      const careerBannerImg = formData.get("careerHeroBanner");
+      if (careerBannerImg instanceof File) careerHeroBannerFile = careerBannerImg;
     } else {
       body = await request.json();
     }
@@ -57,6 +61,9 @@ export async function PUT(request) {
         contactFormImage: "",
         careerFormImage: "",
       },
+      pageBanners: body.pageBanners || {
+        careerHeroBanner: "",
+      },
     };
 
     // Handle image uploads
@@ -67,6 +74,10 @@ export async function PUT(request) {
     if (careerFormImageFile) {
       const path = await uploadImage(careerFormImageFile, "formimages");
       if (path) updateData.formImages.careerFormImage = path;
+    }
+    if (careerHeroBannerFile) {
+      const path = await uploadImage(careerHeroBannerFile, "pagebanners");
+      if (path) updateData.pageBanners.careerHeroBanner = path;
     }
 
     let footerData = await Footer.findOne();

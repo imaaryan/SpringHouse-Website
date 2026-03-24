@@ -18,13 +18,14 @@ export default async function CareersPage() {
   await connectDB();
   const footerData = (await FooterModel.findOne({}).lean()) || {};
   const careerFormImage = footerData?.formImages?.careerFormImage || "";
+  const careerHeroBanner = footerData?.pageBanners?.careerHeroBanner || "/assets/bannerimage/1747035219_home-banner.jpg";
 
   return (
     <>
       <Header />
       <GlobalBanner
         title="Careers"
-        imageSrc="/assets/bannerimage/1747035219_home-banner.jpg"
+        imageSrc={careerHeroBanner}
       />
       <CareerForm careerFormImage={careerFormImage} />
       <Footer />
