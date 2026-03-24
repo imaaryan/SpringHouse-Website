@@ -29,12 +29,18 @@ export default function CareerForm({ careerFormImage }) {
     if (name === "email") {
       setErrors((prev) => ({
         ...prev,
-        email: value && !isValidEmail(value) ? "Please enter a valid email address." : "",
+        email:
+          value && !isValidEmail(value)
+            ? "Please enter a valid email address."
+            : "",
       }));
     } else if (name === "contactNumber") {
       setErrors((prev) => ({
         ...prev,
-        contactNumber: value && !isValidPhone(value) ? "Please enter a valid 10-digit phone number." : "",
+        contactNumber:
+          value && !isValidPhone(value)
+            ? "Please enter a valid 10-digit phone number."
+            : "",
       }));
     }
   };
@@ -43,7 +49,10 @@ export default function CareerForm({ careerFormImage }) {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        setErrors((prev) => ({ ...prev, resume: "Resume size is limited to 5 MB maximum." }));
+        setErrors((prev) => ({
+          ...prev,
+          resume: "Resume size is limited to 5 MB maximum.",
+        }));
         e.target.value = "";
         setResumeFile(null);
         return;
@@ -158,7 +167,13 @@ export default function CareerForm({ careerFormImage }) {
                 <div className="get-left-touch relative">
                   <div className="get-image-bottom mt20 relative">
                     <div className="get-image">
-                      <img src={careerFormImage || "/frontend_assets/img/get-touch.png"} alt="Join Spring House Team" />
+                      <img
+                        src={
+                          careerFormImage ||
+                          "/frontend_assets/img/get-touch.png"
+                        }
+                        alt="Join Spring House Team"
+                      />
                     </div>
                     <div className="circle-arrow">
                       <div className="arrow">
@@ -245,7 +260,9 @@ export default function CareerForm({ careerFormImage }) {
                               required
                             />
                             {errors.email && (
-                              <div className="text-danger small mt-1">{errors.email}</div>
+                              <div className="text-danger small mt-1">
+                                {errors.email}
+                              </div>
                             )}
                           </div>
                         </div>
@@ -262,7 +279,9 @@ export default function CareerForm({ careerFormImage }) {
                               required
                             />
                             {errors.contactNumber && (
-                              <div className="text-danger small mt-1">{errors.contactNumber}</div>
+                              <div className="text-danger small mt-1">
+                                {errors.contactNumber}
+                              </div>
                             )}
                           </div>
                         </div>
@@ -290,7 +309,6 @@ export default function CareerForm({ careerFormImage }) {
                               placeholder="LinkedIn Profile URL *"
                               value={formData.linkedinURL}
                               onChange={handleChange}
-                              required
                             />
                           </div>
                         </div>
@@ -313,7 +331,9 @@ export default function CareerForm({ careerFormImage }) {
                               required
                             />
                             {errors.resume && (
-                              <div className="text-danger small mt-1">{errors.resume}</div>
+                              <div className="text-danger small mt-1">
+                                {errors.resume}
+                              </div>
                             )}
                           </div>
                         </div>
@@ -327,7 +347,6 @@ export default function CareerForm({ careerFormImage }) {
                               rows="4"
                               value={formData.whyWannaJoin}
                               onChange={handleChange}
-                              required
                             ></textarea>
                           </div>
                         </div>
