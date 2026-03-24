@@ -35,7 +35,13 @@ export default function ModalsAndScripts({ phone, dropdownOptions, formImages = 
     setFormData((prev) => {
       const newData = { ...prev, [name]: value };
       // If location changes, reset the property selection since the valid options will change
-      if (name === "location") newData.property = "";
+      if (name === "location") {
+        newData.property = "";
+        newData.solution = "";
+      }
+      if (name === "property") {
+        newData.solution = "";
+      }
       return newData;
     });
 
@@ -58,6 +64,10 @@ export default function ModalsAndScripts({ phone, dropdownOptions, formImages = 
   const filteredProperties = formData.location
     ? properties.filter((p) => p.city?.slug === formData.location)
     : properties;
+
+  const filteredSolutions = formData.property
+    ? properties.find((p) => p.slug === formData.property)?.activeSolutions || []
+    : solutions;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -362,9 +372,9 @@ export default function ModalsAndScripts({ phone, dropdownOptions, formImages = 
                                 required
                               >
                                 <option value="">Select Solution</option>
-                                {solutions.map((sol) => (
+                                {filteredSolutions.map((sol) => (
                                   <option key={sol._id} value={sol.slug}>
-                                    {sol.name}
+                                    {sol.name ? sol.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : sol.name}
                                   </option>
                                 ))}
                               </select>

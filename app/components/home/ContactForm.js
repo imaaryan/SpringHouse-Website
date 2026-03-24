@@ -34,7 +34,13 @@ export default function ContactForm({ phone, dropdownOptions, contactFormImage }
     const { name, value } = e.target;
     setFormData((prev) => {
       const newData = { ...prev, [name]: value };
-      if (name === "location") newData.property = "";
+      if (name === "location") {
+        newData.property = "";
+        newData.solution = "";
+      }
+      if (name === "property") {
+        newData.solution = "";
+      }
       return newData;
     });
 
@@ -55,6 +61,10 @@ export default function ContactForm({ phone, dropdownOptions, contactFormImage }
   const filteredProperties = formData.location
     ? properties.filter((p) => p.city?.slug === formData.location)
     : properties;
+
+  const filteredSolutions = formData.property
+    ? properties.find((p) => p.slug === formData.property)?.activeSolutions || []
+    : solutions;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -326,9 +336,9 @@ export default function ContactForm({ phone, dropdownOptions, contactFormImage }
                               required
                             >
                               <option value="">Select Solution</option>
-                              {solutions.map((sol) => (
+                              {filteredSolutions.map((sol) => (
                                 <option key={sol._id} value={sol.slug}>
-                                  {sol.name}
+                                  {sol.name ? sol.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : sol.name}
                                 </option>
                               ))}
                             </select>

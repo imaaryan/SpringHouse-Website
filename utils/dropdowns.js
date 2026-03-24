@@ -17,8 +17,9 @@ export async function getDropdownOptions() {
         .sort({ name: 1 })
         .lean(),
       Property.find({ isActive: true })
-        .select("_id name slug city")
-        .populate("city", "slug name") // Populate just enough to filter
+        .select("_id name slug city activeSolutions")
+        .populate("city", "slug name")
+        .populate("activeSolutions", "_id name slug")
         .sort({ name: 1 })
         .lean(),
       Solution.find({ isActive: true })
