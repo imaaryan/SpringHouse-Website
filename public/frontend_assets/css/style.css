@@ -2946,3 +2946,21 @@ a.themebtn.themebtn1.membership-login {
 .rich-text-content h6 {
   font-family: "Montserrat", sans-serif !important;
 }
+
+.footer-end-bar {
+  width: 100%;
+  background-color: #141414;
+  display: block;
+  padding: 20px;
+  text-align: center;
+}
+
+.end-credit {
+  width: 100%;
+  color: #fff;
+font-size: 14px;
+}
+
+.end-credit a {
+  color: 2#52bbb8;
+}

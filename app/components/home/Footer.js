@@ -162,6 +162,12 @@ export default async function Footer() {
           </div>
         </div>
       </footer>
+      <div className="footer-end-bar">
+        <span className="end-credit">
+          All rights reserved. See our terms of use and privacy notice. Design
+          by <a href="https://www.anagramco.in/" target="_blank"> anagramco.in </a> 
+        </span>
+      </div>
 
       {contactInfo.whatsapp && (
         <a
