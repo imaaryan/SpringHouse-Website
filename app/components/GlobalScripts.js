@@ -6,10 +6,6 @@ export default function GlobalScripts() {
   return (
     <>
       <Script
-        src="https://code.jquery.com/jquery-3.6.0.min.js"
-        strategy="beforeInteractive"
-      />
-      <Script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         strategy="lazyOnload"
       />
@@ -71,20 +67,29 @@ export default function GlobalScripts() {
       <Script id="global-init" strategy="lazyOnload">
         {`
           // Initialize nice-select
-          if (typeof $ !== 'undefined') {
-            $(document).ready(function() {
-              if ($.fn.niceSelect) {
-                $('.box').niceSelect();
-              }
-            });
+          function initGlobalScripts() {
+            if (typeof $ !== 'undefined') {
+              $(document).ready(function() {
+                if ($.fn.niceSelect) {
+                  $('.box').niceSelect();
+                }
+              });
+            }
+            
+            // Initialize Bootstrap Tooltips
+            if (typeof bootstrap !== 'undefined') {
+              var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+              var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                  return new bootstrap.Tooltip(tooltipTriggerEl);
+              });
+            }
           }
-          
-          // Initialize Bootstrap Tooltips
-          if (typeof bootstrap !== 'undefined') {
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
-            });
+
+          // Run once on load
+          if (document.readyState === 'complete') {
+            initGlobalScripts();
+          } else {
+            window.addEventListener('load', initGlobalScripts);
           }
         `}
       </Script>

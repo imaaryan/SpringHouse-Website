@@ -1,17 +1,17 @@
 export default function OurCommunity({ data = [] }) {
   const defaultLogos = [
-    "/assets/ourcommunity/1748328283_91 Mobiles.png",
-    "/assets/ourcommunity/1748328383_Make My Trip.png",
-    "/assets/ourcommunity/1748328393_Mini So.png",
-    "/assets/ourcommunity/1748328412_Axis Max.png",
-    "/assets/ourcommunity/1748328449_Lenskart.png",
-    "/assets/ourcommunity/1748328484_Jimmy's Cocktails.png",
-    "/assets/ourcommunity/1748328506_Hero.png",
-    "/assets/ourcommunity/1748328543_Godrej.png",
-    "/assets/ourcommunity/1748328580_Darwin Box.png",
-    "/assets/ourcommunity/1748334200_Ad Yogi.png",
-    "/assets/ourcommunity/1750225421_Cars24.png",
-    "/assets/ourcommunity/1750225503_Your Story (1).png",
+    "/assets/homepage/community/1772913856887_91_Mobiles.webp",
+    "/assets/homepage/community/1772913856888_Make_My_Trip.webp",
+    "/assets/homepage/community/1772913856897_Mini_50.webp",
+    "/assets/homepage/community/1772913856890_Axis_Max_Life_Insurance.webp",
+    "/assets/homepage/community/1772913856897_Lenskart.webp",
+    "/assets/homepage/community/1774327796375_Jimmys_Cocktails.png",
+    "/assets/homepage/community/1772913856896_Hero.webp",
+    "/assets/homepage/community/1772913856892_Godrej.webp",
+    "/assets/homepage/community/1772913856891_Darwinbox.webp",
+    "/assets/homepage/community/1772913856889_Adyogi.webp",
+    "/assets/homepage/community/1772913856891_Cars_24.webp",
+    "/assets/homepage/community/1772913856898_Yourstory.webp",
   ];
 
   const displayLogos = data?.length > 0 ? data : defaultLogos;
