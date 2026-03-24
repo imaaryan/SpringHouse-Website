@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Swal from "sweetalert2";
+import { isValidEmail, isValidPhone } from "@/utils/validation";
 
 export default function CareerForm({ careerFormImage }) {
   const [submitting, setSubmitting] = useState(false);
@@ -14,37 +15,72 @@ export default function CareerForm({ careerFormImage }) {
     whyWannaJoin: "",
   });
   const [resumeFile, setResumeFile] = useState(null);
+  const [errors, setErrors] = useState({
+    email: "",
+    contactNumber: "",
+    resume: "",
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Real-time validation
+    if (name === "email") {
+      setErrors((prev) => ({
+        ...prev,
+        email: value && !isValidEmail(value) ? "Please enter a valid email address." : "",
+      }));
+    } else if (name === "contactNumber") {
+      setErrors((prev) => ({
+        ...prev,
+        contactNumber: value && !isValidPhone(value) ? "Please enter a valid 10-digit phone number." : "",
+      }));
+    }
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        Swal.fire({
-          title: "File Too Large",
-          text: "Resume upload size is limited to 5 MB maximum.",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
+        setErrors((prev) => ({ ...prev, resume: "Resume size is limited to 5 MB maximum." }));
         e.target.value = "";
         setResumeFile(null);
         return;
       }
+      setErrors((prev) => ({ ...prev, resume: "" }));
       setResumeFile(file);
+    } else {
+      setErrors((prev) => ({ ...prev, resume: "Please upload your resume." }));
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.fullName || !formData.email || !formData.contactNumber) {
+    // Comprehensive validation
+    if (
+      !formData.fullName ||
+      !formData.email ||
+      !formData.contactNumber ||
+      !formData.applyingFor ||
+      !formData.linkedinURL ||
+      !formData.whyWannaJoin ||
+      !resumeFile
+    ) {
       Swal.fire({
         title: "Error!",
-        text: "Please fill in all required fields.",
+        text: "Please fill in all required fields and upload your resume.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    if (errors.email || errors.contactNumber || errors.resume) {
+      Swal.fire({
+        title: "Error!",
+        text: "Please fix the validation errors before submitting.",
         icon: "error",
         confirmButtonText: "OK",
       });
@@ -90,6 +126,11 @@ export default function CareerForm({ careerFormImage }) {
         applyingFor: "",
         linkedinURL: "",
         whyWannaJoin: "",
+      });
+      setErrors({
+        email: "",
+        contactNumber: "",
+        resume: "",
       });
       setResumeFile(null);
       // Reset file input
@@ -177,7 +218,7 @@ export default function CareerForm({ careerFormImage }) {
                     </h2>
                   </div>
                   <div className="get-right-form-design mt20">
-                    <form id="career_form" onSubmit={handleSubmit}>
+                    <form id="career_form" onSubmit={handleSubmit} noValidate>
                       <div className="mb-3">
                         <input
                           type="text"
@@ -203,6 +244,9 @@ export default function CareerForm({ careerFormImage }) {
                               onChange={handleChange}
                               required
                             />
+                            {errors.email && (
+                              <div className="text-danger small mt-1">{errors.email}</div>
+                            )}
                           </div>
                         </div>
                         <div className="col-lg-6">
@@ -217,6 +261,9 @@ export default function CareerForm({ careerFormImage }) {
                               onChange={handleChange}
                               required
                             />
+                            {errors.contactNumber && (
+                              <div className="text-danger small mt-1">{errors.contactNumber}</div>
+                            )}
                           </div>
                         </div>
                         <div className="col-lg-6">
@@ -226,9 +273,10 @@ export default function CareerForm({ careerFormImage }) {
                               className="form-control"
                               id="applyingFor"
                               name="applyingFor"
-                              placeholder="Applying For (Position)"
+                              placeholder="Applying For (Position) *"
                               value={formData.applyingFor}
                               onChange={handleChange}
+                              required
                             />
                           </div>
                         </div>
@@ -239,9 +287,10 @@ export default function CareerForm({ careerFormImage }) {
                               className="form-control"
                               id="linkedinURL"
                               name="linkedinURL"
-                              placeholder="LinkedIn Profile URL"
+                              placeholder="LinkedIn Profile URL *"
                               value={formData.linkedinURL}
                               onChange={handleChange}
+                              required
                             />
                           </div>
                         </div>
@@ -252,7 +301,7 @@ export default function CareerForm({ careerFormImage }) {
                               className="form-label"
                               style={{ fontSize: "14px", color: "#6b7280" }}
                             >
-                              Upload Resume (PDF, DOC, DOCX - Max 5 MB)
+                              Upload Resume (PDF, DOC, DOCX - Max 5 MB) *
                             </label>
                             <input
                               type="file"
@@ -261,7 +310,11 @@ export default function CareerForm({ careerFormImage }) {
                               name="resume"
                               accept=".pdf,.doc,.docx"
                               onChange={handleFileChange}
+                              required
                             />
+                            {errors.resume && (
+                              <div className="text-danger small mt-1">{errors.resume}</div>
+                            )}
                           </div>
                         </div>
                         <div className="col-lg-12">
@@ -270,10 +323,11 @@ export default function CareerForm({ careerFormImage }) {
                               className="form-control"
                               id="whyWannaJoin"
                               name="whyWannaJoin"
-                              placeholder="Why do you want to join Spring House?"
+                              placeholder="Why do you want to join Spring House? *"
                               rows="4"
                               value={formData.whyWannaJoin}
                               onChange={handleChange}
+                              required
                             ></textarea>
                           </div>
                         </div>
