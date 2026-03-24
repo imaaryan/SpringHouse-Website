@@ -42,7 +42,14 @@ export async function uploadImage(
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
-  const filename = Date.now() + "_" + file.name.replaceAll(" ", "_");
+  
+  // Sanitize filename: remove special characters, keep extension
+  const extension = path.extname(file.name);
+  const baseName = path.basename(file.name, extension)
+    .replace(/[^a-z0-9]/gi, "_")
+    .toLowerCase();
+  
+  const filename = `${Date.now()}_${baseName}${extension}`;
 
   // Ensure the directory exists
   const uploadDir = path.join(process.cwd(), baseDir, folderName);
