@@ -34,6 +34,12 @@ export async function getDropdownOptions() {
         ...doc,
         _id: doc._id.toString(),
         city: doc.city ? { ...doc.city, _id: doc.city._id.toString() } : null,
+        activeSolutions: Array.isArray(doc.activeSolutions)
+          ? doc.activeSolutions.map((s) => ({
+              ...s,
+              _id: s._id.toString(),
+            }))
+          : [],
       }));
 
     return {
