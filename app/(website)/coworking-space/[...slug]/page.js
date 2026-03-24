@@ -162,7 +162,7 @@ export default async function CoworkingSpaceCatchAll({ params }) {
 
     // Build "See More" link to city page's area section
     const areaSlug = rawProperty.area?.slug || rawProperty.area?._id || "";
-    const seeMoreLink = `/coworking-space/${rawProperty.city.slug}-coworking-space`;
+    const seeMoreLink = `/coworking-space/${rawProperty.city.slug}`;
 
     const rawOtherCities = await City.find({ _id: { $ne: rawProperty.city._id }, isActive: true }).select("name slug").lean();
     
@@ -191,7 +191,7 @@ export default async function CoworkingSpaceCatchAll({ params }) {
               {otherCities.map((city) => (
                 <div key={city.slug} className="col-md-6 col-6">
                   <div className="box-loc mb-lg-0 mb-md-0 mb-3">
-                    <Link href={`/coworking-space/${city.slug}-coworking-space`}>{city.name}</Link>
+                    <Link href={`/coworking-space/${city.slug}`}>{city.name}</Link>
                   </div>
                 </div>
               ))}

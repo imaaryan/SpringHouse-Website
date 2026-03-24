@@ -17,6 +17,15 @@ const nextConfig = {
   turbopack: {
     root: __dirname,
   },
+  async redirects() {
+    return [
+      {
+        source: "/blog-details/:slug",
+        destination: "/blogs/:slug",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

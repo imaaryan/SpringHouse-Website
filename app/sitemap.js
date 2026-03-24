@@ -51,16 +51,16 @@ export default async function sitemap() {
     priority: 0.6,
   }));
 
-  // 5. Dynamic Cities (/coworking-space/[city-slug]-coworking-space)
+  // 5. Dynamic Cities (/coworking-space/[city-slug])
   const cities = await City.find({ isActive: true }).select("slug updatedAt").lean();
   const cityRoutes = cities.map((c) => ({
-    url: `${baseUrl}/coworking-space/${c.slug}-coworking-space`,
+    url: `${baseUrl}/coworking-space/${c.slug}`,
     lastModified: c.updatedAt || new Date(),
     changeFrequency: "weekly",
     priority: 0.8,
   }));
 
-  // 6. Dynamic Properties (/coworking-space/[city-slug]-coworking-space/[property-slug])
+  // 6. Dynamic Properties (/coworking-space/[city-slug]/[property-slug])
   const properties = await Property.find({ isActive: true })
     .populate("city", "slug")
     .select("slug city updatedAt")
@@ -68,7 +68,7 @@ export default async function sitemap() {
   const propertyRoutes = properties
     .filter((p) => p.city?.slug)
     .map((p) => ({
-      url: `${baseUrl}/coworking-space/${p.city.slug}-coworking-space/${p.slug}`,
+      url: `${baseUrl}/coworking-space/${p.city.slug}/${p.slug}`,
       lastModified: p.updatedAt || new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
