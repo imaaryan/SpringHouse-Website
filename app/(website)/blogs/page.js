@@ -4,6 +4,7 @@ import { Blog } from "@/model/blog.model";
 import connectDB from "@/utils/db";
 import Link from "next/link";
 import "@/app/components/blogs/blogs.css";
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Blogs | SpringHouse Coworking Space",

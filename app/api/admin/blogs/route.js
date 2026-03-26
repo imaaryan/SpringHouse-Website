@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import connectDB from "@/utils/db";
 import { Blog } from "@/model/blog.model";
 import { uploadImage } from "@/utils/upload";
@@ -39,6 +40,7 @@ export async function POST(request) {
     if (slug) payload.slug = slug;
 
     const newBlog = await Blog.create(payload);
+    revalidatePath("/blogs");
 
     return NextResponse.json({
       success: true,
@@ -67,6 +69,7 @@ export async function DELETE(request) {
     }
 
     await Blog.deleteMany({ _id: { $in: ids } });
+    revalidatePath("/blogs");
 
     return NextResponse.json({
       success: true,

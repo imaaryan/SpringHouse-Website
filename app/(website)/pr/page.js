@@ -3,6 +3,7 @@ import Footer from "@/app/components/home/Footer";
 import { PR } from "@/model/pr.model";
 import connectDB from "@/utils/db";
 import "@/app/components/blogs/blogs.css";
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Public Relations | SpringHouse Coworking Space",

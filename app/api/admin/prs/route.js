@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import connectDB from "@/utils/db";
 import { PR } from "@/model/pr.model";
 import { uploadImage } from "@/utils/upload";
@@ -31,6 +32,7 @@ export async function POST(request) {
     if (imageURL) payload.imageURL = imageURL;
 
     const newPR = await PR.create(payload);
+    revalidatePath("/pr");
 
     return NextResponse.json({
       success: true,
@@ -59,6 +61,7 @@ export async function DELETE(request) {
     }
 
     await PR.deleteMany({ _id: { $in: ids } });
+    revalidatePath("/pr");
 
     return NextResponse.json({
       success: true,

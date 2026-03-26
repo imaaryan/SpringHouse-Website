@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import connectDB from "@/utils/db";
 import { PR } from "@/model/pr.model";
 import { uploadImage } from "@/utils/upload";
@@ -62,6 +63,7 @@ export async function PUT(request, { params }) {
       returnDocument: "after",
       runValidators: true,
     });
+    revalidatePath("/pr");
 
     if (!updatedPR) {
       return NextResponse.json(
@@ -90,6 +92,7 @@ export async function DELETE(request, { params }) {
     const { id } = await params;
 
     const deletedPR = await PR.findByIdAndDelete(id);
+    revalidatePath("/pr");
 
     if (!deletedPR) {
       return NextResponse.json(

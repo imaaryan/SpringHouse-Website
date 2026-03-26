@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import connectDB from "@/utils/db";
 import { Blog } from "@/model/blog.model";
 import { uploadImage } from "@/utils/upload";
@@ -67,6 +68,7 @@ export async function PUT(request, { params }) {
       returnDocument: "after",
       runValidators: true,
     });
+    revalidatePath("/blogs");
 
     if (!updatedBlog) {
       return NextResponse.json(
@@ -95,6 +97,7 @@ export async function DELETE(request, { params }) {
     const { id } = await params;
 
     const deletedBlog = await Blog.findByIdAndDelete(id);
+    revalidatePath("/blogs");
 
     if (!deletedBlog) {
       return NextResponse.json(
