@@ -13,6 +13,13 @@ const prSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    slug: {
+      type: String,
+      unique: true,
+      sparse: true,
+      trim: true,
+      lowercase: true,
+    },
     imageURL: {
       type: String,
     },
@@ -27,5 +34,7 @@ const prSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+applySlugify(prSchema, "title");
 
 export const PR = mongoose.models.PR || mongoose.model("PR", prSchema);

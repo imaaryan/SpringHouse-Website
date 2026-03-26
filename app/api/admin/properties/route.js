@@ -118,7 +118,7 @@ export async function GET(request) {
 
     const [properties, total] = await Promise.all([
       Property.find({})
-        .populate("city", "name")
+        .populate("city", "name slug")
         .populate("area", "name")
         .sort({ createdAt: -1 })
         .skip(skip)

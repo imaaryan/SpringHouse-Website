@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectDB from "@/utils/db";
 import { PR } from "@/model/pr.model";
 import { uploadImage } from "@/utils/upload";
+import slugify from "slugify";
 
 export async function GET(request, { params }) {
   try {
@@ -45,6 +46,10 @@ export async function PUT(request, { params }) {
       isActive,
       ...(publishDate && { publishDate }),
     };
+
+    if (title) {
+      updateData.slug = slugify(title, { lower: true, strict: true });
+    }
 
     // Handle Image Upload if new image provided
     const imageFile = formData.get("image");

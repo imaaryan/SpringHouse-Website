@@ -7,16 +7,28 @@ export async function GET(request) {
     await connectDB();
 
     const { searchParams } = new URL(request.url);
-    const fetchAll = searchParams.get("all") === "true";
 
-    if (fetchAll) {
-      const allEnquiries = await Enquiry.find({}).sort({ createdAt: -1 }).lean();
-      return NextResponse.json({
-        success: true,
-        data: allEnquiries,
-      });
+    // --- Export mode (no pagination) ---
+    if (searchParams.get("export") === "true") {
+      const startDate = searchParams.get("startDate");
+      const endDate = searchParams.get("endDate");
+
+      const filter = {};
+      if (startDate && endDate) {
+        filter.createdAt = {
+          $gte: new Date(startDate),
+          $lte: new Date(new Date(endDate).setHours(23, 59, 59, 999)),
+        };
+      }
+
+      const enquiries = await Enquiry.find(filter)
+        .sort({ createdAt: -1 })
+        .lean();
+
+      return NextResponse.json({ success: true, data: enquiries });
     }
 
+    // --- Normal paginated mode ---
     const page = parseInt(searchParams.get("page")) || 1;
     const limit = parseInt(searchParams.get("limit")) || 10;
     const skip = (page - 1) * limit;

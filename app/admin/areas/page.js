@@ -262,6 +262,8 @@ export default function AreasPage() {
                 value={newAreaName}
                 onChange={(e) => setNewAreaName(e.target.value)}
               />
+			</div>
+			  <div className="flex gap-4">
               <button
                 onClick={handleCreateArea}
                 disabled={creatingArea || !newAreaName || !newAreaCity}

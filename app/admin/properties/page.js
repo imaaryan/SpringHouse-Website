@@ -206,10 +206,16 @@ export default function PropertiesPage() {
                 <Pencil className="mr-3 h-3.5 w-3.5 text-gray-400 group-hover:text-brand-primary" />
                 Edit
               </button>
-              <button className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 group transition-colors">
+              <Link
+                href={`/coworking-space/${row.city?.slug || ""}/${row.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 group transition-colors"
+              >
                 <Eye className="mr-3 h-3.5 w-3.5 text-gray-400 group-hover:text-brand-primary" />
                 View
-              </button>
+              </Link>
               <div className="h-px bg-gray-100 my-1"></div>
               <button
                 onClick={(e) => {

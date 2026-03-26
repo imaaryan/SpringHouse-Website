@@ -73,8 +73,6 @@ export default function CareerForm({ careerFormImage }) {
       !formData.email ||
       !formData.contactNumber ||
       !formData.applyingFor ||
-      !formData.linkedinURL ||
-      !formData.whyWannaJoin ||
       !resumeFile
     ) {
       Swal.fire({
@@ -306,7 +304,7 @@ export default function CareerForm({ careerFormImage }) {
                               className="form-control"
                               id="linkedinURL"
                               name="linkedinURL"
-                              placeholder="LinkedIn Profile URL *"
+                              placeholder="LinkedIn Profile URL"
                               value={formData.linkedinURL}
                               onChange={handleChange}
                             />
@@ -343,7 +341,7 @@ export default function CareerForm({ careerFormImage }) {
                               className="form-control"
                               id="whyWannaJoin"
                               name="whyWannaJoin"
-                              placeholder="Why do you want to join Spring House? *"
+                              placeholder="Why do you want to join Spring House?"
                               rows="4"
                               value={formData.whyWannaJoin}
                               onChange={handleChange}

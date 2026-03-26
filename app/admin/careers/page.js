@@ -9,6 +9,7 @@ import {
   Circle,
   ChevronDown,
   X,
+  Eye,
 } from "lucide-react";
 import * as XLSX from "xlsx";
 import PageHeader from "@/app/components/admin/PageHeader";
@@ -25,6 +26,10 @@ export default function CareersPage() {
     totalPages: 0,
   });
   const [selectedItems, setSelectedItems] = useState([]);
+
+  // Detail Modal state
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
+  const [selectedCareer, setSelectedCareer] = useState(null);
 
   // Dropdown & modal state
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -132,6 +137,8 @@ export default function CareersPage() {
       "Contact Number": row.contactNumber || "",
       "Applying For": row.applyingFor || "",
       "Resume URL": row.resume || "",
+      "LinkedIn URL": row.linkedinURL || "",
+      "Why Join Us": row.whyWannaJoin || "",
       Status: row.isRead ? "Viewed" : "New",
       "Date Applied": new Date(row.createdAt).toLocaleDateString("en-GB", {
         day: "numeric",
@@ -292,6 +299,22 @@ export default function CareersPage() {
         </button>
       ),
     },
+    {
+      header: "Details",
+      render: (row) => (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setSelectedCareer(row);
+            setDetailModalOpen(true);
+          }}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold border transition bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100"
+          title="View Full Application"
+        >
+          <Eye size={14} /> View
+        </button>
+      ),
+    },
   ];
 
   return (
@@ -440,6 +463,96 @@ export default function CareersPage() {
                 className="flex-1 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition"
               >
                 Download
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Detail Modal */}
+      {detailModalOpen && selectedCareer && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 p-6 space-y-5 my-8">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-bold text-gray-900">
+                Applicant Details
+              </h2>
+              <button
+                onClick={() => {
+                  setDetailModalOpen(false);
+                  setSelectedCareer(null);
+                }}
+                className="text-gray-400 hover:text-gray-600 transition"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+                  Full Name
+                </label>
+                <p className="text-sm font-medium text-gray-900">{selectedCareer.fullName}</p>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+                    Email
+                  </label>
+                  <a href={`mailto:${selectedCareer.email}`} className="text-sm text-blue-600 hover:underline break-all">
+                    {selectedCareer.email}
+                  </a>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+                    Contact Number
+                  </label>
+                  <p className="text-sm text-gray-900">{selectedCareer.contactNumber || "N/A"}</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+                    Applying For
+                  </label>
+                  <p className="text-sm text-gray-900">{selectedCareer.applyingFor || "Not Specified"}</p>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+                    LinkedIn URL
+                  </label>
+                  {selectedCareer.linkedinURL ? (
+                    <a href={selectedCareer.linkedinURL} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline break-all">
+                      View Profile
+                    </a>
+                  ) : (
+                    <p className="text-sm text-gray-500">Not Provided</p>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+                  Why do you want to join Spring House?
+                </label>
+                <div className="text-sm text-gray-700 bg-gray-50 rounded-lg p-4 whitespace-pre-wrap border border-gray-100 min-h-[80px]">
+                  {selectedCareer.whyWannaJoin || "Not Provided"}
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <button
+                onClick={() => {
+                  setDetailModalOpen(false);
+                  setSelectedCareer(null);
+                }}
+                className="w-full rounded-lg bg-gray-100 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-200 transition"
+              >
+                Close
               </button>
             </div>
           </div>
