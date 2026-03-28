@@ -12,20 +12,36 @@ export async function generateMetadata() {
     "seo.metaTitle": { $exists: true, $ne: "" },
   }).lean();
 
-  if (faqWithSeo && faqWithSeo.seo) {
-    return {
-      title:
-        faqWithSeo.seo.metaTitle || "Frequently Asked Questions | SpringHouse",
-      description:
-        faqWithSeo.seo.metaDescription ||
-        "Got questions? We have answers. Find everything you need to know about SpringHouse coworking, access, billing, and solutions.",
-    };
-  }
+  const { Homepage } = await import("@/model/homepage.model");
+  const homepage = await Homepage.findOne({}).select("mainBanner").lean();
+  const ogImage = homepage?.mainBanner || "";
+
+  const title = faqWithSeo?.seo?.metaTitle || "Frequently Asked Questions | SpringHouse";
+  const description =
+    faqWithSeo?.seo?.metaDescription ||
+    "Got questions? We have answers. Find everything you need to know about SpringHouse coworking, access, billing, and solutions.";
 
   return {
-    title: "Frequently Asked Questions | SpringHouse",
-    description:
-      "Got questions? We have answers. Find everything you need to know about SpringHouse coworking, access, billing, and solutions.",
+    title,
+    description,
+    alternates: {
+      canonical: "https://springhouse.in/faq",
+    },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: "https://springhouse.in/faq",
+      siteName: "SpringHouse",
+      images: ogImage ? [{ url: ogImage, alt: title }] : [],
+      locale: "en_IN",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ogImage ? [ogImage] : [],
+    },
   };
 }
 

@@ -2,13 +2,39 @@ import Header from "@/app/components/home/Header";
 import Footer from "@/app/components/home/Footer";
 import { PR } from "@/model/pr.model";
 import connectDB from "@/utils/db";
+import { Homepage } from "@/model/homepage.model";
 import "@/app/components/blogs/blogs.css";
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Public Relations | SpringHouse Coworking Space",
-  description: "Read the latest public relations and news from SpringHouse Coworking.",
-};
+export async function generateMetadata() {
+  await connectDB();
+  const homepage = await Homepage.findOne({}).select("mainBanner").lean();
+  const ogImage = homepage?.mainBanner || "";
+  const title = "Public Relations | SpringHouse Coworking Space";
+  const description = "Read the latest public relations and news from SpringHouse Coworking.";
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: "https://springhouse.in/pr",
+    },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: "https://springhouse.in/pr",
+      siteName: "SpringHouse",
+      images: ogImage ? [{ url: ogImage, alt: title }] : [],
+      locale: "en_IN",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ogImage ? [ogImage] : [],
+    },
+  };
+}
 
 export default async function PRArchivePage() {
   await connectDB();

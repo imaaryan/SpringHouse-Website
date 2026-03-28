@@ -19,11 +19,32 @@ export const revalidate = 0; // Disable caching to see immediate CMS changes
 export async function generateMetadata() {
   await connectDB();
   const data = await AboutUs.findOne().lean();
+  const title = data?.seo?.metaTitle || "About Us | SpringHouse Coworking Offices";
+  const description =
+    data?.seo?.metaDescription ||
+    "Learn about SpringHouse Coworking spaces, our history, mission, and the thriving professional community we serve.";
+  const ogImage = data?.mainBanner || "";
   return {
-    title: data?.seo?.metaTitle || "About Us | SpringHouse Coworking Offices",
-    description:
-      data?.seo?.metaDescription ||
-      "Learn about SpringHouse Coworking spaces, our history, mission, and the thriving professional community we serve.",
+    title,
+    description,
+    alternates: {
+      canonical: "https://springhouse.in/about-us",
+    },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: "https://springhouse.in/about-us",
+      siteName: "SpringHouse",
+      images: ogImage ? [{ url: ogImage, alt: title }] : [],
+      locale: "en_IN",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ogImage ? [ogImage] : [],
+    },
   };
 }
 

@@ -16,9 +16,36 @@ export async function generateMetadata({ params }) {
 
   if (!blog) return {};
 
+  const title = blog.seo?.metaTitle || `${blog.title} | SpringHouse Coworking Space`;
+  const description = blog.seo?.metaDescription || blog.title;
+  let ogImage = blog.imageURL || "";
+  if (!ogImage) {
+    const { Homepage } = await import("@/model/homepage.model");
+    const homepage = await Homepage.findOne({}).select("mainBanner").lean();
+    ogImage = homepage?.mainBanner || "";
+  }
+
   return {
-    title: blog.seo?.metaTitle || `${blog.title} | SpringHouse Coworking Space`,
-    description: blog.seo?.metaDescription || blog.title,
+    title,
+    description,
+    alternates: {
+      canonical: `https://springhouse.in/blogs/${slug}`,
+    },
+    openGraph: {
+      type: "article",
+      title,
+      description,
+      url: `https://springhouse.in/blogs/${slug}`,
+      siteName: "SpringHouse",
+      images: ogImage ? [{ url: ogImage, alt: title }] : [],
+      locale: "en_IN",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ogImage ? [ogImage] : [],
+    },
   };
 }
 

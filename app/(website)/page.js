@@ -26,9 +26,30 @@ export const revalidate = 0;
 export async function generateMetadata() {
   await connectDB();
   const homepage = await Homepage.findOne({}).lean();
+  const title = homepage?.seo?.metaTitle || "SpringHouse Coworking | Managed Office Spaces";
+  const description = homepage?.seo?.metaDescription || "Find premium managed office and coworking spaces with SpringHouse.";
+  const ogImage = homepage?.mainBanner || "";
   return {
-    title: homepage?.seo?.metaTitle || "SpringHouse Coworking | Managed Office Spaces",
-    description: homepage?.seo?.metaDescription || "Find premium managed office and coworking spaces with SpringHouse.",
+    title,
+    description,
+    alternates: {
+      canonical: "https://springhouse.in",
+    },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: "https://springhouse.in",
+      siteName: "SpringHouse",
+      images: ogImage ? [{ url: ogImage, alt: title }] : [],
+      locale: "en_IN",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ogImage ? [ogImage] : [],
+    },
   };
 }
 

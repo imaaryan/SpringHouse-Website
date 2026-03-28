@@ -30,18 +30,62 @@ export async function generateMetadata({ params }) {
   // Try Solution first
   const solution = await Solution.findOne({ slug, isActive: true }).lean();
   if (solution) {
+    const title = solution.seo?.metaTitle || `${solution.name} | SpringHouse`;
+    const description = solution.seo?.metaDescription || solution.description;
+    const ogImage = solution.image || "";
     return {
-      title: solution.seo?.metaTitle || `${solution.name} | SpringHouse`,
-      description: solution.seo?.metaDescription || solution.description,
+      title,
+      description,
+      alternates: {
+        canonical: `https://springhouse.in/${slug}`,
+      },
+      openGraph: {
+        type: "website",
+        title,
+        description,
+        url: `https://springhouse.in/${slug}`,
+        siteName: "SpringHouse",
+        images: ogImage ? [{ url: ogImage, alt: title }] : [],
+        locale: "en_IN",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: ogImage ? [ogImage] : [],
+      },
     };
   }
 
   // Then try OtherPage
   const page = await OtherPage.findOne({ slug, isActive: true }).lean();
   if (page) {
+    const title = page.seo?.metaTitle || page.name || "Spring House";
+    const description = page.seo?.metaDescription || "";
+    const { Homepage } = await import("@/model/homepage.model");
+    const homepage = await Homepage.findOne({}).select("mainBanner").lean();
+    const ogImage = homepage?.mainBanner || "";
     return {
-      title: page.seo?.metaTitle || page.name || "Spring House",
-      description: page.seo?.metaDescription || "",
+      title,
+      description,
+      alternates: {
+        canonical: `https://springhouse.in/${slug}`,
+      },
+      openGraph: {
+        type: "website",
+        title,
+        description,
+        url: `https://springhouse.in/${slug}`,
+        siteName: "SpringHouse",
+        images: ogImage ? [{ url: ogImage, alt: title }] : [],
+        locale: "en_IN",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: ogImage ? [ogImage] : [],
+      },
     };
   }
 

@@ -302,6 +302,8 @@ export default function AmenitiesPage() {
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
               />
+			</div>
+			<div className="flex gap-4">
               <button
                 onClick={handleCreate}
                 disabled={creating || !newName}

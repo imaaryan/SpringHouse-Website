@@ -1,15 +1,41 @@
 import Header from "@/app/components/home/Header";
 import Footer from "@/app/components/home/Footer";
+import { Homepage } from "@/model/homepage.model";
 import { Blog } from "@/model/blog.model";
 import connectDB from "@/utils/db";
 import Link from "next/link";
 import "@/app/components/blogs/blogs.css";
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Blogs | SpringHouse Coworking Space",
-  description: "Read the latest blogs and articles from SpringHouse Coworking.",
-};
+export async function generateMetadata() {
+  await connectDB();
+  const homepage = await Homepage.findOne({}).select("mainBanner").lean();
+  const ogImage = homepage?.mainBanner || "";
+  const title = "Blogs | SpringHouse Coworking Space";
+  const description = "Read the latest blogs and articles from SpringHouse Coworking.";
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: "https://springhouse.in/blogs",
+    },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: "https://springhouse.in/blogs",
+      siteName: "SpringHouse",
+      images: ogImage ? [{ url: ogImage, alt: title }] : [],
+      locale: "en_IN",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ogImage ? [ogImage] : [],
+    },
+  };
+}
 
 export default async function BlogsArchivePage() {
   await connectDB();

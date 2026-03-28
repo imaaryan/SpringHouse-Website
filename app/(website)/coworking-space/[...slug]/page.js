@@ -38,17 +38,71 @@ export async function generateMetadata({ params }) {
     const citySlug = slug[0].replace("-coworking-space", "");
     const city = await City.findOne({ slug: citySlug, isActive: true }).lean();
     if (!city) return { title: "Coworking Space" };
+    const title = city.seo?.metaTitle || `Managed Workspaces and Coworking Spaces in ${city.name}`;
+    const description = city.seo?.metaDescription || `Find the perfect managed office or coworking space in ${city.name}. Spring House offers flexible workspace solutions.`;
+    let ogImage = city.image || "";
+    if (!ogImage) {
+      const { Homepage } = await import("@/model/homepage.model");
+      const homepage = await Homepage.findOne({}).select("mainBanner").lean();
+      ogImage = homepage?.mainBanner || "";
+    }
     return {
-      title: city.seo?.metaTitle || `Managed Workspaces and Coworking Spaces in ${city.name}`,
-      description: city.seo?.metaDescription || `Find the perfect managed office or coworking space in ${city.name}. Spring House offers flexible workspace solutions.`,
+      title,
+      description,
+      alternates: {
+        canonical: `https://springhouse.in/coworking-space/${city.slug}`,
+      },
+      openGraph: {
+        type: "website",
+        title,
+        description,
+        url: `https://springhouse.in/coworking-space/${city.slug}`,
+        siteName: "SpringHouse",
+        images: ogImage ? [{ url: ogImage, alt: title }] : [],
+        locale: "en_IN",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: ogImage ? [ogImage] : [],
+      },
     };
   } else if (slug.length === 2) {
     const propertySlug = slug[1];
-    const property = await Property.findOne({ slug: propertySlug, isActive: true }).lean();
+    const property = await Property.findOne({ slug: propertySlug, isActive: true })
+      .populate("city", "slug")
+      .lean();
     if (!property) return { title: "Property Not Found" };
+    const title = property.seo?.metaTitle || `${property.name} | SpringHouse`;
+    const description = property.seo?.metaDescription || property.description || "Discover premium managed workspaces.";
+    let ogImage = property.images?.[0] || "";
+    if (!ogImage) {
+      const { Homepage } = await import("@/model/homepage.model");
+      const homepage = await Homepage.findOne({}).select("mainBanner").lean();
+      ogImage = homepage?.mainBanner || "";
+    }
     return {
-      title: property.seo?.metaTitle || `${property.name} | SpringHouse`,
-      description: property.seo?.metaDescription || property.description || "Discover premium managed workspaces.",
+      title,
+      description,
+      alternates: {
+        canonical: `https://springhouse.in/coworking-space/${property.city?.slug || slug[0]}/${property.slug}`,
+      },
+      openGraph: {
+        type: "website",
+        title,
+        description,
+        url: `https://springhouse.in/coworking-space/${property.city?.slug || slug[0]}/${property.slug}`,
+        siteName: "SpringHouse",
+        images: ogImage ? [{ url: ogImage, alt: title }] : [],
+        locale: "en_IN",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: ogImage ? [ogImage] : [],
+      },
     };
   }
   return { title: "Page Not Found" };
