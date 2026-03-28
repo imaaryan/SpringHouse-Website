@@ -143,6 +143,22 @@ export default function HeroBanner({ dropdownOptions = {}, data = {} }) {
     router.push(redirectUrl);
   };
 
+  const videoRef = React.useRef(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      // Force loading if source changes
+      videoRef.current.load();
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          // Auto-play was prevented (e.g., browser policy)
+          console.log("Autoplay prevented:", error);
+        });
+      }
+    }
+  }, [data.heroVideo]);
+
   return (
     <div className="spring-housebaner relative">
       <div className="container-fluid p-lg-0 p-md-0 p-3 relative">
@@ -151,13 +167,15 @@ export default function HeroBanner({ dropdownOptions = {}, data = {} }) {
           {/* Main Visual: Video taking highest priority, fallback to Image */}
           {data.heroVideo ? (
             <video
+              ref={videoRef}
+              key={data.heroVideo}
               className="w-100 banner-video object-cover"
               autoPlay
               muted
               loop
               playsInline
               poster={data.mainBanner || ""}
-              preload="metadata"
+              preload="auto"
             >
               <source src={data.heroVideo} type="video/mp4" />
               Your browser does not support the video tag.
