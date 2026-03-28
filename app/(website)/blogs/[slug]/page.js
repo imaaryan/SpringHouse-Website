@@ -85,7 +85,7 @@ export default async function SingleBlogPage({ params }) {
         className="pt60 pb60"
         style={{ paddingBottom: "60px", background: "#ffffff" }}
       >
-        <div className="">
+        <div className="container">
           <div className="row justify-content-center">
             <div className="col-12 col-lg-9">
               <div className="blog-content-header mb-5">
